@@ -24,3 +24,7 @@ class CalendarEvent(models.Model):
     
     def __str__(self):
         return f'{self.name} на {self.date}'
+
+    class Meta:
+        verbose_name = 'Подія в календарі'
+        verbose_name_plural = 'Події в календарі'
