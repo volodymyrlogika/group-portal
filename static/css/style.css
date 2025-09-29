@@ -1,0 +1,11 @@
+/* style forum --> comments */
+.card{
+    position: relative !important;
+    width: 50rem;
+    left: 5rem;
+}
+
+.card-img-top{
+    position: relative;
+    height: 38rem;
+}

@@ -4,15 +4,28 @@ from django.contrib.auth.models import User
 
 class Subredit(models.Model): # Імя , опис , картинка , автор
     name = models.CharField(max_length=150, verbose_name="Ім'я")
-    description = models.TextField(null=True, blank=True, verbose_name="Опис")
-    image = models.ImageField(upload_to='subreditamg', verbose_name="Картинка")
+    description = models.TextField(verbose_name="Опис")
+    image = models.ImageField(null=True , blank=True, upload_to='subreditamg', verbose_name="Картинка")
     author = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name="aвтор")
+
+    def __str__(self):
+        return f"{self.name} --- {self.author}"
 
 
 class Coments(models.Model): # Імя , опис , людина яка опублікувала цей комент
+    username = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name="Ім'я коментатора")
+    comsubredit = models.ForeignKey(Subredit, on_delete=models.CASCADE, related_name="comments") 
     name = models.CharField(max_length=150, verbose_name="Ім'я")
     description = models.TextField(null=False , blank=False)
-    username = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name="Ім'я коментатора")
+    
 
     def __str__(self):
-        return f"{self.name} --- {self.username}"
+        return f"{self.name} --- {self.username} {self.description}"
+
+class Answers(models.Model):
+    username = models.ForeignKey(User, on_delete=models.CASCADE)
+    answercomments = models.ForeignKey(Coments, on_delete=models.CASCADE)
+    description = models.TextField(null=False, blank=False)
+
+    def __str__(self):
+        return f"{self.username} -- {self.answercomments}"

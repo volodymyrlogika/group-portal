@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h1>Форум</h1>
+    <div class="container">
+    {% for subred in subredits %}
+    
+        
+    
+      {% if subred.image %}
+        <div class="card" style="width: 70rem;">
+          <img src="{{subred.image.url}}" class="card-img-top" alt="...">
+          <div class="card-body">
+            <h5 class="card-title">{{subred.name}}</h5>
+            <h6 class="authorpost">{{subred.author}}</h6>
+            <p class="card-text">{{subred.description}}</p>
+            {% for i in subred.comments.all %}
+            <div class="card" style="left: 3rem;">
+              <div class="card-header">
+                {{i.username}}
+              </div>
+              <div class="card-body">
+                <h5 class="card-title">{{i.name}}</h5>
+                <p class="card-text">{{i.description}}</p>
+                <a href="#" class="btn btn-primary">Go somewhere</a>
+              </div>
+            </div>
+            {% endfor %}
+          </div>
+        </div>
+      {% else %}
+        <div class="card" style="width: 18rem; ">
+          <div class="card-body">
+            <h5 class="card-title">{{subred.name}}</h5>
+            <h6 class="card-subtitle mb-2 text-body-secondary">{{subred.author}}</h6>
+            <p class="card-text">{{subred.description}}</p>
+            {% for i in subred.comments.all %}
+            <div class="card">
+              <div class="card-header">
+                {{i.username}}
+              </div>
+              <div class="card-body">
+                <h5 class="card-title">{{i.name}}</h5>
+                <p class="card-text">{{i.description}}</p>
+                <a href="#" class="btn btn-primary">Go somewhere</a>
+              </div>
+            </div>
+            {% endfor %}
+          </div>
+        </div>
+      {% endif %}
+      
+        
+    
+      
+    
+    {% endfor %}
+  </div>
+{% endblock content %}
