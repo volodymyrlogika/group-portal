@@ -1,3 +1,6 @@
 from django.contrib import admin
+from journalapp.models import *
 
-# Register your models here.
+admin.site.register(JournalStudents)
+admin.site.register(JournalHomework)
+admin.site.register(Lesson)

@@ -17,10 +17,11 @@ class JournalStudents(models.Model):
         ('11', '11 балів'),
         ('12', '12 балів'),
     ]
-    student_user = models.ForeignKey(User, on_delete=models.CASCADE)
+    student_user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='students_grades')
     grade = models.CharField(max_length=2, choices=GRADES)
     homework_grade = models.CharField(max_length=2, choices=GRADES)
     date = models.DateField()
+    lesson = models.ForeignKey('Lesson', on_delete=models.CASCADE, null=True, blank=True, related_name='lesson_grades')
 
     def __str__(self):
         return f"{self.student_user.username} - {self.grade} on {self.date}"
