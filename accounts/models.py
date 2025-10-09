@@ -1,3 +1,8 @@
 from django.db import models
 
-# Create your models here.
+class Role(models.Model):
+    name = models.CharField(max_length=255)
+    permissions = models.ManyToManyField("auth.Permission")
+
+    def __str__(self):
+        return self.name
