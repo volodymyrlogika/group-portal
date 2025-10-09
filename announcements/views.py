@@ -1,3 +1,8 @@
 from django.shortcuts import render
+from .models import Announcements
 
-# Create your views here.
+
+def announcements_list(request):
+    announcements = Announcements.objects.filter(status="published").order_by("-created_at")
+    return render(request, "announcements/announcements_list.html", {"announcements": announcements})
+
