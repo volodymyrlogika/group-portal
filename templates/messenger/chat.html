@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+{% block content %}
+  <div class="col-md-9">
+    <h3>{{ chat }}</h3>
+    <div id="chat-box" class="border p-3 mb-3" style="height: 400px; overflow-y: auto;">
+      {% for message in messages %}
+        <div class="d-flex {% if message.user == request.user %}justify-content-end{% else %}justify-content-start{% endif %} mb-2">
+          <div class="p-2 border rounded {% if message.user == request.user %}bg-primary text-white{% endif %}" style="max-width: 60%;">
+            <strong>{{ message.user.username }}:</strong> {{ message.text }}
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+
+    <form id="message-form" class="d-flex" method="post">
+      {% csrf_token %}
+      {{ form.text }}
+      <button type="submit" class="btn btn-primary ms-2">Надіслати</button>
+    </form>
+  </div>
+</div>
+
+<script>
+const form = document.querySelector('#message-form');
+const chatBox = document.querySelector('#chat-box');
+const chatId = {{ chat.id }};
+form.addEventListener('submit', function(e) {
+  e.preventDefault();
+  const textInput = document.querySelector('#message-input');
+  const text = textInput.value.trim();
+  if (!text) return;
+
+  const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+  fetch(`/api/send_message/${chatId}/`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'X-CSRFToken': csrftoken
+    },
+    body: JSON.stringify({ text: text, chat_id: chatId })
+  })
+  .then(res => res.json())
+  .then(data => {
+    if (data.errors) {
+      console.log(data.errors);
+      return;
+    }
+    const messageHTML = `
+      <div class="d-flex justify-content-end mb-2">
+          <div class="p-2 border rounded bg-primary text-white" style="max-width: 60%;">
+              <strong>${data.user}:</strong> ${data.text}
+          </div>
+      </div>`;
+    chatBox.insertAdjacentHTML('beforeend', messageHTML);
+    textInput.value = '';
+    chatBox.scrollTop = chatBox.scrollHeight;
+  });
+});
+</script>
+{% endblock %}

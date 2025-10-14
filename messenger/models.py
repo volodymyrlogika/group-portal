@@ -15,6 +15,11 @@ class Chat(BaseModel):
     is_group = models.BooleanField(default=False, verbose_name = 'Група')
     title = models.CharField(max_length=200, blank=True, null=True, verbose_name = 'Назва')
 
+    def save(self, *args, **kwargs):
+        if not self.is_group and self.users.count() > 2:
+            raise ValueError("Приватний чат може мати лише двох користувачів")
+        super().save(*args, **kwargs)
+        
     def __str__(self):
         return self.title or f"Чат {self.id}"
     
