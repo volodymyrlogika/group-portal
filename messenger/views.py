@@ -6,20 +6,34 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy
 from .models import Chat, Message
 from .forms import MessageForm, GroupForm
+from django.db.models import Count
 import json
 
 #Вью для створення чату
 class CreateChatView(LoginRequiredMixin, View):
     def post(self, request, *args, **kwargs):
-        other_user = get_object_or_404(User, id=request.POST.get('user_id'))
         current_user = request.user
+        other_user_id = request.POST.get('user_id')
 
-        chat = Chat.objects.filter(users=current_user).filter(users=other_user).first()
+        if not other_user_id:
+            return JsonResponse({'error': 'Не вказано користувача'}, status=400)
+
+        other_user = get_object_or_404(User, id=other_user_id)
+
+        chat = (
+            Chat.objects.filter(is_group=False)
+            .annotate(num_users=Count('users'))
+            .filter(num_users=2, users=current_user)
+            .filter(users=other_user)
+            .first()
+        )
+
         if not chat:
-            chat = Chat.objects.create(is_group=False)
+            chat = Chat.objects.create(is_group=False) 
             chat.users.add(current_user, other_user)
-        return redirect('chat', pk=chat.id)
 
+        return redirect('chat', pk=chat.id)
+    
 #Сторінка для створення групи
 class CreateGroupView(CreateView):
     model = Chat
@@ -49,6 +63,8 @@ class ChatView(LoginRequiredMixin, DetailView):
         context = super().get_context_data(**kwargs)
 
         context["messages"] = self.object.messages.all()
+        context["users"] = User.objects.all().exclude(id=self.request.user.id)
+        context["chats"] = Chat.objects.filter(users=self.request.user)
         context["form"] = MessageForm()
         return context
 

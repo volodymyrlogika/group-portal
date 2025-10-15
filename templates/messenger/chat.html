@@ -1,60 +1,124 @@
 {% extends "base.html" %}
 {% block content %}
-  <div class="col-md-9">
-    <h3>{{ chat }}</h3>
-    <div id="chat-box" class="border p-3 mb-3" style="height: 400px; overflow-y: auto;">
-      {% for message in messages %}
-        <div class="d-flex {% if message.user == request.user %}justify-content-end{% else %}justify-content-start{% endif %} mb-2">
-          <div class="p-2 border rounded {% if message.user == request.user %}bg-primary text-white{% endif %}" style="max-width: 60%;">
-            <strong>{{ message.user.username }}:</strong> {{ message.text }}
-          </div>
-        </div>
-      {% endfor %}
+<div class="container mt-4">
+
+  <div class="d-flex justify-content-center mb-3">
+    <button id="btn-users" class="btn btn-outline-primary me-2">Користувачі</button>
+    <button id="btn-chats" class="btn btn-outline-secondary">Чати</button>
+  </div>
+
+  <div class="row">
+    <div class="col-md-3">
+
+      <div id="user-list" class="list-group">
+        {% for user in users %}
+          <form method="post" action="{% url 'create_chat' %}">
+            {% csrf_token %}
+            <input type="hidden" name="user_id" value="{{ user.id }}">
+            <button type="submit" class="list-group-item list-group-item-action">
+              {{ user.username }}
+            </button>
+          </form>
+        {% empty %}
+          <p class="text-muted px-3">Немає інших користувачів.</p>
+        {% endfor %}
+      </div>
+
+      <div id="chat-list" class="list-group d-none">
+        {% for c in chats %}
+          <a href="{% url 'chat' c.id %}" class="list-group-item list-group-item-action" id="chat-change">
+            {% if c.is_group %}
+              💬 {{ c.title }}
+            {% else %}
+              👤 {{ c }}
+            {% endif %}
+          </a>
+        {% empty %}
+          <p class="text-muted px-3">Немає чатів.</p>
+        {% endfor %}
+      </div>
+      
+
     </div>
 
-    <form id="message-form" class="d-flex" method="post">
-      {% csrf_token %}
-      {{ form.text }}
-      <button type="submit" class="btn btn-primary ms-2">Надіслати</button>
-    </form>
+    <div class="col-md-9">
+      <h3>{{ chat }}</h3>
+      <div id="chat-box" class="border p-3 mb-3" style="height: 400px; overflow-y: auto;">
+        {% for message in messages %}
+          <div class="d-flex {% if message.user == request.user %}justify-content-end{% else %}justify-content-start{% endif %} mb-2">
+            <div class="p-2 border rounded {% if message.user == request.user %}bg-primary text-white{% endif %}" style="max-width: 60%;">
+              <strong>{{ message.user.username }}:</strong> {{ message.text }}
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+
+      <form id="message-form" class="d-flex" method="post">
+        {% csrf_token %}
+        {{ form.text }}
+        <button type="submit" class="btn btn-primary ms-2">Надіслати</button>
+      </form>
+    </div>
   </div>
 </div>
 
 <script>
-const form = document.querySelector('#message-form');
-const chatBox = document.querySelector('#chat-box');
-const chatId = {{ chat.id }};
-form.addEventListener('submit', function(e) {
-  e.preventDefault();
-  const textInput = document.querySelector('#message-input');
-  const text = textInput.value.trim();
-  if (!text) return;
+  const chatChangeButtons = document.querySelectorAll('#chat-change');
+  const btnUsers = document.getElementById('btn-users');
+  const btnChats = document.getElementById('btn-chats');
+  const userList = document.getElementById('user-list');
+  const chatList = document.getElementById('chat-list');
 
-  const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
-  fetch(`/api/send_message/${chatId}/`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'X-CSRFToken': csrftoken
-    },
-    body: JSON.stringify({ text: text, chat_id: chatId })
-  })
-  .then(res => res.json())
-  .then(data => {
-    if (data.errors) {
-      console.log(data.errors);
-      return;
-    }
-    const messageHTML = `
-      <div class="d-flex justify-content-end mb-2">
-          <div class="p-2 border rounded bg-primary text-white" style="max-width: 60%;">
-              <strong>${data.user}:</strong> ${data.text}
-          </div>
-      </div>`;
-    chatBox.insertAdjacentHTML('beforeend', messageHTML);
-    textInput.value = '';
-    chatBox.scrollTop = chatBox.scrollHeight;
+  btnUsers.addEventListener('click', () => {
+    btnUsers.classList.replace('btn-outline-primary', 'btn-primary');
+    btnChats.classList.replace('btn-primary', 'btn-outline-secondary');
+    userList.classList.remove('d-none');
+    chatList.classList.add('d-none');
   });
-});
+
+  btnChats.addEventListener('click', () => {
+    btnChats.classList.replace('btn-outline-secondary', 'btn-primary');
+    btnUsers.classList.replace('btn-primary', 'btn-outline-primary');
+    chatList.classList.remove('d-none');
+    userList.classList.add('d-none');
+  });
+
+  const form = document.querySelector('#message-form');
+  const chatBox = document.querySelector('#chat-box');
+  const chatId = {{ chat.id }};
+  const textInput = form.querySelector('input[name="text"]');
+
+  form.addEventListener('submit', function(e) {
+    e.preventDefault();
+    const text = textInput.value.trim();
+    if (!text) return;
+
+    const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+
+    fetch(`/api/send_message/${chatId}/`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-CSRFToken': csrftoken
+      },
+      body: JSON.stringify({ text: text, chat_id: chatId })
+    })
+    .then(res => res.json())
+    .then(data => {
+      if (data.errors) {
+        console.log(data.errors);
+        return;
+      }
+      const messageHTML = `
+        <div class="d-flex justify-content-end mb-2">
+          <div class="p-2 border rounded bg-primary text-white" style="max-width: 60%;">
+            <strong>${data.user}:</strong> ${data.text}
+          </div>
+        </div>`;
+      chatBox.insertAdjacentHTML('beforeend', messageHTML);
+      textInput.value = '';
+      chatBox.scrollTop = chatBox.scrollHeight;
+    });
+  });
 </script>
 {% endblock %}
