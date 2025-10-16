@@ -4,9 +4,10 @@ from django.shortcuts import get_object_or_404, redirect
 from django.contrib.auth.models import User
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy
-from .models import Chat, Message
+from .models import Chat, Message, Reaction
 from .forms import MessageForm, GroupForm
 from django.db.models import Count
+from .choices.emoji import EMOJI_CHOICES
 import json
 
 #Вью для створення чату
@@ -20,19 +21,13 @@ class CreateChatView(LoginRequiredMixin, View):
 
         other_user = get_object_or_404(User, id=other_user_id)
 
-        chat = (
-            Chat.objects.filter(is_group=False)
-            .annotate(num_users=Count('users'))
-            .filter(num_users=2, users=current_user)
-            .filter(users=other_user)
-            .first()
-        )
-
+        chat = Chat.objects.filter(is_group=False, users=current_user).filter(users=other_user).first()
+        
         if not chat:
-            chat = Chat.objects.create(is_group=False) 
+            chat = Chat.objects.create(is_group=False)
             chat.users.add(current_user, other_user)
 
-        return redirect('chat', pk=chat.id)
+        return redirect('chat', chat_pk=chat.id)
     
 #Сторінка для створення групи
 class CreateGroupView(CreateView):
@@ -46,7 +41,7 @@ class CreateGroupView(CreateView):
         chat.save()
         form.save_m2m()
         chat.users.add(self.request.user)
-        return redirect('chat', pk=chat.id)
+        return redirect('chat', chat_pk=chat.id)
     
 
 #Основна сторінка виведення чату
@@ -54,18 +49,31 @@ class ChatView(LoginRequiredMixin, DetailView):
     model = Chat
     template_name = 'messenger/chat.html'
     context_object_name = 'chat'
+    pk_url_kwarg = 'chat_pk'
 
     def get_object(self, queryset=None):
-        chat = get_object_or_404(Chat, id=self.kwargs['pk'])
-        return chat
+        return get_object_or_404(Chat, id=self.kwargs['chat_pk'])
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        chat = self.object
 
-        context["messages"] = self.object.messages.all()
-        context["users"] = User.objects.all().exclude(id=self.request.user.id)
-        context["chats"] = Chat.objects.filter(users=self.request.user)
-        context["form"] = MessageForm()
+        messages = chat.messages.all().select_related("user").prefetch_related("reactions")
+
+        for msg in messages:
+            msg.reaction_counts = (
+                msg.reactions.values("emoji")
+                .annotate(count=Count("emoji"))
+                .order_by()
+            )
+
+        context.update({
+            "messages": messages,
+            "users": User.objects.exclude(id=self.request.user.id),
+            "chats": Chat.objects.filter(users=self.request.user),
+            "form": MessageForm(),
+            "emoji_choices": EMOJI_CHOICES,
+        })
         return context
 
 #Вью для відправки повідомлень
@@ -82,9 +90,33 @@ class SendMessageView(LoginRequiredMixin, View):
             )
 
             return JsonResponse({
+                "id": message.id, 
                 "user": message.user.username,
                 "text": message.text,
                 "created_at": str(message.created_at)
             })
         return JsonResponse({'errors': form.errors}, status=400)
 
+
+#В'ю для реакцій
+class AddReactionView(LoginRequiredMixin, View):
+    def post(self, request, message_id, *args, **kwargs):
+        data = json.loads(request.body)
+        emoji = data.get("emoji")
+
+        if not emoji:
+            return JsonResponse({"success": False, "error": "Не вказано емодзі"}, status=400)
+
+        message = get_object_or_404(Message, id=message_id)
+
+        reaction, created = Reaction.objects.get_or_create(
+            user=request.user,
+            message=message,
+            emoji=emoji
+        )
+
+        if not created:
+            reaction.delete()
+            return JsonResponse({"success": True, "removed": True})
+
+        return JsonResponse({"success": True, "added": True})
