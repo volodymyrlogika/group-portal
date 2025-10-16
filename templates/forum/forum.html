@@ -1,12 +1,85 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <h1>Форум</h1>
-    <div class="container">
-    {% for subred in subredits %}
+{% load static %}
+    <style>
+    .teg{
+      position: sticky !important;
+      top: 0;
+      z-index: 1;
+      height: 2.3cm;
+      user-select: none;
+      
+    }
+    .adminaddpost{
+      position: relative;
+      top: -2.5rem;
+      margin-left: 5cm;
+    }
+    .adminpost{
+      position: relative !important;
+      width: 69.9rem;
+      top: 1.5rem;
+      left: 0.4rem;
+      margin-left: 2cm;
+    }
+    .background{
+      position: fixed !important;
+      top: 0;
+      z-index: -1;
+      left:0;
+      width: 100vw;
+      height: 100vh;
+
+      background-image: url("{% static 'img\dark_background_sub.jpg' %}") !important;
+      background-size: 100%;
+      background-repeat: no-repeat;
+      background-attachment: scroll;
+      padding-bottom: -10cm !important;
+    }
+
+    </style>
+    <div class="background"><div class="body2"></div></div>
     
+    <div class="container-fluid">
+      <div class="alert alert-light teg" role="alert">
+      <div><h1 class="menu">
+        Форум
+      </h1>
+      </div>
+      {% if user.is_superuser %}
+        <div class="adminaddpost">
+            <a href="{% url 'crform'%}">
+              <button type="submit" class="form_submit createpost">
+                Створити пост
+              </button>
+            </a>
+                
+        </div>
+    </div>
+    
+      
         
+      {% endif %}
     
+    {% for subred in subredits %}
+    <div class="alert alert-light adminpost" role="alert">
+        <div class="admindelpost">
+          <a href="{% url 'updform' subred.id %}">
+            <button type="submit" class="form_submit">
+              оновити пост
+            </button>
+          </a>
+        </div>
+        <div class="admindelpost">
+          <a href="{% url 'addcom' subred.id %}">
+            <button type="submit" class="form_submit">
+              додати коментар
+            </button>
+          </a>
+        </div>
+        <div class="created_at">{{subred.created_at}}</div>
+      </div>
       {% if subred.image %}
         <div class="card" style="width: 70rem;">
           <img src="{{subred.image.url}}" class="card-img-top" alt="...">
@@ -14,22 +87,56 @@
             <h5 class="card-title">{{subred.name}}</h5>
             <h6 class="authorpost">{{subred.author}}</h6>
             <p class="card-text">{{subred.description}}</p>
-            {% for i in subred.comments.all %}
+            {% for s_com in subred.comments.all %}
+            
+          <a href="{% url 'addanswer' s_com.id %}">
+            <button type="submit" class="form_submit">
+              відповісти
+            </button>
+          </a>
+          
             <div class="card" style="left: 3rem;">
-              <div class="card-header">
-                {{i.username}}
-              </div>
+              <div class="card-header">{{s_com.username}}</div>
               <div class="card-body">
-                <h5 class="card-title">{{i.name}}</h5>
-                <p class="card-text">{{i.description}}</p>
-                <a href="#" class="btn btn-primary">Go somewhere</a>
+                <h5 class="card-title">{{s_com.name}}</h5>
+                <p class="card-text">{{s_com.description}}</p>
+                <form action="{% url 'dlcom' s_com.id %}" method="post">
+                  {% csrf_token %}
+                  <div class="admindelpost">
+                      <button type="submit" class="form_submit">
+                        видалити коментар
+                      </button>
+                  </div>
+                </form>
+                {% for ans_com in s_com.answers.all %}
+                
+                  <div class="card" style="left: 2rem; width: 45rem;">
+                    <div class="card-header">
+                      {{ans_com.username}}
+                    </div>
+                    <div class="card-body">
+                      <p class="card-text">{{ans_com.description}}</p>
+                    </div>
+                    <form action="{% url "delanswer" ans_com.id %}" method="post">
+                      {% csrf_token %}
+                      <div class="admindelpost">
+                          <button type="submit" class="form_submit">
+                            видалити відповідь
+                          </button>
+                      </div>
+                    </form>
+                  </div>
+                {% endfor %}
+              </div>
               </div>
             </div>
             {% endfor %}
           </div>
         </div>
+
+
       {% else %}
-        <div class="card" style="width: 18rem; ">
+        <div class="card" style="width: 70rem; ">
           <div class="card-body">
             <h5 class="card-title">{{subred.name}}</h5>
             <h6 class="card-subtitle mb-2 text-body-secondary">{{subred.author}}</h6>
@@ -42,10 +149,33 @@
               <div class="card-body">
                 <h5 class="card-title">{{i.name}}</h5>
                 <p class="card-text">{{i.description}}</p>
-                <a href="#" class="btn btn-primary">Go somewhere</a>
+                <a href="{% url 'addanswer' i.id %}">
+                  <button type="submit" class="form_submit">
+                    відповісти
+                  </button>
+                </a>
+                {% for answer in i.answers.all %}
+                  <div class="card" style="left: 2rem; width: 45rem;">
+                    <div class="card-header">
+                      {{answer.username}}
+                    </div>
+                    <div class="card-body">
+                      <p class="card-text">{{answer.description}}</p>
+                    </div>
+                    <form action="{% url "delanswer" answer.id %}" method="post">
+                      {% csrf_token %}
+                      <div class="admindelpostt">
+                          <button type="submit" class="form_submit">
+                            видалити відповідь
+                          </button>
+                      </div>
+                    </form>
+                {% endfor %}
               </div>
             </div>
             {% endfor %}
+
+
           </div>
         </div>
       {% endif %}
@@ -55,5 +185,7 @@
       
     
     {% endfor %}
+
   </div>
+
 {% endblock content %}

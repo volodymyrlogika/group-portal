@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    
+    <h1>Зміни</h1>
+    
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{form.as_div}}
+        
+        <button type="submit" class="btn btn-primary mt-2">
+            Внести зміни
+        </button>
+
+    </form>
+
+    <form method="post" action="{% url 'delform' subredits.0.id %}">
+    {% csrf_token %}
+    <button type="submit" class="btn btn-danger mt-2">
+
+        <i class="bi bi-trash"></i> Видалити допис
+
+    </button>
+    
+    </form>
+
+{% endblock content %}
