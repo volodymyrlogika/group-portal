@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'channels',
     'main',
     'accounts',
     'messenger'
@@ -70,8 +71,14 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'group_portal.wsgi.application'
+# WSGI_APPLICATION = 'group_portal.wsgi.application'
+ASGI_APPLICATION = 'group_portal.asgi.application'
 
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels.layers.InMemoryChannelLayer",
+    },
+}
 
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases

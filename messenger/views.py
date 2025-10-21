@@ -1,6 +1,6 @@
-from django.views.generic import DetailView, View, CreateView
+from django.views.generic import View, CreateView
 from django.http import JsonResponse
-from django.shortcuts import get_object_or_404, redirect
+from django.shortcuts import get_object_or_404, redirect, render
 from django.contrib.auth.models import User
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy
@@ -45,36 +45,41 @@ class CreateGroupView(CreateView):
     
 
 #Основна сторінка виведення чату
-class ChatView(LoginRequiredMixin, DetailView):
-    model = Chat
+class ChatView(LoginRequiredMixin, View):
     template_name = 'messenger/chat.html'
-    context_object_name = 'chat'
-    pk_url_kwarg = 'chat_pk'
 
-    def get_object(self, queryset=None):
-        return get_object_or_404(Chat, id=self.kwargs['chat_pk'])
+    def get(self, request, chat_pk=None, *args, **kwargs):
+        chat = None
+        if chat_pk:
+            chat = get_object_or_404(Chat, id=chat_pk, users=request.user)
+        else:
+            chat = Chat.objects.filter(users=request.user).first()
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        chat = self.object
-
-        messages = chat.messages.all().select_related("user").prefetch_related("reactions")
-
-        for msg in messages:
-            msg.reaction_counts = (
-                msg.reactions.values("emoji")
-                .annotate(count=Count("emoji"))
-                .order_by()
+        messages = []
+        if chat:
+            messages = (
+                chat.messages.all()
+                .select_related("user")
+                .prefetch_related("reactions")
             )
 
-        context.update({
+            for msg in messages:
+                msg.reaction_counts = (
+                    msg.reactions.values("emoji")
+                    .annotate(count=Count("emoji"))
+                    .order_by()
+                )
+
+        context = {
+            "chat": chat,
             "messages": messages,
-            "users": User.objects.exclude(id=self.request.user.id),
-            "chats": Chat.objects.filter(users=self.request.user),
+            "users": User.objects.exclude(id=request.user.id),
+            "chats": Chat.objects.filter(users=request.user),
             "form": MessageForm(),
             "emoji_choices": EMOJI_CHOICES,
-        })
-        return context
+        }
+
+        return render(request, self.template_name, context)
 
 #Вью для відправки повідомлень
 class SendMessageView(LoginRequiredMixin, View):
@@ -108,15 +113,18 @@ class AddReactionView(LoginRequiredMixin, View):
             return JsonResponse({"success": False, "error": "Не вказано емодзі"}, status=400)
 
         message = get_object_or_404(Message, id=message_id)
+        user = request.user
 
-        reaction, created = Reaction.objects.get_or_create(
-            user=request.user,
-            message=message,
-            emoji=emoji
-        )
+        existing_reaction = Reaction.objects.filter(message=message, user=user).first()
 
-        if not created:
-            reaction.delete()
-            return JsonResponse({"success": True, "removed": True})
-
-        return JsonResponse({"success": True, "added": True})
+        if existing_reaction:
+            if existing_reaction.emoji == emoji:
+                existing_reaction.delete()
+                return JsonResponse({"success": True, "removed": True, "emoji": emoji})
+            else:
+                existing_reaction.emoji = emoji
+                existing_reaction.save()
+                return JsonResponse({"success": True, "changed": True, "emoji": emoji})
+        else:
+            Reaction.objects.create(message=message, user=user, emoji=emoji)
+            return JsonResponse({"success": True, "added": True, "emoji": emoji})

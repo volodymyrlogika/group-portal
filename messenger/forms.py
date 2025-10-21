@@ -29,3 +29,13 @@ class GroupForm(forms.ModelForm):
                 'class': 'form-control',
             }),
         }
+
+class ChatForm(forms.ModelForm):
+    class Meta:
+        model = Chat
+        fields = ['background']
+        widgets = {
+            'background': forms.ClearableFileInput(attrs={
+                'class': 'form-control',
+            }),
+        }

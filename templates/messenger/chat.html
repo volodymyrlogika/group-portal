@@ -50,18 +50,19 @@
       <div id="chat-box" class="border p-3 mb-3" style="height: 400px; overflow-y: auto;">
         {% for message in messages %}
           <div class="d-flex {% if message.user == request.user %}justify-content-end{% else %}justify-content-start{% endif %} mb-2">
-            <div class="p-2 border rounded message-content {% if message.user == request.user %}bg-primary text-white{% endif %}" 
-                 style="max-width: 80%; width: fit-content; word-wrap: break-word;" data-message-id="{{ message.id }}">
+            <div class="p-2 border rounded message-content {% if message.user == request.user %}bg-primary text-white{% else %}bg-light{% endif %}" 
+                 style="max-width: 80%; width: fit-content; word-wrap: break-word;" 
+                 data-message-id="{{ message.id }}">
               <div class="text-muted" style="font-size: 0.7em;">{{ message.created_at|date:"H:i, d M Y" }}</div>
               <strong>{{ message.user.username }}:</strong> {{ message.text }}
               <div class="mt-1 message-reactions">
                 <div class="reactions-list d-inline-block">
                   {% for reaction in message.reaction_counts %}
-                    <span class="reaction-btn existing" data-emoji="{{ reaction.emoji }}">
+                    <button class="reaction-btn existing mb-2 mt-2 me-2 p-2 border rounded" data-emoji="{{ reaction.emoji }}">
                       {{ reaction.emoji }} <small>×{{ reaction.count }}</small>
-                    </span>
+                    </button>
                   {% endfor %}
-                </div>                
+                </div>
                 <div class="emoji-picker d-none" style="position:absolute; background:#fff; border:1px solid #ccc; padding:5px; border-radius:5px; z-index:1000; display:flex; flex-wrap:wrap; gap:3px; max-width:200px;">
                   {% for emoji, label in emoji_choices %}
                     <span class="emoji-choice" data-emoji="{{ emoji }}" style="cursor:pointer; font-size:1.2em;">{{ emoji }}</span>
@@ -73,7 +74,7 @@
         {% endfor %}
       </div>
 
-      <form id="message-form" class="d-flex" method="post">
+      <form id="message-form" class="d-flex" method="post" action="javascript:void(0)">
         {% csrf_token %}
         {{ form.text }}
         <button type="submit" class="btn btn-primary ms-2">Надіслати</button>
@@ -81,74 +82,96 @@
     </div>
   </div>
 </div>
-
 <script>
-const btnUsers = document.getElementById('btn-users');
-const btnChats = document.getElementById('btn-chats');
-const userList = document.getElementById('user-list');
-const chatList = document.getElementById('chat-list');
-const chatBox = document.querySelector('#chat-box');
+  document.getElementById('btn-users').addEventListener('click', function() {
+    document.getElementById('user-list').classList.remove('d-none');
+    document.getElementById('chat-list').classList.add('d-none');
+  
+    this.classList.replace('btn-outline-primary', 'btn-primary');
+    document.getElementById('btn-chats').classList.replace('btn-primary', 'btn-outline-secondary');
+  });
+  
+  document.getElementById('btn-chats').addEventListener('click', function() {
+    document.getElementById('chat-list').classList.remove('d-none');
+    document.getElementById('user-list').classList.add('d-none');
+  
+    this.classList.replace('btn-outline-secondary', 'btn-primary');
+    document.getElementById('btn-users').classList.replace('btn-primary', 'btn-outline-primary');
+  });
+  </script>
+  
+<script>
 const chatId = {{ chat.id }};
+const chatBox = document.querySelector('#chat-box');
 const form = document.querySelector('#message-form');
 const textInput = form.querySelector('input[name="text"]');
+const currentUser = "{{ request.user.username }}";
 
-btnUsers.addEventListener('click', () => {
-  btnUsers.classList.replace('btn-outline-primary', 'btn-primary');
-  btnChats.classList.replace('btn-primary', 'btn-outline-secondary');
-  userList.classList.remove('d-none');
-  chatList.classList.add('d-none');
-});
+const protocol = window.location.protocol === 'https:' ? 'wss' : 'ws';
+const socket = new WebSocket(`${protocol}://${window.location.host}/ws/chat/${chatId}/`);
 
-btnChats.addEventListener('click', () => {
-  btnChats.classList.replace('btn-outline-secondary', 'btn-primary');
-  btnUsers.classList.replace('btn-primary', 'btn-outline-primary');
-  chatList.classList.remove('d-none');
-  userList.classList.add('d-none');
-});
+socket.onmessage = function(e) {
+  const data = JSON.parse(e.data);
 
-function scrollToBottom() {
-  chatBox.scrollTop = chatBox.scrollHeight;
-}
-scrollToBottom();
-
-form.addEventListener('submit', function(e) {
-  e.preventDefault();
-  const text = textInput.value.trim();
-  if (!text) return;
-  const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
-
-  fetch(`/api/send_message/${chatId}/`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json', 'X-CSRFToken': csrftoken },
-    body: JSON.stringify({ text: text, chat_id: chatId })
-  })
-  .then(res => res.json())
-  .then(data => {
-    if (data.errors) return console.log(data.errors);
-
+  if (data.type === 'chat_message') {
+    const isOwn = data.user === currentUser;
     const messageHTML = `
-      <div class="d-flex justify-content-end mb-2">
-        <div class="p-2 border rounded message-content bg-primary text-white" data-message-id="${data.id}" style="max-width:80%; width:fit-content; word-wrap: break-word;">
-          <div class="text-muted" style="font-size:0.7em;">${data.created_at}</div>
+      <div class="d-flex justify-content-${isOwn ? 'end' : 'start'} mb-2">
+        <div class="p-2 border rounded message-content ${isOwn ? 'bg-primary text-white' : 'bg-light'}"
+             data-message-id="${data.id}"
+             style="max-width:80%; width:fit-content; word-wrap:break-word;">
+          <div class="text-muted" style="font-size:0.7em;">${data.time}</div>
           <strong>${data.user}:</strong> ${data.text}
           <div class="mt-1 message-reactions">
             <div class="reactions-list d-inline-block"></div>
-            <div class="emoji-picker d-none" style="position:absolute; background:#fff; border:1px solid #ccc; padding:5px; border-radius:5px; z-index:1000; display:flex; flex-wrap:wrap; gap:3px; max-width:200px;">
+            <div class="emoji-picker d-none" 
+                 style="position:absolute; background:#fff; border:1px solid #ccc; padding:5px; border-radius:5px; z-index:1000; display:flex; flex-wrap:wrap; gap:3px; max-width:200px;">
               {% for emoji, label in emoji_choices %}
-                <span class="emoji-choice" data-emoji="{{ emoji }}" style="cursor:pointer; font-size:1.2em;">{{ emoji }}</span>
+                <span class="emoji-choice" data-emoji="{{ emoji }}" 
+                      style="cursor:pointer; font-size:1.2em;">{{ emoji }}</span>
               {% endfor %}
             </div>
           </div>
         </div>
       </div>`;
-    
     chatBox.insertAdjacentHTML('beforeend', messageHTML);
-    textInput.value = '';
     scrollToBottom();
     attachRightClickEvents();
     attachEmojiClickEvents();
-  });
+  }
+
+  if (data.type === 'reaction_update') {
+    const msgEl = document.querySelector(`[data-message-id="${data.message_id}"]`);
+    if (!msgEl) return;
+    const list = msgEl.querySelector('.reactions-list');
+    list.innerHTML = '';
+
+    data.counts.forEach(r => {
+      const btn = document.createElement('button');
+      btn.classList.add('reaction-btn', 'existing', 'mb-2', 'mt-2', 'me-2', 'p-2', 'border', 'rounded');
+      btn.dataset.emoji = r.emoji;
+      btn.innerHTML = `${r.emoji} <small>×${r.count}</small>`;
+      list.appendChild(btn);
+    });
+  }
+};
+
+form.addEventListener('submit', e => {
+  e.preventDefault();
+  const text = textInput.value.trim();
+  if (!text) return;
+
+  socket.send(JSON.stringify({
+    type: 'chat_message',
+    text: text
+  }));
+
+  textInput.value = '';
 });
+
+function scrollToBottom() {
+  chatBox.scrollTop = chatBox.scrollHeight;
+}
 
 function attachRightClickEvents() {
   document.querySelectorAll('.message-content').forEach(msg => {
@@ -156,6 +179,7 @@ function attachRightClickEvents() {
       e.preventDefault();
       document.querySelectorAll('.emoji-picker').forEach(p => p.classList.add('d-none'));
       const picker = msg.querySelector('.emoji-picker');
+      if (!picker) return;
       picker.style.top = (e.clientY + window.scrollY) + 'px';
       picker.style.left = (e.clientX + window.scrollX) + 'px';
       picker.classList.remove('d-none');
@@ -169,49 +193,26 @@ function attachEmojiClickEvents() {
       const emoji = choice.dataset.emoji;
       const picker = choice.closest('.emoji-picker');
       const messageId = picker.closest('.message-content').dataset.messageId;
-      const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
 
-      fetch(`/api/add_reaction/${messageId}/`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'X-CSRFToken': csrftoken },
-        body: JSON.stringify({ emoji })
-      })
-      .then(res => res.json())
-      .then(data => {
-        picker.classList.add('d-none');
-        const list = picker.closest('.message-reactions').querySelector('.reactions-list');
-        const existing = list.querySelector(`[data-emoji="${emoji}"]`);
+      socket.send(JSON.stringify({
+        type: 'reaction_update',
+        message_id: messageId,
+        emoji: emoji
+      }));
 
-        if (data.added) {
-          if (existing) {
-            const countEl = existing.querySelector('small');
-            countEl.textContent = '×' + (parseInt(countEl.textContent.replace('×','')) + 1);
-          } else {
-            const newEmoji = document.createElement('span');
-            newEmoji.classList.add('reaction-btn');
-            newEmoji.dataset.emoji = emoji;
-            newEmoji.innerHTML = `${emoji} <small>×1</small>`;
-            list.appendChild(newEmoji);
-          }
-        } else if (data.removed && existing) {
-          const countEl = existing.querySelector('small');
-          const newCount = parseInt(countEl.textContent.replace('×','')) - 1;
-          if (newCount <= 0) existing.remove();
-          else countEl.textContent = '×' + newCount;
-        }
-      });
+      picker.classList.add('d-none');
     };
   });
 }
-
-
-attachRightClickEvents();
-attachEmojiClickEvents();
 
 document.addEventListener('click', e => {
   if (!e.target.closest('.emoji-picker')) {
     document.querySelectorAll('.emoji-picker').forEach(p => p.classList.add('d-none'));
   }
 });
+
+attachRightClickEvents();
+attachEmojiClickEvents();
+scrollToBottom();
 </script>
 {% endblock %}

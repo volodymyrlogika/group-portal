@@ -63,11 +63,8 @@ class Reaction(BaseModel):
         return f"{self.emoji} --- {self.message}"
     
     class Meta: 
+        unique_together = ("message", "user")
         ordering = ["created_at"]
         verbose_name = 'Реакція'
         verbose_name_plural = 'Реакції'
-        constraints = [
-            models.UniqueConstraint(fields=['user', 'message', 'emoji'], name='unique_user_reaction')
-        ]
-
 
