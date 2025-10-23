@@ -4,4 +4,4 @@ from . import views
 urlpatterns = [
     # Визнач тут свої URL-шляхи
     
-]
+] 

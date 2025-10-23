@@ -1,0 +1,71 @@
+:root {
+    /* Background colors */
+    --color-bg: #000;
+    
+    --background: url(../img/backgrounds/main-bg-black.png);
+
+    --background2: url(../img/backgrounds/main-bg-black.png);
+
+    /* Text colors */
+    --color-text: #fff;
+
+    /* Accent colors */
+    --primary-color: #5E81FF;
+    --danger-color: #FF2929;
+    --success-color: #15FF1D;
+    --success-color2: #3DFF43;
+    --warning-color: #FFE500;
+    --secondary-color: #1F1F1F;
+    --third-color: #111;
+    --fourth-color: #2F2F2F;
+    --fifth-color: #3F3F3F;
+    --sixth-color: #5F5F5F;
+    --border-color: #1f1f1f;
+
+    /* Icon colors */
+    --icon-color: #fff;
+
+    /* Buttons */
+    --button-bg: #fff;
+    --button-text: #000;
+    --button-bg-hover: #ccc;
+
+    /* Settings */
+    --overflow-bg-color: #2f2f2f30;
+    --select-bg-color: #1f1f1f70;
+    --menubar-bg-color: rgba(0, 0, 0, 0);
+    --menu-box-bg-color: var(--secondary-color);
+
+    /* Article */
+    --quote-bg: #5e81ff17;
+    --title-header-shadow-color: rgba(0, 0, 0, 0.1);
+    --title-header-bg-color: #22222275;
+
+    --article-nav-links-color: #ffffff50;
+    --article-nav-links-hover-color: #ffffff70;
+    --header-border-color: #222;
+
+    /* Navbar */
+    --hr-nav-color: var(--secondary-color);
+
+    /* Footer */
+    --footer-bg-color: #090909;
+    --footer-text-color: #686868;
+    --footer-text-color-hover: #ababab;
+
+    /* Calendar Colors */
+    --popup-color-magenta: rgba(185, 64, 255, 0.2);
+    --popup-color-cyan: rgba(94, 255, 252, 0.2);
+    --popup-color-purple: rgba(137, 94, 255, 0.2);
+    --popup-color-pink: rgba(255, 94, 215, 0.2);
+    --popup-color-yellow: rgba(255, 229, 0, 0.2);
+    --popup-color-red: rgba(255, 41, 41, 0.2);
+    --popup-color-blue: rgba(94, 129, 255, 0.2);
+    --popup-color-green: rgba(61, 255, 67, 0.2);
+
+    /* Other */
+    --border-outline-color: rgb(88, 88, 88);
+    --inner-color: var(--secondary-color);
+    --inner-hover: var(--fourth-color);
+    --mixable-color: white;
+}

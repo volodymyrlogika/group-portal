@@ -12,6 +12,8 @@ class CalendarEvent(models.Model):
     time_finish = models.TimeField(null=True, blank=True, verbose_name='Кінець події')
     description = models.TextField(null=True, blank=True, verbose_name="Опис")
     topic = models.CharField(null=True, blank=True, max_length=100, verbose_name='Тема')
+
+    tags = models.ManyToManyField('Tag', blank=True, verbose_name="Теґи")
     
     def __str__(self):
         return f'{self.name} на {self.date}'
@@ -22,8 +24,7 @@ class CalendarEvent(models.Model):
 
 
 class Tag(models.Model):
-    name = models.CharField(max_length=50, verbose_name='Назва теґу')
-    event = models.ForeignKey(CalendarEvent, on_delete=models.DO_NOTHING, verbose_name="Подія до якої прив'язаний теґ")
+    name = models.CharField(max_length=50, verbose_name='Назва теґу', unique=True)
 
     def __str__(self):
         return f'Теґ: {self.name}'
@@ -45,11 +46,11 @@ class PersonalEventColor(models.Model):
     }
 
     color = models.CharField(max_length=255, choices=COLORS, default='blue', verbose_name='Персоналізований колір події')
-    event = models.ForeignKey(CalendarEvent, on_delete=models.DO_NOTHING, verbose_name='Подія для персоналізованого коліру')
-    user = models.ForeignKey(User, on_delete=models.DO_NOTHING, verbose_name='Користувач, який вибирає колір події')
+    event = models.ForeignKey(CalendarEvent, on_delete=models.CASCADE, verbose_name='Подія для персоналізованого коліру')
+    user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='Користувач, який вибирає колір події')
 
     def __str__(self):
-        return f'Колір {self.name} для події "{self.event}" для {self.user}'
+        return f'Колір {self.color} для події "{self.event}" для {self.user}'
     
     class Meta:
         verbose_name = 'Персоналізований колір для події'

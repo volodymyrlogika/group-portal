@@ -1,0 +1,720 @@
+body {
+    overflow: hidden;
+    user-select: none;
+}
+
+#add-event-button {
+    padding: 15px;
+    border-radius: 10px;
+    background-color: var(--inner-color);
+    color: var(--text-color);
+    width: 99%;
+    margin-top: 15px;
+}
+
+#add-event-button svg {
+    margin-right: 5px;
+}
+
+#add-event-button svg line {
+    stroke: var(--third-color);
+}
+
+#add-event-button:hover, .see-more-popups:hover {
+    background-color: var(--inner-hover);
+}
+
+.log-out-button {
+    color: var(--danger-color);
+}
+
+.month-arrow {
+    background: none;
+    border-radius: 50%;
+    padding: 2px;
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.month-arrow:hover {
+    background: var(--third-color);
+}
+
+.arrow-forward {
+    transform: rotate(180deg);
+
+}
+
+.month-scrolling-arrows {
+    display: flex;
+    gap: 10px;
+}
+
+.month-name {
+    display: flex;
+    align-items: center;
+    margin-top: 35px;
+    gap: 15px;
+    justify-content: space-between;
+}
+
+.month-name h3 {
+    padding: 0;
+    margin: 0;
+}
+
+.small-calendar-table {
+    width: 107%;
+    margin-top: 30px;
+    margin-left: -7px;
+}
+
+.small-calendar-table td, .small-calendar-table th {
+    text-align: center;
+    font-size: 12px;
+    font-weight: 200;
+    padding: 9px;
+    margin: 4px;
+    user-select: none;
+}
+
+.small-calendar-table th {
+    font-weight: 400;
+}
+
+.another-month {
+    color: var(--sixth-color);
+}
+
+.current-date {
+    color: var(--color-bg);
+    background: var(--primary-color);
+    border-radius: 50%;
+    font-weight: 400;
+}
+
+.small-calendar-table thead * {
+    padding-bottom: 10px;
+}
+
+.calendar-sidebar {
+    padding: 0px 5px 0px 10px;
+    width: 230px;
+    border-right: 1px var(--border-color) solid;
+    height: 90vh;
+    bottom: 0;
+    position: absolute;
+    overflow-y: auto;
+    overflow-x: hidden;
+    z-index: 1000;
+    background: var(--color-bg);
+    scrollbar-width: thin;
+    scrollbar-color: color-mix(in srgb, var(--border-color) 0%, transparent) transparent;
+    transition: scrollbar-color 0.2s;
+    margin: 0;
+}
+
+.calendar-sidebar:hover {
+    scrollbar-color: color-mix(in srgb, var(--border-color) 100%, transparent) transparent;
+
+}
+
+.sidebar-header {
+    font-size: 17px;
+    margin-bottom: 15px;
+}
+
+.event-popup {
+    display: flex;
+    width: 99%;
+    height: 35px;
+    align-items: center;
+    border-radius: 10px;
+    overflow: hidden;
+    margin-bottom: 8px;
+
+}
+
+.popup-date {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    font-size: 14px;
+    width: 25%;
+    justify-content: center;
+
+}
+
+.popup-event-name {
+    margin-left: 10px;
+    font-size: 14px;
+}
+
+.events-side-container {
+    margin-top: 15px;
+}
+
+.popup-blue {
+    background-color: var(--popup-color-blue);
+}
+
+.popup-red {
+    background-color: var(--popup-color-red);
+}
+
+.popup-green {
+    background-color: var(--popup-color-green);
+}
+
+.popup-yellow {
+    background-color: var(--popup-color-yellow);
+}
+
+.popup-magenta {
+    background-color: var(--popup-color-magenta);
+}
+
+.popup-cyan {
+    background-color: var(--popup-color-cyan);
+}
+
+.popup-purple {
+    background-color: var(--popup-color-purple);
+}
+
+.popup-pink {
+    background-color: var(--popup-color-pink)
+}
+
+.see-more-popups {
+    width: 99%;
+    height: 25px;
+    border-radius: 7px;
+    background: var(--inner-color);
+    color: var(--text-color);
+    font-size: 12px;
+    font-weight: 300;
+}
+
+.side-tag {
+    margin: 0;
+    padding: 5px;
+    background-color: var(--popup-color-blue);
+    width: fit-content;
+    font-size: 12px;
+    border-radius: 100px;
+    user-select: none;
+    cursor: pointer;
+    padding-left: 12px;
+    padding-right: 12px;
+}
+
+.side-tag:hover {
+    background-color: color-mix(in srgb, var(--popup-color-blue) 95%, var(--mixable-color));
+}
+
+.tags-side {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 50px;
+
+}
+
+.calendar-sidebar::-webkit-scrollbar {
+  width: 8px; /* ширина скролу */
+}
+
+.calendar-sidebar::-webkit-scrollbar-track {
+  background: transparent; /* прибрали фон */
+}
+.calendar-sidebar::-webkit-scrollbar-thumb {
+    background-color: transparent;
+    border-radius: 10px;
+    transition: background-color 0.5s;
+}
+
+.calendar-sidebar:hover::-webkit-scrollbar-thumb {
+  background-color: var(--border-color); /* колір повзунка */
+  
+}
+
+.calendar-sidebar::-webkit-scrollbar-thumb:hover {
+  background-color: var(--border-color); /* світліший при наведенні */
+}
+
+/* grid */
+
+.grid-container {
+    display: grid;
+    grid-template-columns: repeat(10, 1fr);
+    grid-template-rows: repeat(10, 1fr);
+    gap: 0px;
+}
+    
+.grid1 {
+    grid-column: span 10 / span 10;
+}
+
+.grid2 {
+    grid-column: span 2 / span 2;
+    grid-row: span 9 / span 9;
+    grid-row-start: 2;
+}
+
+.hours-grid * {
+    margin: 0;
+    padding: 4px 4px 0 0;
+    height: 90px;
+    box-sizing: border-box;
+    position: relative;
+    font-size: 13px;
+    user-select: none;
+    
+}
+
+.hours-grid *::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 1.5px; /* товщина лінії */
+    width: 100%; /* довжина */
+    background: linear-gradient(
+        to left,
+        var(--border-color) 0%,
+        var(--border-color) 50%,
+        color-mix(in srgb, var(--border-color) 0%, transparent) 50%,
+        color-mix(in srgb, var(--border-color) 0%, transparent) 100%
+    );
+}
+
+
+.hours-grid {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    width: 2.5%;
+    text-align: right;
+    
+}
+
+.grid3{
+    top: 22vh;
+    left: 245px;
+    position: absolute;
+    width: calc(100vw - 245px);
+    height: calc(78vh - 40px);
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: color-mix(in srgb, var(--border-color) 100%, transparent) transparent;
+    transition: scrollbar-color 0.2s;
+    overflow-y: overlay;
+    z-index: 20; /* піднімаємо вище */
+    padding-bottom: 40px;
+}
+
+.grid3::-webkit-scrollbar-thumb {
+    background: var(--border-color);
+    border-radius: 4px;
+}
+.grid3::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.grid3::-webkit-scrollbar {
+    width: 8px;
+    position: relative;
+    z-index: 9999;
+}
+
+.fixed-navbar {
+    position: absolute !important;
+    height: 10vh;
+    margin: 0;
+}
+
+.calendar-main-container {
+    width: 95%;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(7, 1fr); /* 7 columns */
+    gap: 0px;                              /* spacing between frames */
+    box-sizing: border-box;
+}
+
+[class^='clock-'] .e-frame:last-of-type {
+    border-right: 2px solid var(--border-color);
+    
+}
+
+[class='clock-23'] .e-frame {
+    border-bottom: 2px solid var(--border-color);
+    
+}
+
+.e-frame {
+    border-top: 2px solid var(--border-color);
+    border-left: 2px solid var(--border-color);
+    width: 100%;
+    height: 90px;
+    box-sizing: border-box;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    padding: 8px;
+}
+
+[class^="clock-"] {
+    display: contents;
+}
+
+.days-navigation {
+    width: calc(100vw - 255px);
+    height: 10vh;
+    position: fixed;
+    top: 9vh;
+    left: 245px;
+    
+    
+}
+
+.inner-days-container {
+    margin: 0 auto;
+    width: 95%;
+    height: 100%;
+    display: grid;
+    grid-template-columns: repeat(7, 1fr); /* 7 columns */
+    grid-auto-rows: 90px;                  /* row height — adjust if needed */
+    gap: 0px;                              /* spacing between frames */
+    box-sizing: border-box;
+}
+
+.inner-days-frame {
+    margin: 0 auto;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.day-frame {
+    font-size: 18px;
+    margin: 0;
+    
+    
+}
+
+.date-frame {
+    
+    font-size: 18px;
+    margin: 0;
+    padding: 5px;
+    border-radius: 50%;
+    margin-top: 4px;
+}
+
+.current-date-frame {
+    background: var(--primary-color);
+    color: var(--color-bg);
+}
+
+.red-frame {
+    background: var(--popup-color-red);
+    border: 2px solid color-mix(in srgb, var(--popup-color-red) 100%, var(--popup-color-red) 100%);
+}
+
+.blue-frame {
+    background: var(--popup-color-blue);
+    border: 2px solid color-mix(in srgb, var(--popup-color-blue) 100%, var(--popup-color-blue) 100%);
+}
+
+.green-frame {
+    background: var(--popup-color-green);
+    border: 2px solid color-mix(in srgb, var(--popup-color-green) 100%, var(--popup-color-green) 100%);
+}
+
+.yellow-frame {
+    background: var(--popup-color-yellow);
+    border: 2px solid color-mix(in srgb, var(--popup-color-yellow) 100%, var(--popup-color-yellow) 100%);
+}
+
+.purple-frame {
+    background: var(--popup-color-purple);
+    border: 2px solid color-mix(in srgb, var(--popup-color-purple) 100%, var(--popup-color-purple) 100%);
+}
+
+.magenta-frame {
+    background: var(--popup-color-magenta);
+    border: 2px solid color-mix(in srgb, var(--popup-color-magenta) 100%, var(--popup-color-magenta) 100%);
+}
+
+.pink-frame {
+    background: var(--popup-color-pink);
+    border: 2px solid color-mix(in srgb, var(--popup-color-pink) 100%, var(--popup-color-pink) 100%);
+}
+
+.cyan-frame {
+    background: var(--popup-color-cyan);
+    border: 2px solid color-mix(in srgb, var(--popup-color-cyan) 100%, var(--popup-color-cyan) 100%);
+}
+
+.event-frame {
+    width: 100%;
+    height: 30%;
+    border-radius: 1000px;
+    font-size: 12px;
+    padding: 4px 4px;
+    align-items: center;
+    display: flex;
+    cursor: pointer;
+    user-select: none;
+    gap: 4px;
+}
+
+.frame-title {
+    margin: 0;
+}
+
+.orb {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    box-sizing: border-box;
+    padding: 0;
+}
+
+.inner-orb {
+    width: 12px;
+    height: 12px;
+    background: #000;
+    border-radius: 50%;
+}
+
+.blue-orb {
+    border: 2px solid color-mix(in srgb, var(--popup-color-blue) 100%, var(--popup-color-blue) 100%);
+}
+
+.blue-inner-orb {
+    background: color-mix(in srgb, var(--popup-color-blue) 100%, var(--mixable-color) 10%);
+}
+
+.red-orb {
+    border: 2px solid color-mix(in srgb, var(--popup-color-red) 100%, var(--popup-color-red) 100%);
+}
+
+.red-inner-orb {
+    background: color-mix(in srgb, var(--popup-color-red) 100%, var(--mixable-color) 10%);
+}
+
+.green-orb {
+    border: 2px solid color-mix(in srgb, var(--popup-color-green) 100%, var(--popup-color-green) 100%);
+}
+
+.green-inner-orb {
+    background: color-mix(in srgb, var(--popup-color-green) 100%, var(--mixable-color) 10%);
+}
+
+.yellow-orb {
+    border: 2px solid color-mix(in srgb, var(--popup-color-yellow) 100%, var(--popup-color-yellow) 100%);
+}
+
+.yellow-inner-orb {
+    background: color-mix(in srgb, var(--popup-color-yellow) 100%, var(--mixable-color) 10%);
+}
+
+.magenta-orb {
+    border: 2px solid color-mix(in srgb, var(--popup-color-magenta) 100%, var(--popup-color-magenta) 100%);
+}
+
+.magenta-inner-orb {
+    background: color-mix(in srgb, var(--popup-color-magenta) 100%, var(--mixable-color) 10%);
+}
+
+.cyan-orb {
+    border: 2px solid color-mix(in srgb, var(--popup-color-cyan) 100%, var(--popup-color-cyan) 100%);
+}
+
+.cyan-inner-orb {
+    background: color-mix(in srgb, var(--popup-color-cyan) 100%, var(--mixable-color) 10%);
+}
+
+.purple-orb {
+    border: 2px solid color-mix(in srgb, var(--popup-color-purple) 100%, var(--popup-color-purple) 100%);
+}
+
+.purple-inner-orb {
+    background: color-mix(in srgb, var(--popup-color-purple) 100%, var(--mixable-color) 10%);
+}
+
+.pink-orb {
+    border: 2px solid color-mix(in srgb, var(--popup-color-pink) 100%, var(--popup-color-pink) 100%);
+}
+
+.pink-inner-orb {
+    background: color-mix(in srgb, var(--popup-color-pink) 100%, var(--mixable-color) 10%);
+}
+
+.frame-reverse {
+    flex-direction: row-reverse;
+}
+
+.main-shadow {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    height: 10%;
+    background: linear-gradient(to top, color-mix(in srgb, var(--color-bg) 80%, 
+    transparent), color-mix(in srgb, var(--color-bg) 0%, transparent));
+    z-index: 1001;
+
+}
+
+.orb-connector {
+    position: absolute;
+    height: 2px;
+    border-radius: 2px;
+    transform-origin: left center;
+    pointer-events: none;
+    z-index: 25;
+    background-color: var(--popup-color-blue);
+}
+
+.add-event-overlay.enabled-overlay {
+    top: 0;
+}
+
+.add-event-overlay {
+    position: fixed;
+    top: -100vh;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    backdrop-filter: blur(20px);
+    z-index: 300000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: top 0.5s;
+}
+
+.add-event-window {
+    width: 500px;
+    height: 80vh;
+    background-color: var(--menu-box-bg-color);
+    border-radius: 25px;
+    position: relative;
+}
+
+.add-event-window h3 {
+    margin: 0;
+    padding: 0;
+    margin-top: 10px;
+    font-size: 16px;
+    text-align: center;
+    width: 100%;
+}
+
+.add-event-window input {
+    background: none;
+    border: 1.5px solid var(--fifth-color);
+    padding: 10px;
+    border-radius: 10px;
+    color: var(--text-color);
+    fill: var(--text-color);
+}
+
+.add-event-form {
+    padding: 12px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.add-event-window hr {
+    padding: 0;
+    margin-bottom: 10px;
+}
+
+.add-event-form input {
+    margin-top: 0;
+    margin-bottom: 15px;
+}
+
+input[placeholder='Event Name'] {
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.time-inputs {
+    display: flex;
+    gap: 10px;
+    position: relative;
+}
+
+.time-inputs * {
+    width: calc(100% - 10px);
+}
+
+.input-placeholder {
+    position: absolute;
+    font-size: 10px;
+    width:fit-content;
+    background: var(--secondary-color);
+    padding: 3px;
+    top: -8px;
+    left: 7px;
+}
+
+.input-placeholder.second-placeholder {
+    left: calc(50% + 10px);
+}
+
+.add-event-form textarea {
+    width: 100%;
+    background: none;
+    color: var(--text-color);
+    box-sizing: border-box;
+    border-radius: 10px;
+    padding: 5px;
+    border: 1px solid var(--fifth-color);
+}
+
+.add-event-form button {
+    padding: 8px;
+    padding-left: 18px;
+    padding-right: 18px;
+    border-radius: 100px;
+    box-sizing: border-box;
+
+}
+
+.add-event-form .buttons {
+    display: flex;
+    position: absolute;
+    bottom: 12px;
+    right: 12px;
+    gap: 4px;
+    box-sizing: border-box;
+}
+
+.overlay-button {
+    color: var(--button-bg);
+    border: 1px solid var(--button-bg);
+    background: none;
+    box-sizing: border-box;
+    
+}
+
+.overlay-button:hover {
+    background: var(--button-bg);
+    border: none;
+    color: var(--button-text);
+}
