@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% block title %}Опитування{% endblock %}
+
+{% block content %}
+<h1>Список опитувань</h1>
+
+<div class="list-group">
+    {% for poll in polls %}
+    <a href="{% url 'poll_detail' poll.id %}" class="list-group-item list-group-item-action">
+        {{ poll.title }}
+        {% if not poll.is_active %}
+            <span class="badge bg-secondary">Неактивне</span>
+        {% endif %}
+    </a>
+    {% empty %}
+    <p>Опитувань ще немає.</p>
+    {% endfor %}
+</div>
+{% endblock %}
