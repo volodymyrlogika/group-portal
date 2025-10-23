@@ -47,7 +47,10 @@
         {% endif %}
       </h3>
 
-      <div id="chat-box" class="border p-3 mb-3" style="height: 400px; overflow-y: auto;">
+      <div id="chat-box" class="p-4 mb-3 rounded shadow-sm" 
+      style="height:500px; overflow-y:auto; border:1px solid #ccc;
+            background: url('{{ chat.background.url }}') no-repeat center center;
+            background-size: cover;">
         {% for message in messages %}
           <div class="d-flex {% if message.user == request.user %}justify-content-end{% else %}justify-content-start{% endif %} mb-2">
             <div class="p-2 border rounded message-content {% if message.user == request.user %}bg-primary text-white{% else %}bg-light{% endif %}" 
@@ -102,6 +105,7 @@
   
 <script>
 const chatId = {{ chat.id }};
+const reactionButtons = document.querySelectorAll('.reaction-btn');
 const chatBox = document.querySelector('#chat-box');
 const form = document.querySelector('#message-form');
 const textInput = form.querySelector('input[name="text"]');
@@ -155,6 +159,19 @@ socket.onmessage = function(e) {
     });
   }
 };
+
+reactionButtons.forEach(btn => {
+  btn.addEventListener('click', () => {
+    const emoji = btn.dataset.emoji;
+    const messageId = btn.closest('.message-content').dataset.messageId;
+
+    socket.send(JSON.stringify({
+      type: 'reaction_update',
+      message_id: messageId,
+      emoji: emoji
+    }));
+  });
+});
 
 form.addEventListener('submit', e => {
   e.preventDefault();

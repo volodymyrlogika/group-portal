@@ -49,9 +49,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
 
             message = await sync_to_async(Message.objects.get)(id=message_id)
 
-            existing = await sync_to_async(
-                lambda: Reaction.objects.filter(message=message, user=user, emoji=emoji).first()
-            )()
+            existing = await sync_to_async(Reaction.objects.filter(message=message, user=user, emoji=emoji).first)()
 
             if existing:
                 await sync_to_async(existing.delete)()
