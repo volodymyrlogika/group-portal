@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="container" style="color: black; text-align: center;">
+    <div class="me-auto" style="margin-top: 50px;">
+        <h1>Журнал</h1>
+        <table class="table table-bordered" style="width: 60% ; margin-top: 40px;">
+            <thead>
+                <tr>
+                    <th>Ім'я студента</th>
+                    <th>Оцінка</th>
+                    <th>Оцінка за домашнє завдання</th>
+                    <th>Дата</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for journal_student in journal_students %}
+                <tr>
+                    <td>{{ journal_student.student_user }}</td>
+                    <td><input type="text" value="{{ journal_student.grade }}" class="form-control" /></td>
+                    <td><input type="text" value="{{ journal_student.homework_grade }}" class="form-control" /></td>
+                    <td><input type="text" value="{{ journal_student.date }}" class="form-control" /></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <div class="container" style="margin-left: 400px; max-width: 40%;">
+            {% for lesson in lessons %}
+                <div class="lesson">
+                    <h2><input type="text" value="{{ lesson.topic }}" class="form-control" /></h2>
+                    <p><input type="text" value="{{ lesson.date }}" class="form-control" /></p>
+                    <p><input type="text" value="{{ lesson.homework }}" class="form-control" /></p>
+                </div>
+            {% endfor %}
+        </div>
+        
+
+    </div>
+</div>
+
+{% endblock %}

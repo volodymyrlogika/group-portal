@@ -1,41 +1,54 @@
 {% extends 'base.html' %}
 
 {% block content %}
-
-<div class="container" style="color: black; text-align: center;">
-    <div class="me-auto" style="margin-top: 50px;">
+<div class="container" style="color: black; text-align: center; background-color: aquamarine;">
+    <div class="row" style="margin-top: 50px;">
         <h1>Журнал</h1>
-        <table class="table table-bordered" style="width: 60% ; margin-top: 40px;">
-            <thead>
-                <tr>
-                    <th>Ім'я студента</th>
-                    <th>Оцінка</th>
-                    <th>Оцінка за домашнє завдання</th>
-                    <th>Дата</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for journal_student in journal_students %}
-                <tr>
-                    <td>{{ journal_student.student_user }}</td>
-                    <td>{{ journal_student.grade }}</td>
-                    <td>{{ journal_student.homework_grade }}</td>
-                    <td>{{ journal_student.date }}</td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-        <div class="container" style="margin-left: 400px; max-width: 40%;">
+    </div>
+
+    <div class="row" style="margin-top: 40px;">
+        <div class="col-md-6">
+            <div class="container" style="background-color: rgb(255, 255, 255); width: 800px; height: 300px; border-radius: 10px;">
+                <table class="table table-bordered" 
+                style="width: 100%; border-radius: 10px; background-color: #e9f7ef00; position: relative; border-top-color:#e9f7ef00; border-bottom-color: black; border-left-color: none; border-right-color: none">
+                    <thead>
+                        <tr>
+                            <th>Ім'я студента</th>
+                            <th>Оцінка</th>
+                            <th>Оцінка за домашнє завдання</th>
+                            <th>Дата</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for journal_student in journal_students %}
+                        <tr>
+                            <td>{{ journal_student.student_user }}</td>
+                            <td>{{ journal_student.grade }}</td>
+                            <td>{{ journal_student.homework_grade }}</td>
+                            <td>{{ journal_student.date }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <div class="col-md-6 text-start">
             {% for lesson in lessons %}
-                <div class="lesson">
-                    <h2>{{ lesson.topic }}</h2>
-                    <p>{{ lesson.date }}</p>
-                    <p>{{ lesson.homework }}</p>
+                <div class="lesson mb-4 p-3 border rounded" style="background-color: #e9f7ef;">
+                    <h4>{{ lesson.topic }}</h4>
+                    <p><strong>Дата:</strong> {{ lesson.date }}</p>
+                    <p><strong>Д/З:</strong> {{ lesson.homework }}</p>
                 </div>
             {% endfor %}
+            </div>
         </div>
-        
+    </div>
 
+    <div class="row">
+    {% if user.is_superuser %}
+        <div class="col text-center" style="margin-top: 20px; margin-bottom: 20px;">
+            <a href="{% url 'edit_journal' %}" class="btn btn-primary">Редагувати журнал</a>
+        </div>
+    {% endif %}
     </div>
 </div>
 
