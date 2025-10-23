@@ -3,6 +3,39 @@
 {% block content %}
 {% load static %}
     <style>
+      html{
+        overflow-x: hidden;
+      }
+
+      /* Кнопки та час*/
+
+      .createpost{
+        position: relative;
+        top: -3.4rem;
+        margin-left: 5cm;
+        font-size: 3rch;
+      }
+
+      .updatepost{
+        position: relative; 
+        top: -1.15rem; 
+        left: 10rem;
+      }
+
+      .addcoment{
+        position: relative;
+        top: -3.55rem;
+
+      }
+      
+      .created_at{
+        position: relative;
+        top: -4.6rem;
+        left: 46rem;
+        font-size: 2.1rch;
+        
+      /* Пости */
+      }
     .teg{
       position: sticky !important;
       top: 0;
@@ -11,18 +44,56 @@
       user-select: none;
       
     }
-    .adminaddpost{
-      position: relative;
-      top: -2.5rem;
-      margin-left: 5cm;
-    }
     .adminpost{
       position: relative !important;
       width: 69.9rem;
+      height: 5rem;
       top: 1.5rem;
       left: 0.4rem;
       margin-left: 2cm;
+    } 
+
+
+    .card-header{
+      position: relative;
+      height: 2.2rem;
     }
+
+    /* значення в постах */
+
+    .c-t-post{
+      position: relative !important;
+      padding-left: 3%;
+      font-size: 3ch;
+    }
+
+    .aut-post{
+      position: relative !important;
+      padding-left: 5%;
+      font-size: 2ch;
+      top: -0.3rem;
+    }
+    /* коментарі */
+
+    .description{
+      position: relative !important;
+      left: 3rem;
+      padding: 0.2%;
+      font-size: 4.5ch;
+    }
+
+    /* відповіді */
+
+    .pushtext{
+      position: relative;
+      top: -0.4rem;
+      left: -0.5rem;
+      height: 2rem;
+    }
+
+   
+
+
     .background{
       position: fixed !important;
       top: 0;
@@ -30,13 +101,14 @@
       left:0;
       width: 100vw;
       height: 100vh;
-
       background-image: url("{% static 'img\dark_background_sub.jpg' %}") !important;
       background-size: 100%;
       background-repeat: no-repeat;
       background-attachment: scroll;
       padding-bottom: -10cm !important;
     }
+
+
 
     </style>
     <div class="background"><div class="body2"></div></div>
@@ -50,7 +122,7 @@
       {% if user.is_superuser %}
         <div class="adminaddpost">
             <a href="{% url 'crform'%}">
-              <button type="submit" class="form_submit createpost">
+              <button type="submit" class="form_submit createpost btn btn-secondary">
                 Створити пост
               </button>
             </a>
@@ -63,48 +135,57 @@
       {% endif %}
     
     {% for subred in subredits %}
-    <div class="alert alert-light adminpost" role="alert">
-        <div class="admindelpost">
-          <a href="{% url 'updform' subred.id %}">
-            <button type="submit" class="form_submit">
-              оновити пост
-            </button>
-          </a>
-        </div>
-        <div class="admindelpost">
-          <a href="{% url 'addcom' subred.id %}">
-            <button type="submit" class="form_submit">
-              додати коментар
-            </button>
-          </a>
-        </div>
-        <div class="created_at">{{subred.created_at}}</div>
-      </div>
-      {% if subred.image %}
+
+        
         <div class="card" style="width: 70rem;">
+         {% if subred.image %}
           <img src="{{subred.image.url}}" class="card-img-top" alt="...">
-          <div class="card-body">
-            <h5 class="card-title">{{subred.name}}</h5>
-            <h6 class="authorpost">{{subred.author}}</h6>
-            <p class="card-text">{{subred.description}}</p>
+          {% endif %}
+
+          <div class="card-body ">
+            <div class="card-header"><div class="admindelpost">
+                <a href="{% url 'updform' subred.id %}">
+                  <button type="submit" class="form_submit updatepost btn btn-secondary">
+                    оновити пост
+                  </button>
+                </a>
+              </div>
+              <div class="admindelpost">
+                <a href="{% url 'addcom' subred.id %}">
+                  <button type="submit" class="form_submit addcoment btn btn-secondary">
+                    додати коментар
+                  </button>
+                </a>
+              </div>
+              <div class="created_at">дата створення: {{subred.created_at}}</div>
+            </div>
+          </div>
+            <h5 class="card-title c-t-post">{{subred.name}}</h5>
+            <h6 class="authorpost aut-post">{{subred.author}}</h6>
+            <p class="card-text description">{{subred.description}}</p>
             {% for s_com in subred.comments.all %}
             
-          <a href="{% url 'addanswer' s_com.id %}">
-            <button type="submit" class="form_submit">
-              відповісти
-            </button>
-          </a>
+          
           
             <div class="card" style="left: 3rem;">
-              <div class="card-header">{{s_com.username}}</div>
+              <div class="card-header">
+                <a href="{% url 'addanswer' s_com.id %}">
+                  <button type="submit" class="form_submit pushtext btn btn-secondary">
+                    відповісти
+                  </button>
+                </a>
+                {{s_com.username}}
+              </div>
               <div class="card-body">
                 <h5 class="card-title">{{s_com.name}}</h5>
                 <p class="card-text">{{s_com.description}}</p>
                 <form action="{% url 'dlcom' s_com.id %}" method="post">
                   {% csrf_token %}
                   <div class="admindelpost">
-                      <button type="submit" class="form_submit">
-                        видалити коментар
+                      <button type="submit" class="form_submit btn btn-secondary">
+                        видалити коментар<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash-fill" viewBox="0 0 16 16">
+                                          <path d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5M8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5m3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0"/>
+                                        </svg>
                       </button>
                   </div>
                 </form>
@@ -120,65 +201,22 @@
                     <form action="{% url "delanswer" ans_com.id %}" method="post">
                       {% csrf_token %}
                       <div class="admindelpost">
-                          <button type="submit" class="form_submit">
-                            видалити відповідь
+                          <button type="submit" class="form_submit btn btn-secondary">
+                            видалити відповідь <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash-fill" viewBox="0 0 16 16">
+                                                <path d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5M8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5m3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0"/>
+                                              </svg>
                           </button>
                       </div>
                     </form>
                   </div>
                 {% endfor %}
               </div>
-              </div>
             </div>
             {% endfor %}
           </div>
         </div>
 
 
-      {% else %}
-        <div class="card" style="width: 70rem; ">
-          <div class="card-body">
-            <h5 class="card-title">{{subred.name}}</h5>
-            <h6 class="card-subtitle mb-2 text-body-secondary">{{subred.author}}</h6>
-            <p class="card-text">{{subred.description}}</p>
-            {% for i in subred.comments.all %}
-            <div class="card">
-              <div class="card-header">
-                {{i.username}}
-              </div>
-              <div class="card-body">
-                <h5 class="card-title">{{i.name}}</h5>
-                <p class="card-text">{{i.description}}</p>
-                <a href="{% url 'addanswer' i.id %}">
-                  <button type="submit" class="form_submit">
-                    відповісти
-                  </button>
-                </a>
-                {% for answer in i.answers.all %}
-                  <div class="card" style="left: 2rem; width: 45rem;">
-                    <div class="card-header">
-                      {{answer.username}}
-                    </div>
-                    <div class="card-body">
-                      <p class="card-text">{{answer.description}}</p>
-                    </div>
-                    <form action="{% url "delanswer" answer.id %}" method="post">
-                      {% csrf_token %}
-                      <div class="admindelpostt">
-                          <button type="submit" class="form_submit">
-                            видалити відповідь
-                          </button>
-                      </div>
-                    </form>
-                {% endfor %}
-              </div>
-            </div>
-            {% endfor %}
-
-
-          </div>
-        </div>
-      {% endif %}
       
         
     

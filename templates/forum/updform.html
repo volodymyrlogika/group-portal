@@ -1,10 +1,58 @@
 {% extends 'base.html' %}
 
 {% block content %}
+{% load static %}
+    <style>
+    body{
+            background-image: url("{% static 'img\background2.png' %}");
+            background-size: 100%
+        }
+
+        .title_{
+            position: absolute;
+            left: 61rem;
+            top: 15vw;
+            height: 14cm;
+            z-index: 1;
+        }
+
+        .text-center{
+            position: relative;
+            top: 9cm;
+            font-size: 3rem;
+            left: -1.7rem;
+            color: azure;
+            user-select: none;
+        }
+
+        .formbackground{
+            position: relative;
+            display: flex;
+            flex-direction: row-reverse;
+            justify-content: space-evenly;
+            top: 13vw;
+            height: 14cm;
+            width: 12cm;
+            left: 37.5vh;
+            backdrop-filter: blur(10px);
+            background-color: rgba(179, 179, 179, 0.5);
+            backdrop-filter: blur(10px);
+            border-radius: 1cm;
+        }
+
+        .formm{
+            position: relative;
+            color: black;
+            font-size: 18px;
+            top: 5rem;
+        }
+
+
+    </style>
+    <h1 class="title_">Зміни</h1>
     
-    <h1>Зміни</h1>
-    
-    <form method="post" enctype="multipart/form-data">
+    <form method="post" enctype="multipart/form-data" class="formbackground">
+        <div class="formm">
         {% csrf_token %}
         {{form.as_div}}
         

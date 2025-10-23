@@ -1,13 +1,54 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <form method="post">
+{% load static %}
+    <style>
+    body{
+            background-image: url("{% static 'img\background2.png' %}");
+            background-size: 100%
+        }
+
+        .text-center{
+            position: relative;
+            top: 12cm;
+            font-size: 3rem;
+            left: -1.5rem;
+            color: azure;
+            user-select: none;
+        }
+
+        .formbackground{
+            position: relative;
+            display: flex;
+            flex-direction: row-reverse;
+            justify-content: space-evenly;
+            top: 14vw;
+            height: 12cm;
+            width: 12cm;
+            left: 37.5vh;
+            backdrop-filter: blur(10px);
+            background-color: rgba(179, 179, 179, 0.5);
+            backdrop-filter: blur(10px);
+            border-radius: 1cm;
+        }
+
+        .formm{
+            position: relative;
+            top: 3rem;
+            color: black;
+            font-size: 18px;
+            top: 2rem;
+        }
+
+
+    </style>
+    <form method="post" class="formbackground">
+        <div class="formm">
         {% csrf_token %}
         {{comment.as_div}}
-        
         <button type="submit" class="btn btn-primary mt-2">
             Додати коментар
         </button>
-
+        </div>
     </form>
 {% endblock content %}
