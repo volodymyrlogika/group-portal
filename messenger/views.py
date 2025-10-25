@@ -1,11 +1,11 @@
-from django.views.generic import View, CreateView
+from django.views.generic import View, CreateView, UpdateView
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.contrib.auth.models import User
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy
 from .models import Chat, Message, Reaction
-from .forms import MessageForm, GroupForm
+from .forms import MessageForm, GroupForm, ChatForm
 from django.db.models import Count
 from .choices.emoji import EMOJI_CHOICES
 import json
@@ -29,12 +29,28 @@ class CreateChatView(LoginRequiredMixin, View):
 
         return redirect('chat', chat_pk=chat.id)
     
+#Вью для редагування чату/групи
+class ChatEditView(LoginRequiredMixin, UpdateView):
+    model = Chat
+    pk_url_kwarg = 'chat_pk'
+    template_name = 'messenger/chat_edit.html'
+
+    def get_form_class(self):
+        if self.object.is_group:
+            return GroupForm
+        else:
+            return ChatForm
+    
+    def get_success_url(self):
+        return reverse_lazy('chat', kwargs={'chat_pk': self.object.id})
+    
 #Сторінка для створення групи
 class CreateGroupView(CreateView):
     model = Chat
     form_class = GroupForm
     template_name = 'messenger/create_group.html'
     success_url = reverse_lazy('main')
+    
     def form_valid(self, form):
         chat = form.save(commit=False)
         chat.is_group = True

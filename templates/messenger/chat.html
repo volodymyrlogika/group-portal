@@ -1,5 +1,7 @@
 {% extends "base.html" %}
+{% load static %}
 {% block content %}
+
 <div class="container mt-4">
 
   <div class="d-flex justify-content-center mb-3">
@@ -45,12 +47,18 @@
         {% else %}
           {{ chat }}
         {% endif %}
+        <!--кнопка щоб перейти на сторінеу редагування-->
+        <a href="{% url 'chat_edit' chat.pk %}" class="btn btn-sm btn-outline-secondary ms-2">Редагувати</a>
       </h3>
 
       <div id="chat-box" class="p-4 mb-3 rounded shadow-sm" 
       style="height:500px; overflow-y:auto; border:1px solid #ccc;
-            background: url('{{ chat.background.url }}') no-repeat center center;
-            background-size: cover;">
+       {% if chat.background %}
+           background: url('{{ chat.background.url }}') no-repeat center center;
+           background-size: cover;
+       {% else %}
+            background: url('{% static "default/default_bg.png" %}') no-repeat center center;
+       {% endif %}">
         {% for message in messages %}
           <div class="d-flex {% if message.user == request.user %}justify-content-end{% else %}justify-content-start{% endif %} mb-2">
             <div class="p-2 border rounded message-content {% if message.user == request.user %}bg-primary text-white{% else %}bg-light{% endif %}" 
