@@ -196,7 +196,8 @@ function throttle(fn, wait) {
         }
     };
 }
-// ...existing code...
+
+
 
 addEvents = document.querySelector('.add-event-overlay')
 
@@ -208,3 +209,76 @@ function closeAddEvents() {
     addEvents.classList.remove('enabled-overlay');
 }
 
+
+document.addEventListener('DOMContentLoaded', () => {
+    initOrbConnectors();
+    initDropdowns(); // <-- додано ініціалізацію дропдаунів
+});
+
+// глобальний лічильник для підняття відкритого дропдауна над іншими
+let dropdownZCounter = 200000;
+
+function initDropdowns() {
+    const container = document.querySelector('.grid3');
+    const frames = Array.from(document.querySelectorAll('.event-frame'));
+
+    frames.forEach(frame => {
+        const dropdown = frame.querySelector('.dropdown-info');
+        if (!dropdown) return;
+
+        // початковий стан
+        dropdown.style.display = dropdown.classList.contains('show') ? 'block' : 'none';
+        dropdown.setAttribute('aria-hidden', dropdown.classList.contains('show') ? 'false' : 'true');
+        dropdown.style.zIndex = dropdownZCounter; // базовий z
+
+        // клік по фрейму — перемикати дропдаун
+        frame.addEventListener('click', (e) => {
+            e.stopPropagation();
+            toggleDropdown(frame);
+        });
+
+        // не закривати при кліку всередині самого дропдауну
+        dropdown.addEventListener('click', e => e.stopPropagation());
+
+        // після завершення анімації приховуємо display для економії місця
+        dropdown.addEventListener('animationend', () => {
+            if (dropdown.classList.contains('hide')) {
+                dropdown.style.display = 'none';
+                dropdown.setAttribute('aria-hidden', 'true');
+            } else if (dropdown.classList.contains('show')) {
+                dropdown.style.display = 'block';
+                dropdown.setAttribute('aria-hidden', 'false');
+            }
+        });
+    });
+
+    // закривати при кліку поза івентами
+    document.addEventListener('click', closeAllDropdowns);
+}
+
+function toggleDropdown(frame) {
+    const dropdown = frame.querySelector('.dropdown-info');
+    if (!dropdown) return;
+
+    // закриваємо інші дропдауни, крім поточного
+    closeAllDropdowns(dropdown);
+
+    if (dropdown.classList.contains('show')) {
+        dropdown.classList.remove('show');
+        dropdown.classList.add('hide');
+    } else {
+        // зробимо видимим перед запуском анімації і піднімемо в стек
+        dropdown.style.display = 'block';
+        dropdown.style.zIndex = ++dropdownZCounter; // підняти над усіма попередніми
+        dropdown.classList.remove('hide');
+        dropdown.classList.add('show');
+    }
+}
+
+function closeAllDropdowns(skip = null) {
+    document.querySelectorAll('.dropdown-info.show, .dropdown-info.hide').forEach(d => {
+        if (d === skip) return;
+        d.classList.remove('show');
+        if (!d.classList.contains('hide')) d.classList.add('hide');
+    });
+}

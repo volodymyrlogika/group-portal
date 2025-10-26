@@ -1,3 +1,16 @@
+:root {
+  --popup-color-blue-complete: #3b82f6;
+  --popup-color-red-complete: #ef4444;
+  --popup-color-green-complete: #10b981;
+  --popup-color-yellow-complete: #f59e0b;
+  --popup-color-magenta-complete: #d946ef;
+  --popup-color-pink-complete: #f472b6;
+  --popup-color-purple-complete: #8b5cf6;
+  --popup-color-cyan-complete: #06b6d4;
+  --border-outline-color: rgba(0,0,0,0.12);
+  --mixable-color: rgba(255,255,255,0.06);
+}
+
 body {
     overflow: hidden;
     user-select: none;
@@ -612,12 +625,14 @@ body {
     background-color: var(--menu-box-bg-color);
     border-radius: 25px;
     position: relative;
+    overflow-y: auto;
 }
 
 .add-event-window h3 {
     margin: 0;
     padding: 0;
-    margin-top: 10px;
+    margin-top: 15px;
+    margin-bottom: 20px;
     font-size: 16px;
     text-align: center;
     width: 100%;
@@ -703,6 +718,7 @@ input[placeholder='Event Name'] {
     right: 12px;
     gap: 4px;
     box-sizing: border-box;
+    z-index: 200000;
 }
 
 .overlay-button {
@@ -710,6 +726,7 @@ input[placeholder='Event Name'] {
     border: 1px solid var(--button-bg);
     background: none;
     box-sizing: border-box;
+    backdrop-filter: blur(10px);
     
 }
 
@@ -717,4 +734,252 @@ input[placeholder='Event Name'] {
     background: var(--button-bg);
     border: none;
     color: var(--button-text);
+}
+
+/* Контейнер */
+.outer-color-circle {
+  width: 35px;
+  height: 35px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  cursor: pointer;
+  position: relative;
+  transition: border 0.5s ease;
+  border: 2px solid color-mix(in srgb, var(--secondary-color) 100%, var(--mixable-color) 10%)
+}
+
+/* Прихований input */
+.color-radio {
+  position: absolute;
+  opacity: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  cursor: pointer;
+  z-index: 2;
+}
+
+/* Внутрішнє коло */
+.color-circle {
+  width: 25px;
+  height: 25px;
+  border-radius: 50%;
+  position: relative;
+  z-index: 1;
+}
+
+.color-circle::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1.5px;
+  background: linear-gradient(
+    to bottom left,
+    var(--border-outline-color) 0%,
+    color-mix(in srgb, var(--mixable-color) 50%, transparent) 10%,
+    color-mix(in srgb, var(--mixable-color) 0%, transparent) 75%,
+    var(--border-outline-color) 100%
+  );
+  mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  -webkit-mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+}
+
+/* Активний стан (рамка навколо зовнішнього кола) */
+.color-radio:checked + .color-circle {
+  outline: 2px solid var(--popup-color-blue-complete);
+  outline-offset: 5px; /* щоб рамка була зовні */
+}
+
+/* Приклади кольорів */
+.blue-circle {
+  background: var(--popup-color-blue-complete);
+}
+
+.red-circle {
+  background: var(--popup-color-red-complete);
+}
+
+.radio-colors {
+    display: flex;
+    gap: 4px;
+}
+
+.green-circle {
+  background: var(--popup-color-green-complete);
+}
+
+.cyan-circle {
+  background: var(--popup-color-cyan-complete);
+}
+
+.yellow-circle {
+  background: var(--popup-color-yellow-complete);
+}
+
+.magenta-circle {
+  background: var(--popup-color-magenta-complete);
+}
+
+.pink-circle {
+  background: var(--popup-color-pink-complete);
+}
+
+.purple-circle {
+  background: var(--popup-color-purple-complete);
+}
+
+.dropdown-info {
+    min-width: 350px;
+    top: -20px;
+    left: -0px;
+    cursor: default;
+    border-radius: 25px;
+    overflow: hidden;
+    opacity: 0;
+    z-index: 6000;
+    backdrop-filter: blur(20px);
+
+
+    /* нове: щоб не перехоплював кліки коли прихований */
+    pointer-events: none;
+    will-change: transform, opacity;
+}
+
+.dropdown-info.show {
+    animation: dropdown-info-open 1s cubic-bezier(0.22, 1.2, 0.36, 1) forwards;
+    pointer-events: auto;
+}
+
+.dropdown-info.hide {
+    animation: dropdown-info-hide 0.8s cubic-bezier(0.5, -0, 0.7, -0.2) forwards;
+    pointer-events: none;
+}
+
+@keyframes dropdown-info-open {
+    0% {
+        transform: scale(0);
+        min-width: 0;
+        filter: blur(20px);
+        opacity: 0;
+        left: 0;
+        transform-origin: top left;
+    }
+
+    25% {
+        margin-top: 30px;
+    }
+
+    80% {
+        filter: blur(0px);
+        opacity: 1;
+    }
+
+    100% {
+        transform: scale(1);
+        padding: 20px;
+        left: -400px;
+        margin-left: 0;
+        opacity: 1;
+    }
+}
+
+@keyframes dropdown-info-hide {
+    0% {
+        transform: scale(1);
+        padding: 20px;
+        left: -400px;
+        margin-left: 0;
+        filter: blur(0px);
+        opacity: 1;
+    }
+    20% {
+        filter: blur(0px);
+        opacity: 1;
+    }
+
+    75% {
+        margin-top: 30px;
+    }
+    100% {
+        transform: scale(0);
+        min-width: 0;
+        filter: blur(20px);
+        opacity: 0;
+        left: 0px;
+        transform-origin: top left;
+    }
+}
+
+.dropdown-info h4 {
+    font-size: 16px;
+    margin: 0;
+    padding: 0;
+}
+
+.event-frame {
+    position: relative;
+}
+
+.full-date {
+    font-size: 11px;
+    margin: 2px 0 0 0;
+    padding: 0;
+    font-weight: 200;
+}
+
+.all-info-div {
+    margin-top: 30px;
+}
+
+.info-flex {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    margin-top: 4px;
+    font-weight: 200;
+}
+
+.info-tag {
+    background: var(--popup-color-blue);
+    width: fit-content;
+    padding: 4px;
+    border-radius: 1000px;
+    padding-left: 10px;
+    padding-right: 10px;
+    font-weight: 200;
+}
+
+.tags-info {
+    display: flex;
+    margin-top: 12px;
+    gap: 4px;
+}
+
+.dropdown-info {
+    position: absolute; /* щоб при переміщенні в body позиціювати через top/left */
+    min-width: 350px;
+    top: -20px;
+    left: 0;
+    cursor: default;
+    border-radius: 25px;
+    overflow: hidden;
+    opacity: 0;
+    z-index: 200000; /* базовий z — JS ще піднімає inline z */
+    pointer-events: none;
+    will-change: transform, opacity;
+}
+/* ...existing code... */
+.add-event-overlay.enabled-overlay,
+.settings-menu {
+    z-index: 300000; /* оверлеї завжди вище за дропдауни */
 }

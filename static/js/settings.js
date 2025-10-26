@@ -8,9 +8,9 @@ themeInputs.forEach(input => {
     input.addEventListener("change", (e) => {
         if (e.target.checked) {
             if (e.target.value === "light") {
-                themeChanger.setAttribute("href", "./src/css/beige-theme.css");
+                themeChanger.setAttribute("href", "{% static 'css/beige-theme.css'%}");
             } else if (e.target.value === "dark") {
-                themeChanger.setAttribute("href", "./src/css/dark-theme.css");
+                themeChanger.setAttribute("href", "{% static 'css/dark-theme.css'%}");
             }
         }
     });

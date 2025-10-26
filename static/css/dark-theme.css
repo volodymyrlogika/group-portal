@@ -68,4 +68,15 @@
     --inner-color: var(--secondary-color);
     --inner-hover: var(--fourth-color);
     --mixable-color: white;
+
+    /* Complete calendar colors */
+    --popup-color-magenta-complete: rgba(185, 64, 255, 1);
+    --popup-color-cyan-complete: rgba(94, 255, 252, 1);
+    --popup-color-purple-complete: rgba(137, 94, 255, 1);
+    --popup-color-pink-complete: rgba(255, 94, 215, 1);
+    --popup-color-yellow-complete: rgba(255, 229, 0, 1);
+    --popup-color-red-complete: rgba(255, 41, 41, 1);
+    --popup-color-blue-complete: rgba(94, 129, 255, 1);
+    --popup-color-green-complete: rgba(61, 255, 67, 1);
+
 }
