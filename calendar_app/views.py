@@ -7,6 +7,8 @@ from django.utils.translation import gettext as _
 
 def calendar_view(request):
     today = date.today()
+    
+    
 
     # ---- Тиждень ----
     start_of_week = today - timedelta(days=today.weekday())

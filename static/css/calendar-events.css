@@ -979,3 +979,35 @@ input[placeholder='Event Name'] {
 .settings-menu {
     z-index: 300000; /* оверлеї завжди вище за дропдауни */
 }
+
+.list-event {
+    margin: 0;
+    padding: 15px;
+    position: absolute;
+    top: 10vh;
+    left: 245px;
+    width: calc(100vw - 245px);
+    box-sizing: border-box;
+    border-bottom: 1px solid var(--secondary-color);
+    cursor: pointer;
+}
+
+.main-list-info {
+    display: flex;
+    justify-content: space-between;
+}
+
+.list-event * {
+    font-size: 14px;
+    
+}
+
+.list-description {
+    font-weight: 100;
+    color: rgba(255, 255, 255, 0.3);
+    font-style: italic;
+}
+
+.list-time {
+    color: rgba(255, 255, 255, 0.3)
+}
