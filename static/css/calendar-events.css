@@ -56,14 +56,10 @@ body {
     background: var(--third-color);
 }
 
-.arrow-forward {
-    transform: rotate(180deg);
-
-}
-
 .month-scrolling-arrows {
     display: flex;
     gap: 10px;
+    align-items: center;
 }
 
 .month-name {

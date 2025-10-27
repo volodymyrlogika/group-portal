@@ -152,38 +152,20 @@
                     <span>Нова подія</span>
                 </button>
 
-                <div class="additional-calendar-information">
-                    <div class="month-display">
-                        <div class="month-name">
-                            <h3 class="sidebar-header">Вересень</h3>
-                            <div class="month-scrolling-arrows">
-                                <button class="month-arrow arrow-backward">
-                                    <svg width="6" height="10" viewBox="0 0 6 10" fill="none"
-                                        xmlns="http://www.w3.org/2000/svg">
-                                        <line x1="5.35355" y1="0.353553" x2="0.353553" y2="5.35355" stroke="white" />
-                                        <line y1="-0.5" x2="7.07107" y2="-0.5"
-                                            transform="matrix(-0.707107 -0.707107 -0.707107 0.707107 5 10)"
-                                            stroke="var(--color-text)" />
-                                    </svg>
-                                </button>
-
-                                <button class="month-arrow arrow-forward">
-                                    <svg width="6" height="10" viewBox="0 0 6 10" fill="none"
-                                        xmlns="http://www.w3.org/2000/svg">
-                                        <line x1="5.35355" y1="0.353553" x2="0.353553" y2="5.35355" stroke="white" />
-                                        <line y1="-0.5" x2="7.07107" y2="-0.5"
-                                            transform="matrix(-0.707107 -0.707107 -0.707107 0.707107 5 10)"
-                                            stroke="var(--color-text)" />
-                                    </svg>
-                                </button>
-
-
-
-                            </div>
+                <div class="month-display">
+                    <div class="month-name">
+                        <h3 class="sidebar-header">{{ month_name }}</h3>
+                        <div class="month-scrolling-arrows">
+                            <a href="?year={{ prev_year }}&month={{ prev_month }}"
+                                class="month-arrow arrow-backward">‹</a>
+                            <a href="?year={{ next_year }}&month={{ next_month }}"
+                                class="month-arrow arrow-forward">›</a>
                         </div>
+                    </div>
 
-                        <table class="small-calendar-table">
-                            <thead class="table-weekdays">
+                    <table class="small-calendar-table">
+                        <thead class="table-weekdays">
+                            <tr>
                                 <th>П</th>
                                 <th>В</th>
                                 <th>С</th>
@@ -191,1328 +173,1276 @@
                                 <th>П</th>
                                 <th>С</th>
                                 <th>Н</th>
-                            </thead>
-                            <tbody class="date-nums-table">
-                                <tr class="date-nums-row">
-                                    <td>1</td>
-                                    <td>2</td>
-                                    <td>3</td>
-                                    <td>4</td>
-                                    <td>5</td>
-                                    <td>6</td>
-                                    <td>7</td>
-                                </tr>
-                                <tr class="date-nums-row">
-                                    <td>8</td>
-                                    <td>9</td>
-                                    <td>10</td>
-                                    <td>11</td>
-                                    <td>12</td>
-                                    <td>13</td>
-                                    <td>14</td>
-                                </tr>
-                                <tr class="date-nums-row">
-                                    <td>15</td>
-                                    <td>16</td>
-                                    <td>17</td>
-                                    <td>18</td>
-                                    <td>19</td>
-                                    <td>20</td>
-                                    <td>21</td>
-                                </tr>
-                                <tr class="date-nums-row">
-                                    <td class="current-date">22</td>
-                                    <td>23</td>
-                                    <td>24</td>
-                                    <td>25</td>
-                                    <td>26</td>
-                                    <td>27</td>
-                                    <td>28</td>
-                                </tr>
-                                <tr>
-                                    <td>28</td>
-                                    <td>29</td>
-                                    <td>30</td>
-                                    <td class="another-month">1</td>
-                                    <td class="another-month">2</td>
-                                    <td class="another-month">3</td>
-                                    <td class="another-month">4</td>
-                                </tr>
-                            </tbody>
-                        </table>
+                            </tr>
+                        </thead>
+                        <tbody class="date-nums-table">
+                            {% for week in weeks %}
+                            <tr class="date-nums-row">
+                                {% for day in week %}
+                                {% if day.month != month %}
+                                <td class="another-month">{{ day.day }}</td>
+                                {% elif day == today %}
+                                <td class="current-date">{{ day.day }}</td>
+                                {% else %}
+                                <td>{{ day.day }}</td>
+                                {% endif %}
+                                {% endfor %}
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+
+
+
+
+                <div class="events-display">
+                    <h3 class="sidebar-header">Події</h3>
+                    <div class="events-side-container">
+                        {% for event in events %}
+                        <div class="event-popup popup-{{ event.color }}">
+                            <div class="popup-date popup-{{ event.color }}">
+                                <span>{{ event.date | date:'d.m'}}</span>
+                            </div>
+                            <span class="popup-event-name">{{ event.name }}</span>
+                        </div>
+                        {% empty %}
+                        <p style="font-size: 12px; font-weight: 200">Поки що немає подій</p>
+                        {% endfor %}
+                        {% if events|length > 4 %}
+                        <button class="see-more-popups">
+                            Більше
+                        </button>
+                        {% endif %}
+
+
 
                     </div>
+                </div>
 
-                    <div class="events-display">
-                        <h3 class="sidebar-header">Події</h3>
-                        <div class="events-side-container">
-                            <div class="event-popup popup-blue">
-                                <div class="popup-date popup-blue">
-                                    <span>24.09</span>
-                                </div>
-                                <span class="popup-event-name">Lesson #18</span>
-                            </div>
-
-                            <div class="event-popup popup-red">
-                                <div class="popup-date popup-red">
-                                    <span>25.09</span>
-                                </div>
-                                <span class="popup-event-name">Lesson #19</span>
-                            </div>
-
-                            <div class="event-popup popup-green">
-                                <div class="popup-date popup-green">
-                                    <span>25.09</span>
-                                </div>
-                                <span class="popup-event-name">Therapy</span>
-                            </div>
-
-                            <div class="event-popup popup-yellow">
-                                <div class="popup-date popup-yellow">
-                                    <span>10.10</span>
-                                </div>
-                                <span class="popup-event-name">Formal Meeting</span>
-                            </div>
-
-                            <button class="see-more-popups">
-                                Більше
-                            </button>
-
-
-                        </div>
-                    </div>
-
-                    <div class="tags-display">
-                        <h3 class="sidebar-header">Теги</h3>
-                        <div class="tag-search"></div>
-                        <div class="tags-side">
-                            <div class="side-tag">Програмування</div>
-                            <div class="side-tag">Терапія</div>
-                            <div class="side-tag">Фести</div>
-                            <div class="side-tag">Програма майбутніх лідерів</div>
-                        </div>
+                <div class="tags-display">
+                    <h3 class="sidebar-header">Теги</h3>
+                    <div class="tags-side">
+                        {% for tag in tags %}
+                        <div class="side-tag">{{ tag.name }}</div>
+                        {% endfor %}
                     </div>
                 </div>
             </div>
         </div>
-        <div class="days-navigation">
-            <div class="inner-days-container">
-                <div class="inner-days-frame">
-                    <p class="date-frame">19</p>
-                    <p class="day-frame">ПН</p>
-                </div>
-                <div class="inner-days-frame">
-                    <p class="date-frame">20</p>
-                    <p class="day-frame">ВТ</p>
-                </div>
-                <div class="inner-days-frame">
-                    <p class="date-frame">21</p>
-                    <p class="day-frame">СР</p>
-                </div>
-                <div class="inner-days-frame">
-                    <p class="date-frame current-date-frame">22</p>
-                    <p class="day-frame">ЧТ</p>
-                </div>
-                <div class="inner-days-frame">
-                    <p class="date-frame">23</p>
-                    <p class="day-frame">ПТ</p>
-                </div>
-                <div class="inner-days-frame">
-                    <p class="date-frame">24</p>
-                    <p class="day-frame">СБ</p>
-                </div>
-                <div class="inner-days-frame">
-                    <p class="date-frame">25</p>
-                    <p class="day-frame">НД</p>
-                </div>
-
+    </div>
+    <div class="days-navigation">
+        <div class="inner-days-container">
+            <div class="inner-days-frame">
+                <p class="date-frame">19</p>
+                <p class="day-frame">ПН</p>
             </div>
+            <div class="inner-days-frame">
+                <p class="date-frame">20</p>
+                <p class="day-frame">ВТ</p>
+            </div>
+            <div class="inner-days-frame">
+                <p class="date-frame">21</p>
+                <p class="day-frame">СР</p>
+            </div>
+            <div class="inner-days-frame">
+                <p class="date-frame current-date-frame">22</p>
+                <p class="day-frame">ЧТ</p>
+            </div>
+            <div class="inner-days-frame">
+                <p class="date-frame">23</p>
+                <p class="day-frame">ПТ</p>
+            </div>
+            <div class="inner-days-frame">
+                <p class="date-frame">24</p>
+                <p class="day-frame">СБ</p>
+            </div>
+            <div class="inner-days-frame">
+                <p class="date-frame">25</p>
+                <p class="day-frame">НД</p>
+            </div>
+
         </div>
-        <div class="grid3">
-            <div class="main-shadow"></div>
-            <div class="hours-grid">
-                <span>00</span>
-                <span>01</span>
-                <span>02</span>
-                <span>03</span>
-                <span>04</span>
-                <span>05</span>
-                <span>06</span>
-                <span>07</span>
-                <span>08</span>
-                <span>09</span>
-                <span>10</span>
-                <span>11</span>
-                <span>12</span>
-                <span>13</span>
-                <span>14</span>
-                <span>15</span>
-                <span>16</span>
-                <span>17</span>
-                <span>18</span>
-                <span>19</span>
-                <span>20</span>
-                <span>21</span>
-                <span>22</span>
-                <span>23</span>
-            </div>
-            <div class="calendar-main-container">
-                <div class="clock-0">
-                    <div class="day-mon e-frame">
-                    </div>
-                    <div class="day-tue e-frame"></div>
-                    <div class="day-wed e-frame">
-                        <div class="event-frame purple-frame">
-                            <p class="frame-title">Hackathon</p>
-                            <div class="dropdown-info dropdown-basis" id="dropdown3-s">
-                                <h4>Therapy</h4>
-                                <p class="full-date">Неділя, вересень 25</p>
-
-                                <div class="all-info-div">
-                                    <div class="info-flex">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 8 8"
-                                            fill="none">
-                                            <g clip-path="url(#clip0_273_1166)">
-                                                <path
-                                                    d="M4.00098 0.666992C5.84191 0.666992 7.33398 2.15905 7.33398 4C7.33398 5.84093 5.84191 7.33301 4.00098 7.33301C2.16006 7.33297 0.667973 5.84091 0.667969 4C0.667969 2.15907 2.16006 0.667029 4.00098 0.666992ZM4.00098 2.41699C3.86291 2.41699 3.75098 2.52892 3.75098 2.66699V4C3.75098 4.0663 3.77732 4.12989 3.82422 4.17676L4.65723 5.00977C4.75486 5.1074 4.91311 5.10739 5.01074 5.00977C5.10838 4.91213 5.10838 4.75388 5.01074 4.65625L4.25098 3.89648V2.66699C4.25098 2.52892 4.13904 2.41699 4.00098 2.41699Z"
-                                                    fill="white" />
-                                            </g>
-                                            <defs>
-                                                <clipPath id="clip0_273_1166">
-                                                    <rect width="8" height="8" fill="white" />
-                                                </clipPath>
-                                            </defs>
-                                        </svg>
-                                        <span>Час: 19:00-23:00</span>
-                                    </div>
-                                </div>
-                                <div class="tags-info">
-                                    <div class="info-tag">
-                                        Терапія
-                                    </div>
-                                </div>
-
-                                <div class="colors-info">
-                                    <p>Колір</p>
-                                    <div class="radio-colors">
-                                        <label class="outer-color-circle">
-                                            <input type="radio" name="color" value="blue" class="color-radio" checked>
-                                            <span class="color-circle blue-circle"></span>
-                                        </label>
-
-                                        <label class="outer-color-circle">
-                                            <input type="radio" name="color" value="red" class="color-radio">
-                                            <span class="color-circle red-circle"></span>
-                                        </label>
-
-                                        <label class="outer-color-circle">
-                                            <input type="radio" name="color" value="green" class="color-radio" checked>
-                                            <span class="color-circle green-circle"></span>
-                                        </label>
-
-                                        <label class="outer-color-circle">
-                                            <input type="radio" name="color" value="yellow" class="color-radio">
-                                            <span class="color-circle yellow-circle"></span>
-                                        </label>
-
-                                        <label class="outer-color-circle">
-                                            <input type="radio" name="color" value="purple" class="color-radio">
-                                            <span class="color-circle purple-circle"></span>
-                                        </label>
-
-                                        <label class="outer-color-circle">
-                                            <input type="radio" name="color" value="magenta" class="color-radio">
-                                            <span class="color-circle magenta-circle"></span>
-                                        </label>
-
-                                        <label class="outer-color-circle">
-                                            <input type="radio" name="color" value="cyan" class="color-radio">
-                                            <span class="color-circle cyan-circle"></span>
-                                        </label>
-
-                                        <label class="outer-color-circle">
-                                            <input type="radio" name="color" value="pink" class="color-radio">
-                                            <span class="color-circle pink-circle"></span>
-                                        </label>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="day-thu e-frame"></div>
-                    <div class="day-fri e-frame"></div>
-                    <div class="day-sat e-frame"></div>
-                    <div class="day-sun e-frame"></div>
-                </div>
-                <div class="clock-1">
-                    <div class="day-mon e-frame"></div>
-                    <div class="day-tue e-frame"></div>
-                    <div class="day-wed e-frame"></div>
-                    <div class="day-thu e-frame"></div>
-                    <div class="day-fri e-frame"></div>
-                    <div class="day-sat e-frame"></div>
-                    <div class="day-sun e-frame"></div>
-                </div>
-                <div class="clock-2">
-                    <div class="day-mon e-frame"></div>
-                    <div class="day-tue e-frame"></div>
-                    <div class="day-wed e-frame"></div>
-                    <div class="day-thu e-frame"></div>
-                    <div class="day-fri e-frame"></div>
-                    <div class="day-sat e-frame"></div>
-                    <div class="day-sun e-frame"></div>
-                </div>
-                <div class="clock-3">
-                    <div class="day-mon e-frame"></div>
-                    <div class="day-tue e-frame"></div>
-                    <div class="day-wed e-frame"></div>
-                    <div class="day-thu e-frame"></div>
-                    <div class="day-fri e-frame"></div>
-                    <div class="day-sat e-frame"></div>
-                    <div class="day-sun e-frame"></div>
-                </div>
-                <div class="clock-4">
-                    <div class="day-mon e-frame"></div>
-                    <div class="day-tue e-frame"></div>
-                    <div class="day-wed e-frame"></div>
-                    <div class="day-thu e-frame"></div>
-                    <div class="day-fri e-frame"></div>
-                    <div class="day-sat e-frame"></div>
-                    <div class="day-sun e-frame"></div>
-                </div>
-                <div class="clock-5">
-                    <div class="day-mon e-frame"></div>
-                    <div class="day-tue e-frame"></div>
-                    <div class="day-wed e-frame"></div>
-                    <div class="day-thu e-frame"></div>
-                    <div class="day-fri e-frame"></div>
-                    <div class="day-sat e-frame"></div>
-                    <div class="day-sun e-frame"></div>
-                </div>
-                <div class="clock-6">
-                    <div class="day-mon e-frame"></div>
-                    <div class="day-tue e-frame"></div>
-                    <div class="day-wed e-frame"></div>
-                    <div class="day-thu e-frame"></div>
-                    <div class="day-fri e-frame"></div>
-                    <div class="day-sat e-frame"></div>
-                    <div class="day-sun e-frame"></div>
-                </div>
-                <div class="clock-7">
-                    <div class="day-mon e-frame"></div>
-                    <div class="day-tue e-frame"></div>
-                    <div class="day-wed e-frame"></div>
-                    <div class="day-thu e-frame"></div>
-                    <div class="day-fri e-frame"></div>
-                    <div class="day-sat e-frame"></div>
-                    <div class="day-sun e-frame"></div>
-                </div>
-                <div class="clock-8">
-                    <div class="day-mon e-frame"></div>
-                    <div class="day-tue e-frame"></div>
-                    <div class="day-wed e-frame"></div>
-                    <div class="day-thu e-frame"></div>
-                    <div class="day-fri e-frame"></div>
-                    <div class="day-sat e-frame"></div>
-                    <div class="day-sun e-frame"></div>
-                </div>
-                <div class="clock-9">
-                    <div class="day-mon e-frame"></div>
-                    <div class="day-tue e-frame"></div>
-                    <div class="day-wed e-frame"></div>
-                    <div class="day-thu e-frame"></div>
-                    <div class="day-fri e-frame"></div>
-                    <div class="day-sat e-frame"></div>
-                    <div class="day-sun e-frame"></div>
-                </div>
-                <div class="clock-10">
-                    <div class="day-mon e-frame"></div>
-                    <div class="day-tue e-frame"></div>
-                    <div class="day-wed e-frame"></div>
-                    <div class="day-thu e-frame"></div>
-                    <div class="day-fri e-frame"></div>
-                    <div class="day-sat e-frame"></div>
-                    <div class="day-sun e-frame"></div>
-                </div>
-                <div class="clock-11">
-                    <div class="day-mon e-frame"></div>
-                    <div class="day-tue e-frame"></div>
-                    <div class="day-wed e-frame"></div>
-                    <div class="day-thu e-frame"></div>
-                    <div class="day-fri e-frame"></div>
-                    <div class="day-sat e-frame"></div>
-                    <div class="day-sun e-frame"></div>
-                </div>
-                <div class="clock-12">
-                    <div class="day-mon e-frame"></div>
-                    <div class="day-tue e-frame"></div>
-                    <div class="day-wed e-frame"></div>
-                    <div class="day-thu e-frame"></div>
-                    <div class="day-fri e-frame"></div>
-                    <div class="day-sat e-frame"></div>
-                    <div class="day-sun e-frame"></div>
-                </div>
-                <div class="clock-13">
-                    <div class="day-mon e-frame"></div>
-                    <div class="day-tue e-frame"></div>
-                    <div class="day-wed e-frame"></div>
-                    <div class="day-thu e-frame"></div>
-                    <div class="day-fri e-frame"></div>
-                    <div class="day-sat e-frame"></div>
-                    <div class="day-sun e-frame"></div>
-                </div>
-                <div class="clock-14">
-                    <div class="day-mon e-frame"></div>
-                    <div class="day-tue e-frame"></div>
-                    <div class="day-wed e-frame"></div>
-                    <div class="day-thu e-frame"></div>
-                    <div class="day-fri e-frame"></div>
-                    <div class="day-sat e-frame"></div>
-                    <div class="day-sun e-frame"></div>
-                </div>
-                <div class="clock-15">
-                    <div class="day-mon e-frame"></div>
-                    <div class="day-tue e-frame"></div>
-                    <div class="day-wed e-frame"></div>
-                    <div class="day-thu e-frame"></div>
-                    <div class="day-fri e-frame"></div>
-                    <div class="day-sat e-frame">
-                        <div class="event-frame blue-frame" id="start-event-1">
-                            <div class="orb blue-orb">
-                                <div class="inner-orb blue-inner-orb starting-orb"></div>
-                            </div>
-                            <p class="frame-title">Початок: Lesson #18</p>
-                            <div class="dropdown-info dropdown-basis" id="dropdown1-s">
-                                <h4>Lesson #18</h4>
-                                <p class="full-date">Субота, вересень 24</p>
-
-                                <div class="all-info-div">
-                                    <div class="info-flex">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 8 8"
-                                            fill="none">
-                                            <g clip-path="url(#clip0_273_1158)">
-                                                <path
-                                                    d="M4.69739 3.58331L4.44739 4.41665H3.30273L3.55273 3.58331H4.69739Z"
-                                                    fill="white" />
-                                                <path fill-rule="evenodd" clip-rule="evenodd"
-                                                    d="M3.99935 0.666687C2.1584 0.666687 0.666016 2.15907 0.666016 4.00002C0.666016 5.84095 2.1584 7.33335 3.99935 7.33335C5.84028 7.33335 7.33268 5.84095 7.33268 4.00002C7.33268 2.15907 5.84028 0.666687 3.99935 0.666687ZM3.73785 2.0939C3.87012 2.13358 3.94515 2.27295 3.90548 2.4052L3.70202 3.08336H4.84668L5.09322 2.26152C5.13292 2.12927 5.27228 2.05423 5.40452 2.0939C5.53678 2.13358 5.61181 2.27295 5.57215 2.4052L5.36868 3.08336H5.99935C6.13742 3.08336 6.24935 3.19529 6.24935 3.33335C6.24935 3.47142 6.13742 3.58335 5.99935 3.58335H5.21868L4.96868 4.41669H5.66602C5.80408 4.41669 5.91602 4.52862 5.91602 4.66669C5.91602 4.80475 5.80408 4.91669 5.66602 4.91669H4.81868L4.57215 5.73852C4.53245 5.87079 4.39308 5.94582 4.26085 5.90615C4.12858 5.86649 4.05355 5.72709 4.09322 5.59485L4.29668 4.91669H3.15202L2.90547 5.73852C2.8658 5.87079 2.72643 5.94582 2.59418 5.90615C2.46193 5.86649 2.38689 5.72709 2.42656 5.59485L2.63001 4.91669H1.99935C1.86128 4.91669 1.74935 4.80475 1.74935 4.66669C1.74935 4.52862 1.86128 4.41669 1.99935 4.41669H2.78001L3.03001 3.58335H2.33268C2.19461 3.58335 2.08268 3.47142 2.08268 3.33335C2.08268 3.19529 2.19461 3.08336 2.33268 3.08336H3.18001L3.42655 2.26152C3.46625 2.12927 3.60562 2.05423 3.73785 2.0939Z"
-                                                    fill="white" />
-                                            </g>
-                                            <defs>
-                                                <clipPath id="clip0_273_1158">
-                                                    <rect width="8" height="8" fill="white" />
-                                                </clipPath>
-                                            </defs>
-                                        </svg>
-                                        <span>Тема: Data analysis and machine learning</span>
-                                    </div>
-
-                                    <div class="info-flex">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 8 8"
-                                            fill="none">
-                                            <g clip-path="url(#clip0_273_1166)">
-                                                <path
-                                                    d="M4.00098 0.666992C5.84191 0.666992 7.33398 2.15905 7.33398 4C7.33398 5.84093 5.84191 7.33301 4.00098 7.33301C2.16006 7.33297 0.667973 5.84091 0.667969 4C0.667969 2.15907 2.16006 0.667029 4.00098 0.666992ZM4.00098 2.41699C3.86291 2.41699 3.75098 2.52892 3.75098 2.66699V4C3.75098 4.0663 3.77732 4.12989 3.82422 4.17676L4.65723 5.00977C4.75486 5.1074 4.91311 5.10739 5.01074 5.00977C5.10838 4.91213 5.10838 4.75388 5.01074 4.65625L4.25098 3.89648V2.66699C4.25098 2.52892 4.13904 2.41699 4.00098 2.41699Z"
-                                                    fill="white" />
-                                            </g>
-                                            <defs>
-                                                <clipPath id="clip0_273_1166">
-                                                    <rect width="8" height="8" fill="white" />
-                                                </clipPath>
-                                            </defs>
-                                        </svg>
-                                        <span>Час: 03:00-05:00</span>
-                                    </div>
-                                </div>
-                                <div class="tags-info">
-                                    <div class="info-tag">
-                                        Програмування
-                                    </div>
-
-                                    <div class="info-tag">
-                                        Програма майбутніх лідерів
-                                    </div>
-                                </div>
-
-                                <div class="colors-info">
-                                    <p>Колір</p>
-                                    <div class="radio-colors">
-                                        <label class="outer-color-circle">
-                                            <input type="radio" name="color" value="blue" class="color-radio" checked>
-                                            <span class="color-circle blue-circle"></span>
-                                        </label>
-
-                                        <label class="outer-color-circle">
-                                            <input type="radio" name="color" value="red" class="color-radio">
-                                            <span class="color-circle red-circle"></span>
-                                        </label>
-
-                                        <label class="outer-color-circle">
-                                            <input type="radio" name="color" value="green" class="color-radio">
-                                            <span class="color-circle green-circle"></span>
-                                        </label>
-
-                                        <label class="outer-color-circle">
-                                            <input type="radio" name="color" value="yellow" class="color-radio">
-                                            <span class="color-circle yellow-circle"></span>
-                                        </label>
-
-                                        <label class="outer-color-circle">
-                                            <input type="radio" name="color" value="purple" class="color-radio">
-                                            <span class="color-circle purple-circle"></span>
-                                        </label>
-
-                                        <label class="outer-color-circle">
-                                            <input type="radio" name="color" value="magenta" class="color-radio">
-                                            <span class="color-circle magenta-circle"></span>
-                                        </label>
-
-                                        <label class="outer-color-circle">
-                                            <input type="radio" name="color" value="cyan" class="color-radio">
-                                            <span class="color-circle cyan-circle"></span>
-                                        </label>
-
-                                        <label class="outer-color-circle">
-                                            <input type="radio" name="color" value="pink" class="color-radio">
-                                            <span class="color-circle pink-circle"></span>
-                                        </label>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="day-sun e-frame"></div>
-                </div>
-                <div class="clock-16">
-                    <div class="day-mon e-frame"></div>
-                    <div class="day-tue e-frame"></div>
-                    <div class="day-wed e-frame"></div>
-                    <div class="day-thu e-frame"></div>
-                    <div class="day-fri e-frame"></div>
-                    <div class="day-sat e-frame"></div>
-                    <div class="day-sun e-frame"></div>
-                </div>
-                <div class="clock-17">
-                    <div class="day-mon e-frame"></div>
-                    <div class="day-tue e-frame"></div>
-                    <div class="day-wed e-frame"></div>
-                    <div class="day-thu e-frame"></div>
-                    <div class="day-fri e-frame"></div>
-                    <div class="day-sat e-frame">
-                        <div class="event-frame blue-frame" id="end-event-1">
-                            <div class="orb blue-orb">
-                                <div class="inner-orb blue-inner-orb ending-orb"></div>
-                            </div>
-                            <p class="frame-title">Кінець: Lesson #18</p>
-                            <div class="dropdown-info dropdown-basis" id="dropdown1-e">
-                                <h4>Lesson #18</h4>
-                                <p class="full-date">Субота, вересень 24</p>
-
-                                <div class="all-info-div">
-                                    <div class="info-flex">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 8 8"
-                                            fill="none">
-                                            <g clip-path="url(#clip0_273_1158)">
-                                                <path
-                                                    d="M4.69739 3.58331L4.44739 4.41665H3.30273L3.55273 3.58331H4.69739Z"
-                                                    fill="white" />
-                                                <path fill-rule="evenodd" clip-rule="evenodd"
-                                                    d="M3.99935 0.666687C2.1584 0.666687 0.666016 2.15907 0.666016 4.00002C0.666016 5.84095 2.1584 7.33335 3.99935 7.33335C5.84028 7.33335 7.33268 5.84095 7.33268 4.00002C7.33268 2.15907 5.84028 0.666687 3.99935 0.666687ZM3.73785 2.0939C3.87012 2.13358 3.94515 2.27295 3.90548 2.4052L3.70202 3.08336H4.84668L5.09322 2.26152C5.13292 2.12927 5.27228 2.05423 5.40452 2.0939C5.53678 2.13358 5.61181 2.27295 5.57215 2.4052L5.36868 3.08336H5.99935C6.13742 3.08336 6.24935 3.19529 6.24935 3.33335C6.24935 3.47142 6.13742 3.58335 5.99935 3.58335H5.21868L4.96868 4.41669H5.66602C5.80408 4.41669 5.91602 4.52862 5.91602 4.66669C5.91602 4.80475 5.80408 4.91669 5.66602 4.91669H4.81868L4.57215 5.73852C4.53245 5.87079 4.39308 5.94582 4.26085 5.90615C4.12858 5.86649 4.05355 5.72709 4.09322 5.59485L4.29668 4.91669H3.15202L2.90547 5.73852C2.8658 5.87079 2.72643 5.94582 2.59418 5.90615C2.46193 5.86649 2.38689 5.72709 2.42656 5.59485L2.63001 4.91669H1.99935C1.86128 4.91669 1.74935 4.80475 1.74935 4.66669C1.74935 4.52862 1.86128 4.41669 1.99935 4.41669H2.78001L3.03001 3.58335H2.33268C2.19461 3.58335 2.08268 3.47142 2.08268 3.33335C2.08268 3.19529 2.19461 3.08336 2.33268 3.08336H3.18001L3.42655 2.26152C3.46625 2.12927 3.60562 2.05423 3.73785 2.0939Z"
-                                                    fill="white" />
-                                            </g>
-                                            <defs>
-                                                <clipPath id="clip0_273_1158">
-                                                    <rect width="8" height="8" fill="white" />
-                                                </clipPath>
-                                            </defs>
-                                        </svg>
-                                        <span>Тема: Data analysis and machine learning</span>
-                                    </div>
-
-                                    <div class="info-flex">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 8 8"
-                                            fill="none">
-                                            <g clip-path="url(#clip0_273_1166)">
-                                                <path
-                                                    d="M4.00098 0.666992C5.84191 0.666992 7.33398 2.15905 7.33398 4C7.33398 5.84093 5.84191 7.33301 4.00098 7.33301C2.16006 7.33297 0.667973 5.84091 0.667969 4C0.667969 2.15907 2.16006 0.667029 4.00098 0.666992ZM4.00098 2.41699C3.86291 2.41699 3.75098 2.52892 3.75098 2.66699V4C3.75098 4.0663 3.77732 4.12989 3.82422 4.17676L4.65723 5.00977C4.75486 5.1074 4.91311 5.10739 5.01074 5.00977C5.10838 4.91213 5.10838 4.75388 5.01074 4.65625L4.25098 3.89648V2.66699C4.25098 2.52892 4.13904 2.41699 4.00098 2.41699Z"
-                                                    fill="white" />
-                                            </g>
-                                            <defs>
-                                                <clipPath id="clip0_273_1166">
-                                                    <rect width="8" height="8" fill="white" />
-                                                </clipPath>
-                                            </defs>
-                                        </svg>
-                                        <span>Час: 03:00-05:00</span>
-                                    </div>
-                                </div>
-                                <div class="tags-info">
-                                    <div class="info-tag">
-                                        Програмування
-                                    </div>
-
-                                    <div class="info-tag">
-                                        Програма майбутніх лідерів
-                                    </div>
-                                </div>
-
-                                <div class="colors-info">
-                                    <p>Колір</p>
-                                    <div class="radio-colors">
-                                        <label class="outer-color-circle">
-                                            <input type="radio" name="color" value="blue" class="color-radio" checked>
-                                            <span class="color-circle blue-circle"></span>
-                                        </label>
-
-                                        <label class="outer-color-circle">
-                                            <input type="radio" name="color" value="red" class="color-radio">
-                                            <span class="color-circle red-circle"></span>
-                                        </label>
-
-                                        <label class="outer-color-circle">
-                                            <input type="radio" name="color" value="green" class="color-radio">
-                                            <span class="color-circle green-circle"></span>
-                                        </label>
-
-                                        <label class="outer-color-circle">
-                                            <input type="radio" name="color" value="yellow" class="color-radio">
-                                            <span class="color-circle yellow-circle"></span>
-                                        </label>
-
-                                        <label class="outer-color-circle">
-                                            <input type="radio" name="color" value="purple" class="color-radio">
-                                            <span class="color-circle purple-circle"></span>
-                                        </label>
-
-                                        <label class="outer-color-circle">
-                                            <input type="radio" name="color" value="magenta" class="color-radio">
-                                            <span class="color-circle magenta-circle"></span>
-                                        </label>
-
-                                        <label class="outer-color-circle">
-                                            <input type="radio" name="color" value="cyan" class="color-radio">
-                                            <span class="color-circle cyan-circle"></span>
-                                        </label>
-
-                                        <label class="outer-color-circle">
-                                            <input type="radio" name="color" value="pink" class="color-radio">
-                                            <span class="color-circle pink-circle"></span>
-                                        </label>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="day-sun e-frame"></div>
-                </div>
-                <div class="clock-18">
-                    <div class="day-mon e-frame"></div>
-                    <div class="day-tue e-frame"></div>
-                    <div class="day-wed e-frame"></div>
-                    <div class="day-thu e-frame"></div>
-                    <div class="day-fri e-frame"></div>
-                    <div class="day-sat e-frame"></div>
-                    <div class="day-sun e-frame">
-                        <div class="event-frame red-frame" id="start-event-2">
-                            <div class="orb red-orb">
-                                <div class="inner-orb red-inner-orb starting-orb"></div>
-                            </div>
-                            <p class="frame-title">Початок: Lesson #19</p>
-                            <div class="dropdown-info dropdown-basis" id="dropdown2-s">
-                                <h4>Lesson #19</h4>
-                                <p class="full-date">Неділя, вересень 25</p>
-
-                                <div class="all-info-div">
-                                    <div class="info-flex">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 8 8"
-                                            fill="none">
-                                            <g clip-path="url(#clip0_273_1158)">
-                                                <path
-                                                    d="M4.69739 3.58331L4.44739 4.41665H3.30273L3.55273 3.58331H4.69739Z"
-                                                    fill="white" />
-                                                <path fill-rule="evenodd" clip-rule="evenodd"
-                                                    d="M3.99935 0.666687C2.1584 0.666687 0.666016 2.15907 0.666016 4.00002C0.666016 5.84095 2.1584 7.33335 3.99935 7.33335C5.84028 7.33335 7.33268 5.84095 7.33268 4.00002C7.33268 2.15907 5.84028 0.666687 3.99935 0.666687ZM3.73785 2.0939C3.87012 2.13358 3.94515 2.27295 3.90548 2.4052L3.70202 3.08336H4.84668L5.09322 2.26152C5.13292 2.12927 5.27228 2.05423 5.40452 2.0939C5.53678 2.13358 5.61181 2.27295 5.57215 2.4052L5.36868 3.08336H5.99935C6.13742 3.08336 6.24935 3.19529 6.24935 3.33335C6.24935 3.47142 6.13742 3.58335 5.99935 3.58335H5.21868L4.96868 4.41669H5.66602C5.80408 4.41669 5.91602 4.52862 5.91602 4.66669C5.91602 4.80475 5.80408 4.91669 5.66602 4.91669H4.81868L4.57215 5.73852C4.53245 5.87079 4.39308 5.94582 4.26085 5.90615C4.12858 5.86649 4.05355 5.72709 4.09322 5.59485L4.29668 4.91669H3.15202L2.90547 5.73852C2.8658 5.87079 2.72643 5.94582 2.59418 5.90615C2.46193 5.86649 2.38689 5.72709 2.42656 5.59485L2.63001 4.91669H1.99935C1.86128 4.91669 1.74935 4.80475 1.74935 4.66669C1.74935 4.52862 1.86128 4.41669 1.99935 4.41669H2.78001L3.03001 3.58335H2.33268C2.19461 3.58335 2.08268 3.47142 2.08268 3.33335C2.08268 3.19529 2.19461 3.08336 2.33268 3.08336H3.18001L3.42655 2.26152C3.46625 2.12927 3.60562 2.05423 3.73785 2.0939Z"
-                                                    fill="white" />
-                                            </g>
-                                            <defs>
-                                                <clipPath id="clip0_273_1158">
-                                                    <rect width="8" height="8" fill="white" />
-                                                </clipPath>
-                                            </defs>
-                                        </svg>
-                                        <span>Тема: Generative AI. LLM.</span>
-                                    </div>
-
-                                    <div class="info-flex">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 8 8"
-                                            fill="none">
-                                            <g clip-path="url(#clip0_273_1166)">
-                                                <path
-                                                    d="M4.00098 0.666992C5.84191 0.666992 7.33398 2.15905 7.33398 4C7.33398 5.84093 5.84191 7.33301 4.00098 7.33301C2.16006 7.33297 0.667973 5.84091 0.667969 4C0.667969 2.15907 2.16006 0.667029 4.00098 0.666992ZM4.00098 2.41699C3.86291 2.41699 3.75098 2.52892 3.75098 2.66699V4C3.75098 4.0663 3.77732 4.12989 3.82422 4.17676L4.65723 5.00977C4.75486 5.1074 4.91311 5.10739 5.01074 5.00977C5.10838 4.91213 5.10838 4.75388 5.01074 4.65625L4.25098 3.89648V2.66699C4.25098 2.52892 4.13904 2.41699 4.00098 2.41699Z"
-                                                    fill="white" />
-                                            </g>
-                                            <defs>
-                                                <clipPath id="clip0_273_1166">
-                                                    <rect width="8" height="8" fill="white" />
-                                                </clipPath>
-                                            </defs>
-                                        </svg>
-                                        <span>Час: 18:00-21:00</span>
-                                    </div>
-                                </div>
-                                <div class="tags-info">
-                                    <div class="info-tag">
-                                        Програмування
-                                    </div>
-
-                                    <div class="info-tag">
-                                        Програма майбутніх лідерів
-                                    </div>
-                                </div>
-
-                                <div class="colors-info">
-                                    <p>Колір</p>
-                                    <div class="radio-colors">
-                                        <label class="outer-color-circle">
-                                            <input type="radio" name="color" value="blue" class="color-radio" checked>
-                                            <span class="color-circle blue-circle"></span>
-                                        </label>
-
-                                        <label class="outer-color-circle">
-                                            <input type="radio" name="color" value="red" class="color-radio">
-                                            <span class="color-circle red-circle"></span>
-                                        </label>
-
-                                        <label class="outer-color-circle">
-                                            <input type="radio" name="color" value="green" class="color-radio">
-                                            <span class="color-circle green-circle"></span>
-                                        </label>
-
-                                        <label class="outer-color-circle">
-                                            <input type="radio" name="color" value="yellow" class="color-radio">
-                                            <span class="color-circle yellow-circle"></span>
-                                        </label>
-
-                                        <label class="outer-color-circle">
-                                            <input type="radio" name="color" value="purple" class="color-radio">
-                                            <span class="color-circle purple-circle"></span>
-                                        </label>
-
-                                        <label class="outer-color-circle">
-                                            <input type="radio" name="color" value="magenta" class="color-radio">
-                                            <span class="color-circle magenta-circle"></span>
-                                        </label>
-
-                                        <label class="outer-color-circle">
-                                            <input type="radio" name="color" value="cyan" class="color-radio">
-                                            <span class="color-circle cyan-circle"></span>
-                                        </label>
-
-                                        <label class="outer-color-circle">
-                                            <input type="radio" name="color" value="pink" class="color-radio">
-                                            <span class="color-circle pink-circle"></span>
-                                        </label>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="clock-19">
-                    <div class="day-mon e-frame"></div>
-                    <div class="day-tue e-frame"></div>
-                    <div class="day-wed e-frame"></div>
-                    <div class="day-thu e-frame"></div>
-                    <div class="day-fri e-frame"></div>
-                    <div class="day-sat e-frame"></div>
-                    <div class="day-sun e-frame">
-                        <div class="event-frame frame-reverse green-frame" id="start-event-3">
-                            <div class="orb green-orb">
-                                <div class="inner-orb green-inner-orb starting-orb"></div>
-                            </div>
-                            <p class="frame-title">Початок: Therapy</p>
-                            <div class="dropdown-info dropdown-basis" id="dropdown3-s">
-                                <h4>Therapy</h4>
-                                <p class="full-date">Неділя, вересень 25</p>
-
-                                <div class="all-info-div">
-                                    <div class="info-flex">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 8 8"
-                                            fill="none">
-                                            <g clip-path="url(#clip0_273_1166)">
-                                                <path
-                                                    d="M4.00098 0.666992C5.84191 0.666992 7.33398 2.15905 7.33398 4C7.33398 5.84093 5.84191 7.33301 4.00098 7.33301C2.16006 7.33297 0.667973 5.84091 0.667969 4C0.667969 2.15907 2.16006 0.667029 4.00098 0.666992ZM4.00098 2.41699C3.86291 2.41699 3.75098 2.52892 3.75098 2.66699V4C3.75098 4.0663 3.77732 4.12989 3.82422 4.17676L4.65723 5.00977C4.75486 5.1074 4.91311 5.10739 5.01074 5.00977C5.10838 4.91213 5.10838 4.75388 5.01074 4.65625L4.25098 3.89648V2.66699C4.25098 2.52892 4.13904 2.41699 4.00098 2.41699Z"
-                                                    fill="white" />
-                                            </g>
-                                            <defs>
-                                                <clipPath id="clip0_273_1166">
-                                                    <rect width="8" height="8" fill="white" />
-                                                </clipPath>
-                                            </defs>
-                                        </svg>
-                                        <span>Час: 19:00-23:00</span>
-                                    </div>
-                                </div>
-                                <div class="tags-info">
-                                    <div class="info-tag">
-                                        Therapy
-                                    </div>
-                                </div>
-
-                                <div class="colors-info">
-                                    <p>Colors</p>
-                                    <div class="radio-colors">
-                                        <label class="outer-color-circle">
-                                            <input type="radio" name="color" value="blue" class="color-radio" checked>
-                                            <span class="color-circle blue-circle"></span>
-                                        </label>
-
-                                        <label class="outer-color-circle">
-                                            <input type="radio" name="color" value="red" class="color-radio">
-                                            <span class="color-circle red-circle"></span>
-                                        </label>
-
-                                        <label class="outer-color-circle">
-                                            <input type="radio" name="color" value="green" class="color-radio" checked>
-                                            <span class="color-circle green-circle"></span>
-                                        </label>
-
-                                        <label class="outer-color-circle">
-                                            <input type="radio" name="color" value="yellow" class="color-radio">
-                                            <span class="color-circle yellow-circle"></span>
-                                        </label>
-
-                                        <label class="outer-color-circle">
-                                            <input type="radio" name="color" value="purple" class="color-radio">
-                                            <span class="color-circle purple-circle"></span>
-                                        </label>
-
-                                        <label class="outer-color-circle">
-                                            <input type="radio" name="color" value="magenta" class="color-radio">
-                                            <span class="color-circle magenta-circle"></span>
-                                        </label>
-
-                                        <label class="outer-color-circle">
-                                            <input type="radio" name="color" value="cyan" class="color-radio">
-                                            <span class="color-circle cyan-circle"></span>
-                                        </label>
-
-                                        <label class="outer-color-circle">
-                                            <input type="radio" name="color" value="pink" class="color-radio">
-                                            <span class="color-circle pink-circle"></span>
-                                        </label>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="clock-20">
-                    <div class="day-mon e-frame"></div>
-                    <div class="day-tue e-frame"></div>
-                    <div class="day-wed e-frame"></div>
-                    <div class="day-thu e-frame"></div>
-                    <div class="day-fri e-frame"></div>
-                    <div class="day-sat e-frame"></div>
-                    <div class="day-sun e-frame"></div>
-                </div>
-                <div class="clock-21">
-                    <div class="day-mon e-frame"></div>
-                    <div class="day-tue e-frame"></div>
-                    <div class="day-wed e-frame"></div>
-                    <div class="day-thu e-frame"></div>
-                    <div class="day-fri e-frame"></div>
-                    <div class="day-sat e-frame"></div>
-                    <div class="day-sun e-frame">
-                        <div class="event-frame red-frame" id="end-event-2">
-                            <div class="orb red-orb">
-                                <div class="inner-orb red-inner-orb starting-orb"></div>
-                            </div>
-                            <p class="frame-title">Кінець: Lesson #19</p>
-                            <div class="dropdown-info dropdown-basis" id="dropdown2-e">
-                                <h4>Lesson #19</h4>
-                                <p class="full-date">Неділя, вересень 25</p>
-
-                                <div class="all-info-div">
-                                    <div class="info-flex">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 8 8"
-                                            fill="none">
-                                            <g clip-path="url(#clip0_273_1158)">
-                                                <path
-                                                    d="M4.69739 3.58331L4.44739 4.41665H3.30273L3.55273 3.58331H4.69739Z"
-                                                    fill="white" />
-                                                <path fill-rule="evenodd" clip-rule="evenodd"
-                                                    d="M3.99935 0.666687C2.1584 0.666687 0.666016 2.15907 0.666016 4.00002C0.666016 5.84095 2.1584 7.33335 3.99935 7.33335C5.84028 7.33335 7.33268 5.84095 7.33268 4.00002C7.33268 2.15907 5.84028 0.666687 3.99935 0.666687ZM3.73785 2.0939C3.87012 2.13358 3.94515 2.27295 3.90548 2.4052L3.70202 3.08336H4.84668L5.09322 2.26152C5.13292 2.12927 5.27228 2.05423 5.40452 2.0939C5.53678 2.13358 5.61181 2.27295 5.57215 2.4052L5.36868 3.08336H5.99935C6.13742 3.08336 6.24935 3.19529 6.24935 3.33335C6.24935 3.47142 6.13742 3.58335 5.99935 3.58335H5.21868L4.96868 4.41669H5.66602C5.80408 4.41669 5.91602 4.52862 5.91602 4.66669C5.91602 4.80475 5.80408 4.91669 5.66602 4.91669H4.81868L4.57215 5.73852C4.53245 5.87079 4.39308 5.94582 4.26085 5.90615C4.12858 5.86649 4.05355 5.72709 4.09322 5.59485L4.29668 4.91669H3.15202L2.90547 5.73852C2.8658 5.87079 2.72643 5.94582 2.59418 5.90615C2.46193 5.86649 2.38689 5.72709 2.42656 5.59485L2.63001 4.91669H1.99935C1.86128 4.91669 1.74935 4.80475 1.74935 4.66669C1.74935 4.52862 1.86128 4.41669 1.99935 4.41669H2.78001L3.03001 3.58335H2.33268C2.19461 3.58335 2.08268 3.47142 2.08268 3.33335C2.08268 3.19529 2.19461 3.08336 2.33268 3.08336H3.18001L3.42655 2.26152C3.46625 2.12927 3.60562 2.05423 3.73785 2.0939Z"
-                                                    fill="white" />
-                                            </g>
-                                            <defs>
-                                                <clipPath id="clip0_273_1158">
-                                                    <rect width="8" height="8" fill="white" />
-                                                </clipPath>
-                                            </defs>
-                                        </svg>
-                                        <span>Тема: Generative AI. LLM.</span>
-                                    </div>
-
-                                    <div class="info-flex">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 8 8"
-                                            fill="none">
-                                            <g clip-path="url(#clip0_273_1166)">
-                                                <path
-                                                    d="M4.00098 0.666992C5.84191 0.666992 7.33398 2.15905 7.33398 4C7.33398 5.84093 5.84191 7.33301 4.00098 7.33301C2.16006 7.33297 0.667973 5.84091 0.667969 4C0.667969 2.15907 2.16006 0.667029 4.00098 0.666992ZM4.00098 2.41699C3.86291 2.41699 3.75098 2.52892 3.75098 2.66699V4C3.75098 4.0663 3.77732 4.12989 3.82422 4.17676L4.65723 5.00977C4.75486 5.1074 4.91311 5.10739 5.01074 5.00977C5.10838 4.91213 5.10838 4.75388 5.01074 4.65625L4.25098 3.89648V2.66699C4.25098 2.52892 4.13904 2.41699 4.00098 2.41699Z"
-                                                    fill="white" />
-                                            </g>
-                                            <defs>
-                                                <clipPath id="clip0_273_1166">
-                                                    <rect width="8" height="8" fill="white" />
-                                                </clipPath>
-                                            </defs>
-                                        </svg>
-                                        <span>Час: 18:00-21:00</span>
-                                    </div>
-                                </div>
-                                <div class="tags-info">
-                                    <div class="info-tag">
-                                        Програмування
-                                    </div>
-
-                                    <div class="info-tag">
-                                        Програма майбутніх лідерів
-                                    </div>
-                                </div>
-
-                                <div class="colors-info">
-                                    <p>Колір</p>
-                                    <div class="radio-colors">
-                                        <label class="outer-color-circle">
-                                            <input type="radio" name="color" value="blue" class="color-radio">
-                                            <span class="color-circle blue-circle"></span>
-                                        </label>
-
-                                        <label class="outer-color-circle">
-                                            <input type="radio" name="color" value="red" class="color-radio">
-                                            <span class="color-circle red-circle"></span>
-                                        </label>
-
-                                        <label class="outer-color-circle">
-                                            <input type="radio" name="color" value="green" class="color-radio" checked>
-                                            <span class="color-circle green-circle"></span>
-                                        </label>
-
-                                        <label class="outer-color-circle">
-                                            <input type="radio" name="color" value="yellow" class="color-radio">
-                                            <span class="color-circle yellow-circle"></span>
-                                        </label>
-
-                                        <label class="outer-color-circle">
-                                            <input type="radio" name="color" value="purple" class="color-radio">
-                                            <span class="color-circle purple-circle"></span>
-                                        </label>
-
-                                        <label class="outer-color-circle">
-                                            <input type="radio" name="color" value="magenta" class="color-radio">
-                                            <span class="color-circle magenta-circle"></span>
-                                        </label>
-
-                                        <label class="outer-color-circle">
-                                            <input type="radio" name="color" value="cyan" class="color-radio">
-                                            <span class="color-circle cyan-circle"></span>
-                                        </label>
-
-                                        <label class="outer-color-circle">
-                                            <input type="radio" name="color" value="pink" class="color-radio">
-                                            <span class="color-circle pink-circle"></span>
-                                        </label>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="clock-22">
-                    <div class="day-mon e-frame"></div>
-                    <div class="day-tue e-frame"></div>
-                    <div class="day-wed e-frame"></div>
-                    <div class="day-thu e-frame"></div>
-                    <div class="day-fri e-frame"></div>
-                    <div class="day-sat e-frame"></div>
-                    <div class="day-sun e-frame"></div>
-                </div>
-                <div class="clock-23">
-                    <div class="day-mon e-frame"></div>
-                    <div class="day-tue e-frame"></div>
-                    <div class="day-wed e-frame"></div>
-                    <div class="day-thu e-frame"></div>
-                    <div class="day-fri e-frame"></div>
-                    <div class="day-sat e-frame"></div>
-                    <div class="day-sun e-frame">
-                        <div class="event-frame frame-reverse green-frame" id="end-event-3">
-                            <div class="orb green-orb">
-                                <div class="inner-orb green-inner-orb starting-orb"></div>
-                            </div>
-                            <p class="frame-title">Кінець: Therapy</p>
-                            <div class="dropdown-info dropdown-basis" id="dropdown3-e">
-                                <h4>Therapy</h4>
-                                <p class="full-date">Неділя, вересень 25</p>
-
-                                <div class="all-info-div">
-                                    <div class="info-flex">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 8 8"
-                                            fill="none">
-                                            <g clip-path="url(#clip0_273_1166)">
-                                                <path
-                                                    d="M4.00098 0.666992C5.84191 0.666992 7.33398 2.15905 7.33398 4C7.33398 5.84093 5.84191 7.33301 4.00098 7.33301C2.16006 7.33297 0.667973 5.84091 0.667969 4C0.667969 2.15907 2.16006 0.667029 4.00098 0.666992ZM4.00098 2.41699C3.86291 2.41699 3.75098 2.52892 3.75098 2.66699V4C3.75098 4.0663 3.77732 4.12989 3.82422 4.17676L4.65723 5.00977C4.75486 5.1074 4.91311 5.10739 5.01074 5.00977C5.10838 4.91213 5.10838 4.75388 5.01074 4.65625L4.25098 3.89648V2.66699C4.25098 2.52892 4.13904 2.41699 4.00098 2.41699Z"
-                                                    fill="white" />
-                                            </g>
-                                            <defs>
-                                                <clipPath id="clip0_273_1166">
-                                                    <rect width="8" height="8" fill="white" />
-                                                </clipPath>
-                                            </defs>
-                                        </svg>
-                                        <span>Час: 19:00-23:00</span>
-                                    </div>
-                                </div>
-                                <div class="tags-info">
-                                    <div class="info-tag">
-                                        Терапія
-                                    </div>
-                                </div>
-
-                                <div class="colors-info">
-                                    <p>Колір</p>
-                                    <div class="radio-colors">
-                                        <label class="outer-color-circle">
-                                            <input type="radio" name="color" value="blue" class="color-radio" checked>
-                                            <span class="color-circle blue-circle"></span>
-                                        </label>
-
-                                        <label class="outer-color-circle">
-                                            <input type="radio" name="color" value="red" class="color-radio">
-                                            <span class="color-circle red-circle"></span>
-                                        </label>
-
-                                        <label class="outer-color-circle">
-                                            <input type="radio" name="color" value="green" class="color-radio">
-                                            <span class="color-circle green-circle"></span>
-                                        </label>
-
-                                        <label class="outer-color-circle">
-                                            <input type="radio" name="color" value="yellow" class="color-radio">
-                                            <span class="color-circle yellow-circle"></span>
-                                        </label>
-
-                                        <label class="outer-color-circle">
-                                            <input type="radio" name="color" value="purple" class="color-radio">
-                                            <span class="color-circle purple-circle"></span>
-                                        </label>
-
-                                        <label class="outer-color-circle">
-                                            <input type="radio" name="color" value="magenta" class="color-radio">
-                                            <span class="color-circle magenta-circle"></span>
-                                        </label>
-
-                                        <label class="outer-color-circle">
-                                            <input type="radio" name="color" value="cyan" class="color-radio">
-                                            <span class="color-circle cyan-circle"></span>
-                                        </label>
-
-                                        <label class="outer-color-circle">
-                                            <input type="radio" name="color" value="pink" class="color-radio">
-                                            <span class="color-circle pink-circle"></span>
-                                        </label>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-            </div>
+    </div>
+    <div class="grid3">
+        <div class="main-shadow"></div>
+        <div class="hours-grid">
+            <span>00</span>
+            <span>01</span>
+            <span>02</span>
+            <span>03</span>
+            <span>04</span>
+            <span>05</span>
+            <span>06</span>
+            <span>07</span>
+            <span>08</span>
+            <span>09</span>
+            <span>10</span>
+            <span>11</span>
+            <span>12</span>
+            <span>13</span>
+            <span>14</span>
+            <span>15</span>
+            <span>16</span>
+            <span>17</span>
+            <span>18</span>
+            <span>19</span>
+            <span>20</span>
+            <span>21</span>
+            <span>22</span>
+            <span>23</span>
         </div>
+        <div class="calendar-main-container">
+            <div class="clock-0">
+                <div class="day-mon e-frame">
+                </div>
+                <div class="day-tue e-frame"></div>
+                <div class="day-wed e-frame">
+                    <div class="event-frame purple-frame">
+                        <p class="frame-title">Hackathon</p>
+                        <div class="dropdown-info dropdown-basis" id="dropdown3-s">
+                            <h4>Therapy</h4>
+                            <p class="full-date">Неділя, вересень 25</p>
+
+                            <div class="all-info-div">
+                                <div class="info-flex">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 8 8"
+                                        fill="none">
+                                        <g clip-path="url(#clip0_273_1166)">
+                                            <path
+                                                d="M4.00098 0.666992C5.84191 0.666992 7.33398 2.15905 7.33398 4C7.33398 5.84093 5.84191 7.33301 4.00098 7.33301C2.16006 7.33297 0.667973 5.84091 0.667969 4C0.667969 2.15907 2.16006 0.667029 4.00098 0.666992ZM4.00098 2.41699C3.86291 2.41699 3.75098 2.52892 3.75098 2.66699V4C3.75098 4.0663 3.77732 4.12989 3.82422 4.17676L4.65723 5.00977C4.75486 5.1074 4.91311 5.10739 5.01074 5.00977C5.10838 4.91213 5.10838 4.75388 5.01074 4.65625L4.25098 3.89648V2.66699C4.25098 2.52892 4.13904 2.41699 4.00098 2.41699Z"
+                                                fill="white" />
+                                        </g>
+                                        <defs>
+                                            <clipPath id="clip0_273_1166">
+                                                <rect width="8" height="8" fill="white" />
+                                            </clipPath>
+                                        </defs>
+                                    </svg>
+                                    <span>Час: 19:00-23:00</span>
+                                </div>
+                            </div>
+                            <div class="tags-info">
+                                <div class="info-tag">
+                                    Терапія
+                                </div>
+                            </div>
+
+                            <div class="colors-info">
+                                <p>Колір</p>
+                                <div class="radio-colors">
+                                    <label class="outer-color-circle">
+                                        <input type="radio" name="color" value="blue" class="color-radio" checked>
+                                        <span class="color-circle blue-circle"></span>
+                                    </label>
+
+                                    <label class="outer-color-circle">
+                                        <input type="radio" name="color" value="red" class="color-radio">
+                                        <span class="color-circle red-circle"></span>
+                                    </label>
+
+                                    <label class="outer-color-circle">
+                                        <input type="radio" name="color" value="green" class="color-radio" checked>
+                                        <span class="color-circle green-circle"></span>
+                                    </label>
+
+                                    <label class="outer-color-circle">
+                                        <input type="radio" name="color" value="yellow" class="color-radio">
+                                        <span class="color-circle yellow-circle"></span>
+                                    </label>
+
+                                    <label class="outer-color-circle">
+                                        <input type="radio" name="color" value="purple" class="color-radio">
+                                        <span class="color-circle purple-circle"></span>
+                                    </label>
+
+                                    <label class="outer-color-circle">
+                                        <input type="radio" name="color" value="magenta" class="color-radio">
+                                        <span class="color-circle magenta-circle"></span>
+                                    </label>
+
+                                    <label class="outer-color-circle">
+                                        <input type="radio" name="color" value="cyan" class="color-radio">
+                                        <span class="color-circle cyan-circle"></span>
+                                    </label>
+
+                                    <label class="outer-color-circle">
+                                        <input type="radio" name="color" value="pink" class="color-radio">
+                                        <span class="color-circle pink-circle"></span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="day-thu e-frame"></div>
+                <div class="day-fri e-frame"></div>
+                <div class="day-sat e-frame"></div>
+                <div class="day-sun e-frame"></div>
+            </div>
+            <div class="clock-1">
+                <div class="day-mon e-frame"></div>
+                <div class="day-tue e-frame"></div>
+                <div class="day-wed e-frame"></div>
+                <div class="day-thu e-frame"></div>
+                <div class="day-fri e-frame"></div>
+                <div class="day-sat e-frame"></div>
+                <div class="day-sun e-frame"></div>
+            </div>
+            <div class="clock-2">
+                <div class="day-mon e-frame"></div>
+                <div class="day-tue e-frame"></div>
+                <div class="day-wed e-frame"></div>
+                <div class="day-thu e-frame"></div>
+                <div class="day-fri e-frame"></div>
+                <div class="day-sat e-frame"></div>
+                <div class="day-sun e-frame"></div>
+            </div>
+            <div class="clock-3">
+                <div class="day-mon e-frame"></div>
+                <div class="day-tue e-frame"></div>
+                <div class="day-wed e-frame"></div>
+                <div class="day-thu e-frame"></div>
+                <div class="day-fri e-frame"></div>
+                <div class="day-sat e-frame"></div>
+                <div class="day-sun e-frame"></div>
+            </div>
+            <div class="clock-4">
+                <div class="day-mon e-frame"></div>
+                <div class="day-tue e-frame"></div>
+                <div class="day-wed e-frame"></div>
+                <div class="day-thu e-frame"></div>
+                <div class="day-fri e-frame"></div>
+                <div class="day-sat e-frame"></div>
+                <div class="day-sun e-frame"></div>
+            </div>
+            <div class="clock-5">
+                <div class="day-mon e-frame"></div>
+                <div class="day-tue e-frame"></div>
+                <div class="day-wed e-frame"></div>
+                <div class="day-thu e-frame"></div>
+                <div class="day-fri e-frame"></div>
+                <div class="day-sat e-frame"></div>
+                <div class="day-sun e-frame"></div>
+            </div>
+            <div class="clock-6">
+                <div class="day-mon e-frame"></div>
+                <div class="day-tue e-frame"></div>
+                <div class="day-wed e-frame"></div>
+                <div class="day-thu e-frame"></div>
+                <div class="day-fri e-frame"></div>
+                <div class="day-sat e-frame"></div>
+                <div class="day-sun e-frame"></div>
+            </div>
+            <div class="clock-7">
+                <div class="day-mon e-frame"></div>
+                <div class="day-tue e-frame"></div>
+                <div class="day-wed e-frame"></div>
+                <div class="day-thu e-frame"></div>
+                <div class="day-fri e-frame"></div>
+                <div class="day-sat e-frame"></div>
+                <div class="day-sun e-frame"></div>
+            </div>
+            <div class="clock-8">
+                <div class="day-mon e-frame"></div>
+                <div class="day-tue e-frame"></div>
+                <div class="day-wed e-frame"></div>
+                <div class="day-thu e-frame"></div>
+                <div class="day-fri e-frame"></div>
+                <div class="day-sat e-frame"></div>
+                <div class="day-sun e-frame"></div>
+            </div>
+            <div class="clock-9">
+                <div class="day-mon e-frame"></div>
+                <div class="day-tue e-frame"></div>
+                <div class="day-wed e-frame"></div>
+                <div class="day-thu e-frame"></div>
+                <div class="day-fri e-frame"></div>
+                <div class="day-sat e-frame"></div>
+                <div class="day-sun e-frame"></div>
+            </div>
+            <div class="clock-10">
+                <div class="day-mon e-frame"></div>
+                <div class="day-tue e-frame"></div>
+                <div class="day-wed e-frame"></div>
+                <div class="day-thu e-frame"></div>
+                <div class="day-fri e-frame"></div>
+                <div class="day-sat e-frame"></div>
+                <div class="day-sun e-frame"></div>
+            </div>
+            <div class="clock-11">
+                <div class="day-mon e-frame"></div>
+                <div class="day-tue e-frame"></div>
+                <div class="day-wed e-frame"></div>
+                <div class="day-thu e-frame"></div>
+                <div class="day-fri e-frame"></div>
+                <div class="day-sat e-frame"></div>
+                <div class="day-sun e-frame"></div>
+            </div>
+            <div class="clock-12">
+                <div class="day-mon e-frame"></div>
+                <div class="day-tue e-frame"></div>
+                <div class="day-wed e-frame"></div>
+                <div class="day-thu e-frame"></div>
+                <div class="day-fri e-frame"></div>
+                <div class="day-sat e-frame"></div>
+                <div class="day-sun e-frame"></div>
+            </div>
+            <div class="clock-13">
+                <div class="day-mon e-frame"></div>
+                <div class="day-tue e-frame"></div>
+                <div class="day-wed e-frame"></div>
+                <div class="day-thu e-frame"></div>
+                <div class="day-fri e-frame"></div>
+                <div class="day-sat e-frame"></div>
+                <div class="day-sun e-frame"></div>
+            </div>
+            <div class="clock-14">
+                <div class="day-mon e-frame"></div>
+                <div class="day-tue e-frame"></div>
+                <div class="day-wed e-frame"></div>
+                <div class="day-thu e-frame"></div>
+                <div class="day-fri e-frame"></div>
+                <div class="day-sat e-frame"></div>
+                <div class="day-sun e-frame"></div>
+            </div>
+            <div class="clock-15">
+                <div class="day-mon e-frame"></div>
+                <div class="day-tue e-frame"></div>
+                <div class="day-wed e-frame"></div>
+                <div class="day-thu e-frame"></div>
+                <div class="day-fri e-frame"></div>
+                <div class="day-sat e-frame">
+                    <div class="event-frame blue-frame" id="start-event-1">
+                        <div class="orb blue-orb">
+                            <div class="inner-orb blue-inner-orb starting-orb"></div>
+                        </div>
+                        <p class="frame-title">Початок: Lesson #18</p>
+                        <div class="dropdown-info dropdown-basis" id="dropdown1-s">
+                            <h4>Lesson #18</h4>
+                            <p class="full-date">Субота, вересень 24</p>
+
+                            <div class="all-info-div">
+                                <div class="info-flex">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 8 8"
+                                        fill="none">
+                                        <g clip-path="url(#clip0_273_1158)">
+                                            <path d="M4.69739 3.58331L4.44739 4.41665H3.30273L3.55273 3.58331H4.69739Z"
+                                                fill="white" />
+                                            <path fill-rule="evenodd" clip-rule="evenodd"
+                                                d="M3.99935 0.666687C2.1584 0.666687 0.666016 2.15907 0.666016 4.00002C0.666016 5.84095 2.1584 7.33335 3.99935 7.33335C5.84028 7.33335 7.33268 5.84095 7.33268 4.00002C7.33268 2.15907 5.84028 0.666687 3.99935 0.666687ZM3.73785 2.0939C3.87012 2.13358 3.94515 2.27295 3.90548 2.4052L3.70202 3.08336H4.84668L5.09322 2.26152C5.13292 2.12927 5.27228 2.05423 5.40452 2.0939C5.53678 2.13358 5.61181 2.27295 5.57215 2.4052L5.36868 3.08336H5.99935C6.13742 3.08336 6.24935 3.19529 6.24935 3.33335C6.24935 3.47142 6.13742 3.58335 5.99935 3.58335H5.21868L4.96868 4.41669H5.66602C5.80408 4.41669 5.91602 4.52862 5.91602 4.66669C5.91602 4.80475 5.80408 4.91669 5.66602 4.91669H4.81868L4.57215 5.73852C4.53245 5.87079 4.39308 5.94582 4.26085 5.90615C4.12858 5.86649 4.05355 5.72709 4.09322 5.59485L4.29668 4.91669H3.15202L2.90547 5.73852C2.8658 5.87079 2.72643 5.94582 2.59418 5.90615C2.46193 5.86649 2.38689 5.72709 2.42656 5.59485L2.63001 4.91669H1.99935C1.86128 4.91669 1.74935 4.80475 1.74935 4.66669C1.74935 4.52862 1.86128 4.41669 1.99935 4.41669H2.78001L3.03001 3.58335H2.33268C2.19461 3.58335 2.08268 3.47142 2.08268 3.33335C2.08268 3.19529 2.19461 3.08336 2.33268 3.08336H3.18001L3.42655 2.26152C3.46625 2.12927 3.60562 2.05423 3.73785 2.0939Z"
+                                                fill="white" />
+                                        </g>
+                                        <defs>
+                                            <clipPath id="clip0_273_1158">
+                                                <rect width="8" height="8" fill="white" />
+                                            </clipPath>
+                                        </defs>
+                                    </svg>
+                                    <span>Тема: Data analysis and machine learning</span>
+                                </div>
+
+                                <div class="info-flex">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 8 8"
+                                        fill="none">
+                                        <g clip-path="url(#clip0_273_1166)">
+                                            <path
+                                                d="M4.00098 0.666992C5.84191 0.666992 7.33398 2.15905 7.33398 4C7.33398 5.84093 5.84191 7.33301 4.00098 7.33301C2.16006 7.33297 0.667973 5.84091 0.667969 4C0.667969 2.15907 2.16006 0.667029 4.00098 0.666992ZM4.00098 2.41699C3.86291 2.41699 3.75098 2.52892 3.75098 2.66699V4C3.75098 4.0663 3.77732 4.12989 3.82422 4.17676L4.65723 5.00977C4.75486 5.1074 4.91311 5.10739 5.01074 5.00977C5.10838 4.91213 5.10838 4.75388 5.01074 4.65625L4.25098 3.89648V2.66699C4.25098 2.52892 4.13904 2.41699 4.00098 2.41699Z"
+                                                fill="white" />
+                                        </g>
+                                        <defs>
+                                            <clipPath id="clip0_273_1166">
+                                                <rect width="8" height="8" fill="white" />
+                                            </clipPath>
+                                        </defs>
+                                    </svg>
+                                    <span>Час: 03:00-05:00</span>
+                                </div>
+                            </div>
+                            <div class="tags-info">
+                                <div class="info-tag">
+                                    Програмування
+                                </div>
+
+                                <div class="info-tag">
+                                    Програма майбутніх лідерів
+                                </div>
+                            </div>
+
+                            <div class="colors-info">
+                                <p>Колір</p>
+                                <div class="radio-colors">
+                                    <label class="outer-color-circle">
+                                        <input type="radio" name="color" value="blue" class="color-radio" checked>
+                                        <span class="color-circle blue-circle"></span>
+                                    </label>
+
+                                    <label class="outer-color-circle">
+                                        <input type="radio" name="color" value="red" class="color-radio">
+                                        <span class="color-circle red-circle"></span>
+                                    </label>
+
+                                    <label class="outer-color-circle">
+                                        <input type="radio" name="color" value="green" class="color-radio">
+                                        <span class="color-circle green-circle"></span>
+                                    </label>
+
+                                    <label class="outer-color-circle">
+                                        <input type="radio" name="color" value="yellow" class="color-radio">
+                                        <span class="color-circle yellow-circle"></span>
+                                    </label>
+
+                                    <label class="outer-color-circle">
+                                        <input type="radio" name="color" value="purple" class="color-radio">
+                                        <span class="color-circle purple-circle"></span>
+                                    </label>
+
+                                    <label class="outer-color-circle">
+                                        <input type="radio" name="color" value="magenta" class="color-radio">
+                                        <span class="color-circle magenta-circle"></span>
+                                    </label>
+
+                                    <label class="outer-color-circle">
+                                        <input type="radio" name="color" value="cyan" class="color-radio">
+                                        <span class="color-circle cyan-circle"></span>
+                                    </label>
+
+                                    <label class="outer-color-circle">
+                                        <input type="radio" name="color" value="pink" class="color-radio">
+                                        <span class="color-circle pink-circle"></span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="day-sun e-frame"></div>
+            </div>
+            <div class="clock-16">
+                <div class="day-mon e-frame"></div>
+                <div class="day-tue e-frame"></div>
+                <div class="day-wed e-frame"></div>
+                <div class="day-thu e-frame"></div>
+                <div class="day-fri e-frame"></div>
+                <div class="day-sat e-frame"></div>
+                <div class="day-sun e-frame"></div>
+            </div>
+            <div class="clock-17">
+                <div class="day-mon e-frame"></div>
+                <div class="day-tue e-frame"></div>
+                <div class="day-wed e-frame"></div>
+                <div class="day-thu e-frame"></div>
+                <div class="day-fri e-frame"></div>
+                <div class="day-sat e-frame">
+                    <div class="event-frame blue-frame" id="end-event-1">
+                        <div class="orb blue-orb">
+                            <div class="inner-orb blue-inner-orb ending-orb"></div>
+                        </div>
+                        <p class="frame-title">Кінець: Lesson #18</p>
+                        <div class="dropdown-info dropdown-basis" id="dropdown1-e">
+                            <h4>Lesson #18</h4>
+                            <p class="full-date">Субота, вересень 24</p>
+
+                            <div class="all-info-div">
+                                <div class="info-flex">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 8 8"
+                                        fill="none">
+                                        <g clip-path="url(#clip0_273_1158)">
+                                            <path d="M4.69739 3.58331L4.44739 4.41665H3.30273L3.55273 3.58331H4.69739Z"
+                                                fill="white" />
+                                            <path fill-rule="evenodd" clip-rule="evenodd"
+                                                d="M3.99935 0.666687C2.1584 0.666687 0.666016 2.15907 0.666016 4.00002C0.666016 5.84095 2.1584 7.33335 3.99935 7.33335C5.84028 7.33335 7.33268 5.84095 7.33268 4.00002C7.33268 2.15907 5.84028 0.666687 3.99935 0.666687ZM3.73785 2.0939C3.87012 2.13358 3.94515 2.27295 3.90548 2.4052L3.70202 3.08336H4.84668L5.09322 2.26152C5.13292 2.12927 5.27228 2.05423 5.40452 2.0939C5.53678 2.13358 5.61181 2.27295 5.57215 2.4052L5.36868 3.08336H5.99935C6.13742 3.08336 6.24935 3.19529 6.24935 3.33335C6.24935 3.47142 6.13742 3.58335 5.99935 3.58335H5.21868L4.96868 4.41669H5.66602C5.80408 4.41669 5.91602 4.52862 5.91602 4.66669C5.91602 4.80475 5.80408 4.91669 5.66602 4.91669H4.81868L4.57215 5.73852C4.53245 5.87079 4.39308 5.94582 4.26085 5.90615C4.12858 5.86649 4.05355 5.72709 4.09322 5.59485L4.29668 4.91669H3.15202L2.90547 5.73852C2.8658 5.87079 2.72643 5.94582 2.59418 5.90615C2.46193 5.86649 2.38689 5.72709 2.42656 5.59485L2.63001 4.91669H1.99935C1.86128 4.91669 1.74935 4.80475 1.74935 4.66669C1.74935 4.52862 1.86128 4.41669 1.99935 4.41669H2.78001L3.03001 3.58335H2.33268C2.19461 3.58335 2.08268 3.47142 2.08268 3.33335C2.08268 3.19529 2.19461 3.08336 2.33268 3.08336H3.18001L3.42655 2.26152C3.46625 2.12927 3.60562 2.05423 3.73785 2.0939Z"
+                                                fill="white" />
+                                        </g>
+                                        <defs>
+                                            <clipPath id="clip0_273_1158">
+                                                <rect width="8" height="8" fill="white" />
+                                            </clipPath>
+                                        </defs>
+                                    </svg>
+                                    <span>Тема: Data analysis and machine learning</span>
+                                </div>
+
+                                <div class="info-flex">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 8 8"
+                                        fill="none">
+                                        <g clip-path="url(#clip0_273_1166)">
+                                            <path
+                                                d="M4.00098 0.666992C5.84191 0.666992 7.33398 2.15905 7.33398 4C7.33398 5.84093 5.84191 7.33301 4.00098 7.33301C2.16006 7.33297 0.667973 5.84091 0.667969 4C0.667969 2.15907 2.16006 0.667029 4.00098 0.666992ZM4.00098 2.41699C3.86291 2.41699 3.75098 2.52892 3.75098 2.66699V4C3.75098 4.0663 3.77732 4.12989 3.82422 4.17676L4.65723 5.00977C4.75486 5.1074 4.91311 5.10739 5.01074 5.00977C5.10838 4.91213 5.10838 4.75388 5.01074 4.65625L4.25098 3.89648V2.66699C4.25098 2.52892 4.13904 2.41699 4.00098 2.41699Z"
+                                                fill="white" />
+                                        </g>
+                                        <defs>
+                                            <clipPath id="clip0_273_1166">
+                                                <rect width="8" height="8" fill="white" />
+                                            </clipPath>
+                                        </defs>
+                                    </svg>
+                                    <span>Час: 03:00-05:00</span>
+                                </div>
+                            </div>
+                            <div class="tags-info">
+                                <div class="info-tag">
+                                    Програмування
+                                </div>
+
+                                <div class="info-tag">
+                                    Програма майбутніх лідерів
+                                </div>
+                            </div>
+
+                            <div class="colors-info">
+                                <p>Колір</p>
+                                <div class="radio-colors">
+                                    <label class="outer-color-circle">
+                                        <input type="radio" name="color" value="blue" class="color-radio" checked>
+                                        <span class="color-circle blue-circle"></span>
+                                    </label>
+
+                                    <label class="outer-color-circle">
+                                        <input type="radio" name="color" value="red" class="color-radio">
+                                        <span class="color-circle red-circle"></span>
+                                    </label>
+
+                                    <label class="outer-color-circle">
+                                        <input type="radio" name="color" value="green" class="color-radio">
+                                        <span class="color-circle green-circle"></span>
+                                    </label>
+
+                                    <label class="outer-color-circle">
+                                        <input type="radio" name="color" value="yellow" class="color-radio">
+                                        <span class="color-circle yellow-circle"></span>
+                                    </label>
+
+                                    <label class="outer-color-circle">
+                                        <input type="radio" name="color" value="purple" class="color-radio">
+                                        <span class="color-circle purple-circle"></span>
+                                    </label>
+
+                                    <label class="outer-color-circle">
+                                        <input type="radio" name="color" value="magenta" class="color-radio">
+                                        <span class="color-circle magenta-circle"></span>
+                                    </label>
+
+                                    <label class="outer-color-circle">
+                                        <input type="radio" name="color" value="cyan" class="color-radio">
+                                        <span class="color-circle cyan-circle"></span>
+                                    </label>
+
+                                    <label class="outer-color-circle">
+                                        <input type="radio" name="color" value="pink" class="color-radio">
+                                        <span class="color-circle pink-circle"></span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="day-sun e-frame"></div>
+            </div>
+            <div class="clock-18">
+                <div class="day-mon e-frame"></div>
+                <div class="day-tue e-frame"></div>
+                <div class="day-wed e-frame"></div>
+                <div class="day-thu e-frame"></div>
+                <div class="day-fri e-frame"></div>
+                <div class="day-sat e-frame"></div>
+                <div class="day-sun e-frame">
+                    <div class="event-frame red-frame" id="start-event-2">
+                        <div class="orb red-orb">
+                            <div class="inner-orb red-inner-orb starting-orb"></div>
+                        </div>
+                        <p class="frame-title">Початок: Lesson #19</p>
+                        <div class="dropdown-info dropdown-basis" id="dropdown2-s">
+                            <h4>Lesson #19</h4>
+                            <p class="full-date">Неділя, вересень 25</p>
+
+                            <div class="all-info-div">
+                                <div class="info-flex">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 8 8"
+                                        fill="none">
+                                        <g clip-path="url(#clip0_273_1158)">
+                                            <path d="M4.69739 3.58331L4.44739 4.41665H3.30273L3.55273 3.58331H4.69739Z"
+                                                fill="white" />
+                                            <path fill-rule="evenodd" clip-rule="evenodd"
+                                                d="M3.99935 0.666687C2.1584 0.666687 0.666016 2.15907 0.666016 4.00002C0.666016 5.84095 2.1584 7.33335 3.99935 7.33335C5.84028 7.33335 7.33268 5.84095 7.33268 4.00002C7.33268 2.15907 5.84028 0.666687 3.99935 0.666687ZM3.73785 2.0939C3.87012 2.13358 3.94515 2.27295 3.90548 2.4052L3.70202 3.08336H4.84668L5.09322 2.26152C5.13292 2.12927 5.27228 2.05423 5.40452 2.0939C5.53678 2.13358 5.61181 2.27295 5.57215 2.4052L5.36868 3.08336H5.99935C6.13742 3.08336 6.24935 3.19529 6.24935 3.33335C6.24935 3.47142 6.13742 3.58335 5.99935 3.58335H5.21868L4.96868 4.41669H5.66602C5.80408 4.41669 5.91602 4.52862 5.91602 4.66669C5.91602 4.80475 5.80408 4.91669 5.66602 4.91669H4.81868L4.57215 5.73852C4.53245 5.87079 4.39308 5.94582 4.26085 5.90615C4.12858 5.86649 4.05355 5.72709 4.09322 5.59485L4.29668 4.91669H3.15202L2.90547 5.73852C2.8658 5.87079 2.72643 5.94582 2.59418 5.90615C2.46193 5.86649 2.38689 5.72709 2.42656 5.59485L2.63001 4.91669H1.99935C1.86128 4.91669 1.74935 4.80475 1.74935 4.66669C1.74935 4.52862 1.86128 4.41669 1.99935 4.41669H2.78001L3.03001 3.58335H2.33268C2.19461 3.58335 2.08268 3.47142 2.08268 3.33335C2.08268 3.19529 2.19461 3.08336 2.33268 3.08336H3.18001L3.42655 2.26152C3.46625 2.12927 3.60562 2.05423 3.73785 2.0939Z"
+                                                fill="white" />
+                                        </g>
+                                        <defs>
+                                            <clipPath id="clip0_273_1158">
+                                                <rect width="8" height="8" fill="white" />
+                                            </clipPath>
+                                        </defs>
+                                    </svg>
+                                    <span>Тема: Generative AI. LLM.</span>
+                                </div>
+
+                                <div class="info-flex">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 8 8"
+                                        fill="none">
+                                        <g clip-path="url(#clip0_273_1166)">
+                                            <path
+                                                d="M4.00098 0.666992C5.84191 0.666992 7.33398 2.15905 7.33398 4C7.33398 5.84093 5.84191 7.33301 4.00098 7.33301C2.16006 7.33297 0.667973 5.84091 0.667969 4C0.667969 2.15907 2.16006 0.667029 4.00098 0.666992ZM4.00098 2.41699C3.86291 2.41699 3.75098 2.52892 3.75098 2.66699V4C3.75098 4.0663 3.77732 4.12989 3.82422 4.17676L4.65723 5.00977C4.75486 5.1074 4.91311 5.10739 5.01074 5.00977C5.10838 4.91213 5.10838 4.75388 5.01074 4.65625L4.25098 3.89648V2.66699C4.25098 2.52892 4.13904 2.41699 4.00098 2.41699Z"
+                                                fill="white" />
+                                        </g>
+                                        <defs>
+                                            <clipPath id="clip0_273_1166">
+                                                <rect width="8" height="8" fill="white" />
+                                            </clipPath>
+                                        </defs>
+                                    </svg>
+                                    <span>Час: 18:00-21:00</span>
+                                </div>
+                            </div>
+                            <div class="tags-info">
+                                <div class="info-tag">
+                                    Програмування
+                                </div>
+
+                                <div class="info-tag">
+                                    Програма майбутніх лідерів
+                                </div>
+                            </div>
+
+                            <div class="colors-info">
+                                <p>Колір</p>
+                                <div class="radio-colors">
+                                    <label class="outer-color-circle">
+                                        <input type="radio" name="color" value="blue" class="color-radio" checked>
+                                        <span class="color-circle blue-circle"></span>
+                                    </label>
+
+                                    <label class="outer-color-circle">
+                                        <input type="radio" name="color" value="red" class="color-radio">
+                                        <span class="color-circle red-circle"></span>
+                                    </label>
+
+                                    <label class="outer-color-circle">
+                                        <input type="radio" name="color" value="green" class="color-radio">
+                                        <span class="color-circle green-circle"></span>
+                                    </label>
+
+                                    <label class="outer-color-circle">
+                                        <input type="radio" name="color" value="yellow" class="color-radio">
+                                        <span class="color-circle yellow-circle"></span>
+                                    </label>
+
+                                    <label class="outer-color-circle">
+                                        <input type="radio" name="color" value="purple" class="color-radio">
+                                        <span class="color-circle purple-circle"></span>
+                                    </label>
+
+                                    <label class="outer-color-circle">
+                                        <input type="radio" name="color" value="magenta" class="color-radio">
+                                        <span class="color-circle magenta-circle"></span>
+                                    </label>
+
+                                    <label class="outer-color-circle">
+                                        <input type="radio" name="color" value="cyan" class="color-radio">
+                                        <span class="color-circle cyan-circle"></span>
+                                    </label>
+
+                                    <label class="outer-color-circle">
+                                        <input type="radio" name="color" value="pink" class="color-radio">
+                                        <span class="color-circle pink-circle"></span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="clock-19">
+                <div class="day-mon e-frame"></div>
+                <div class="day-tue e-frame"></div>
+                <div class="day-wed e-frame"></div>
+                <div class="day-thu e-frame"></div>
+                <div class="day-fri e-frame"></div>
+                <div class="day-sat e-frame"></div>
+                <div class="day-sun e-frame">
+                    <div class="event-frame frame-reverse green-frame" id="start-event-3">
+                        <div class="orb green-orb">
+                            <div class="inner-orb green-inner-orb starting-orb"></div>
+                        </div>
+                        <p class="frame-title">Початок: Therapy</p>
+                        <div class="dropdown-info dropdown-basis" id="dropdown3-s">
+                            <h4>Therapy</h4>
+                            <p class="full-date">Неділя, вересень 25</p>
+
+                            <div class="all-info-div">
+                                <div class="info-flex">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 8 8"
+                                        fill="none">
+                                        <g clip-path="url(#clip0_273_1166)">
+                                            <path
+                                                d="M4.00098 0.666992C5.84191 0.666992 7.33398 2.15905 7.33398 4C7.33398 5.84093 5.84191 7.33301 4.00098 7.33301C2.16006 7.33297 0.667973 5.84091 0.667969 4C0.667969 2.15907 2.16006 0.667029 4.00098 0.666992ZM4.00098 2.41699C3.86291 2.41699 3.75098 2.52892 3.75098 2.66699V4C3.75098 4.0663 3.77732 4.12989 3.82422 4.17676L4.65723 5.00977C4.75486 5.1074 4.91311 5.10739 5.01074 5.00977C5.10838 4.91213 5.10838 4.75388 5.01074 4.65625L4.25098 3.89648V2.66699C4.25098 2.52892 4.13904 2.41699 4.00098 2.41699Z"
+                                                fill="white" />
+                                        </g>
+                                        <defs>
+                                            <clipPath id="clip0_273_1166">
+                                                <rect width="8" height="8" fill="white" />
+                                            </clipPath>
+                                        </defs>
+                                    </svg>
+                                    <span>Час: 19:00-23:00</span>
+                                </div>
+                            </div>
+                            <div class="tags-info">
+                                <div class="info-tag">
+                                    Therapy
+                                </div>
+                            </div>
+
+                            <div class="colors-info">
+                                <p>Colors</p>
+                                <div class="radio-colors">
+                                    <label class="outer-color-circle">
+                                        <input type="radio" name="color" value="blue" class="color-radio" checked>
+                                        <span class="color-circle blue-circle"></span>
+                                    </label>
+
+                                    <label class="outer-color-circle">
+                                        <input type="radio" name="color" value="red" class="color-radio">
+                                        <span class="color-circle red-circle"></span>
+                                    </label>
+
+                                    <label class="outer-color-circle">
+                                        <input type="radio" name="color" value="green" class="color-radio" checked>
+                                        <span class="color-circle green-circle"></span>
+                                    </label>
+
+                                    <label class="outer-color-circle">
+                                        <input type="radio" name="color" value="yellow" class="color-radio">
+                                        <span class="color-circle yellow-circle"></span>
+                                    </label>
+
+                                    <label class="outer-color-circle">
+                                        <input type="radio" name="color" value="purple" class="color-radio">
+                                        <span class="color-circle purple-circle"></span>
+                                    </label>
+
+                                    <label class="outer-color-circle">
+                                        <input type="radio" name="color" value="magenta" class="color-radio">
+                                        <span class="color-circle magenta-circle"></span>
+                                    </label>
+
+                                    <label class="outer-color-circle">
+                                        <input type="radio" name="color" value="cyan" class="color-radio">
+                                        <span class="color-circle cyan-circle"></span>
+                                    </label>
+
+                                    <label class="outer-color-circle">
+                                        <input type="radio" name="color" value="pink" class="color-radio">
+                                        <span class="color-circle pink-circle"></span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="clock-20">
+                <div class="day-mon e-frame"></div>
+                <div class="day-tue e-frame"></div>
+                <div class="day-wed e-frame"></div>
+                <div class="day-thu e-frame"></div>
+                <div class="day-fri e-frame"></div>
+                <div class="day-sat e-frame"></div>
+                <div class="day-sun e-frame"></div>
+            </div>
+            <div class="clock-21">
+                <div class="day-mon e-frame"></div>
+                <div class="day-tue e-frame"></div>
+                <div class="day-wed e-frame"></div>
+                <div class="day-thu e-frame"></div>
+                <div class="day-fri e-frame"></div>
+                <div class="day-sat e-frame"></div>
+                <div class="day-sun e-frame">
+                    <div class="event-frame red-frame" id="end-event-2">
+                        <div class="orb red-orb">
+                            <div class="inner-orb red-inner-orb starting-orb"></div>
+                        </div>
+                        <p class="frame-title">Кінець: Lesson #19</p>
+                        <div class="dropdown-info dropdown-basis" id="dropdown2-e">
+                            <h4>Lesson #19</h4>
+                            <p class="full-date">Неділя, вересень 25</p>
+
+                            <div class="all-info-div">
+                                <div class="info-flex">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 8 8"
+                                        fill="none">
+                                        <g clip-path="url(#clip0_273_1158)">
+                                            <path d="M4.69739 3.58331L4.44739 4.41665H3.30273L3.55273 3.58331H4.69739Z"
+                                                fill="white" />
+                                            <path fill-rule="evenodd" clip-rule="evenodd"
+                                                d="M3.99935 0.666687C2.1584 0.666687 0.666016 2.15907 0.666016 4.00002C0.666016 5.84095 2.1584 7.33335 3.99935 7.33335C5.84028 7.33335 7.33268 5.84095 7.33268 4.00002C7.33268 2.15907 5.84028 0.666687 3.99935 0.666687ZM3.73785 2.0939C3.87012 2.13358 3.94515 2.27295 3.90548 2.4052L3.70202 3.08336H4.84668L5.09322 2.26152C5.13292 2.12927 5.27228 2.05423 5.40452 2.0939C5.53678 2.13358 5.61181 2.27295 5.57215 2.4052L5.36868 3.08336H5.99935C6.13742 3.08336 6.24935 3.19529 6.24935 3.33335C6.24935 3.47142 6.13742 3.58335 5.99935 3.58335H5.21868L4.96868 4.41669H5.66602C5.80408 4.41669 5.91602 4.52862 5.91602 4.66669C5.91602 4.80475 5.80408 4.91669 5.66602 4.91669H4.81868L4.57215 5.73852C4.53245 5.87079 4.39308 5.94582 4.26085 5.90615C4.12858 5.86649 4.05355 5.72709 4.09322 5.59485L4.29668 4.91669H3.15202L2.90547 5.73852C2.8658 5.87079 2.72643 5.94582 2.59418 5.90615C2.46193 5.86649 2.38689 5.72709 2.42656 5.59485L2.63001 4.91669H1.99935C1.86128 4.91669 1.74935 4.80475 1.74935 4.66669C1.74935 4.52862 1.86128 4.41669 1.99935 4.41669H2.78001L3.03001 3.58335H2.33268C2.19461 3.58335 2.08268 3.47142 2.08268 3.33335C2.08268 3.19529 2.19461 3.08336 2.33268 3.08336H3.18001L3.42655 2.26152C3.46625 2.12927 3.60562 2.05423 3.73785 2.0939Z"
+                                                fill="white" />
+                                        </g>
+                                        <defs>
+                                            <clipPath id="clip0_273_1158">
+                                                <rect width="8" height="8" fill="white" />
+                                            </clipPath>
+                                        </defs>
+                                    </svg>
+                                    <span>Тема: Generative AI. LLM.</span>
+                                </div>
+
+                                <div class="info-flex">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 8 8"
+                                        fill="none">
+                                        <g clip-path="url(#clip0_273_1166)">
+                                            <path
+                                                d="M4.00098 0.666992C5.84191 0.666992 7.33398 2.15905 7.33398 4C7.33398 5.84093 5.84191 7.33301 4.00098 7.33301C2.16006 7.33297 0.667973 5.84091 0.667969 4C0.667969 2.15907 2.16006 0.667029 4.00098 0.666992ZM4.00098 2.41699C3.86291 2.41699 3.75098 2.52892 3.75098 2.66699V4C3.75098 4.0663 3.77732 4.12989 3.82422 4.17676L4.65723 5.00977C4.75486 5.1074 4.91311 5.10739 5.01074 5.00977C5.10838 4.91213 5.10838 4.75388 5.01074 4.65625L4.25098 3.89648V2.66699C4.25098 2.52892 4.13904 2.41699 4.00098 2.41699Z"
+                                                fill="white" />
+                                        </g>
+                                        <defs>
+                                            <clipPath id="clip0_273_1166">
+                                                <rect width="8" height="8" fill="white" />
+                                            </clipPath>
+                                        </defs>
+                                    </svg>
+                                    <span>Час: 18:00-21:00</span>
+                                </div>
+                            </div>
+                            <div class="tags-info">
+                                <div class="info-tag">
+                                    Програмування
+                                </div>
+
+                                <div class="info-tag">
+                                    Програма майбутніх лідерів
+                                </div>
+                            </div>
+
+                            <div class="colors-info">
+                                <p>Колір</p>
+                                <div class="radio-colors">
+                                    <label class="outer-color-circle">
+                                        <input type="radio" name="color" value="blue" class="color-radio">
+                                        <span class="color-circle blue-circle"></span>
+                                    </label>
+
+                                    <label class="outer-color-circle">
+                                        <input type="radio" name="color" value="red" class="color-radio">
+                                        <span class="color-circle red-circle"></span>
+                                    </label>
+
+                                    <label class="outer-color-circle">
+                                        <input type="radio" name="color" value="green" class="color-radio" checked>
+                                        <span class="color-circle green-circle"></span>
+                                    </label>
+
+                                    <label class="outer-color-circle">
+                                        <input type="radio" name="color" value="yellow" class="color-radio">
+                                        <span class="color-circle yellow-circle"></span>
+                                    </label>
+
+                                    <label class="outer-color-circle">
+                                        <input type="radio" name="color" value="purple" class="color-radio">
+                                        <span class="color-circle purple-circle"></span>
+                                    </label>
+
+                                    <label class="outer-color-circle">
+                                        <input type="radio" name="color" value="magenta" class="color-radio">
+                                        <span class="color-circle magenta-circle"></span>
+                                    </label>
+
+                                    <label class="outer-color-circle">
+                                        <input type="radio" name="color" value="cyan" class="color-radio">
+                                        <span class="color-circle cyan-circle"></span>
+                                    </label>
+
+                                    <label class="outer-color-circle">
+                                        <input type="radio" name="color" value="pink" class="color-radio">
+                                        <span class="color-circle pink-circle"></span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="clock-22">
+                <div class="day-mon e-frame"></div>
+                <div class="day-tue e-frame"></div>
+                <div class="day-wed e-frame"></div>
+                <div class="day-thu e-frame"></div>
+                <div class="day-fri e-frame"></div>
+                <div class="day-sat e-frame"></div>
+                <div class="day-sun e-frame"></div>
+            </div>
+            <div class="clock-23">
+                <div class="day-mon e-frame"></div>
+                <div class="day-tue e-frame"></div>
+                <div class="day-wed e-frame"></div>
+                <div class="day-thu e-frame"></div>
+                <div class="day-fri e-frame"></div>
+                <div class="day-sat e-frame"></div>
+                <div class="day-sun e-frame">
+                    <div class="event-frame frame-reverse green-frame" id="end-event-3">
+                        <div class="orb green-orb">
+                            <div class="inner-orb green-inner-orb starting-orb"></div>
+                        </div>
+                        <p class="frame-title">Кінець: Therapy</p>
+                        <div class="dropdown-info dropdown-basis" id="dropdown3-e">
+                            <h4>Therapy</h4>
+                            <p class="full-date">Неділя, вересень 25</p>
+
+                            <div class="all-info-div">
+                                <div class="info-flex">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 8 8"
+                                        fill="none">
+                                        <g clip-path="url(#clip0_273_1166)">
+                                            <path
+                                                d="M4.00098 0.666992C5.84191 0.666992 7.33398 2.15905 7.33398 4C7.33398 5.84093 5.84191 7.33301 4.00098 7.33301C2.16006 7.33297 0.667973 5.84091 0.667969 4C0.667969 2.15907 2.16006 0.667029 4.00098 0.666992ZM4.00098 2.41699C3.86291 2.41699 3.75098 2.52892 3.75098 2.66699V4C3.75098 4.0663 3.77732 4.12989 3.82422 4.17676L4.65723 5.00977C4.75486 5.1074 4.91311 5.10739 5.01074 5.00977C5.10838 4.91213 5.10838 4.75388 5.01074 4.65625L4.25098 3.89648V2.66699C4.25098 2.52892 4.13904 2.41699 4.00098 2.41699Z"
+                                                fill="white" />
+                                        </g>
+                                        <defs>
+                                            <clipPath id="clip0_273_1166">
+                                                <rect width="8" height="8" fill="white" />
+                                            </clipPath>
+                                        </defs>
+                                    </svg>
+                                    <span>Час: 19:00-23:00</span>
+                                </div>
+                            </div>
+                            <div class="tags-info">
+                                <div class="info-tag">
+                                    Терапія
+                                </div>
+                            </div>
+
+                            <div class="colors-info">
+                                <p>Колір</p>
+                                <div class="radio-colors">
+                                    <label class="outer-color-circle">
+                                        <input type="radio" name="color" value="blue" class="color-radio" checked>
+                                        <span class="color-circle blue-circle"></span>
+                                    </label>
+
+                                    <label class="outer-color-circle">
+                                        <input type="radio" name="color" value="red" class="color-radio">
+                                        <span class="color-circle red-circle"></span>
+                                    </label>
+
+                                    <label class="outer-color-circle">
+                                        <input type="radio" name="color" value="green" class="color-radio">
+                                        <span class="color-circle green-circle"></span>
+                                    </label>
+
+                                    <label class="outer-color-circle">
+                                        <input type="radio" name="color" value="yellow" class="color-radio">
+                                        <span class="color-circle yellow-circle"></span>
+                                    </label>
+
+                                    <label class="outer-color-circle">
+                                        <input type="radio" name="color" value="purple" class="color-radio">
+                                        <span class="color-circle purple-circle"></span>
+                                    </label>
+
+                                    <label class="outer-color-circle">
+                                        <input type="radio" name="color" value="magenta" class="color-radio">
+                                        <span class="color-circle magenta-circle"></span>
+                                    </label>
+
+                                    <label class="outer-color-circle">
+                                        <input type="radio" name="color" value="cyan" class="color-radio">
+                                        <span class="color-circle cyan-circle"></span>
+                                    </label>
+
+                                    <label class="outer-color-circle">
+                                        <input type="radio" name="color" value="pink" class="color-radio">
+                                        <span class="color-circle pink-circle"></span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
 
 
 
-        <div class="settings-menu">
-            <button onclick="closeSettings()" class="overflow-action-btn"></button>
-            <div class="enabled settings-box">
-                <div class="settings-title">
-                    <p>Settings</p>
-                    <button class="close-settings">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="#000" width="20px" height="20px"
-                            viewBox="0 0 20 20" stroke='#fff'>
+    <div class="settings-menu">
+        <button onclick="closeSettings()" class="overflow-action-btn"></button>
+        <div class="enabled settings-box">
+            <div class="settings-title">
+                <p>Settings</p>
+                <button class="close-settings">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="#000" width="20px" height="20px" viewBox="0 0 20 20"
+                        stroke='#fff'>
 
-                            <g id="SVGRepo_bgCarrier" stroke-width="0" />
+                        <g id="SVGRepo_bgCarrier" stroke-width="0" />
 
 
 
+                        <g id="SVGRepo_iconCarrier">
+
+                            <path
+                                d="M14.348 14.849a1.2 1.2 0 0 1-1.697 0L10 11.819l-2.651 3.029a1.2 1.2 0 1 1-1.697-1.697l2.758-3.15-2.759-3.152a1.2 1.2 0 1 1 1.697-1.697L10 8.183l2.651-3.031a1.2 1.2 0 1 1 1.697 1.697l-2.758 3.152 2.758 3.15a1.2 1.2 0 0 1 0 1.698z" />
+
+                        </g>
+
+                    </svg>
+
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" viewBox="0 0 20 20"
+                        stroke="#fff">
+
+                        <g id="SVGRepo_bgCarrier" stroke-width="0" />
+
+                        <g id="SVGRepo_iconCarrier">
+
+                            <path
+                                d="M14.348 14.849a1.2 1.2 0 0 1-1.697 0L10 11.819l-2.651 3.029a1.2 1.2 0 1 1-1.697-1.697l2.758-3.15-2.759-3.152a1.2 1.2 0 1 1 1.697-1.697L10 8.183l2.651-3.031a1.2 1.2 0 1 1 1.697 1.697l-2.758 3.152 2.758 3.15a1.2 1.2 0 0 1 0 1.698z" />
+
+                        </g>
+
+                    </svg>
+                    <span>Close</span>
+                </button>
+
+            </div>
+
+
+            <hr>
+            <div class="main-settings-container">
+                <div class="settings-menubar">
+                    <button id="menubarBtnGeneral" class="menubar-button current-menubtn">
+                        <svg width="20px" height="20px" viewBox="0 0 24 24" fill="none"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                            <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
                             <g id="SVGRepo_iconCarrier">
-
-                                <path
-                                    d="M14.348 14.849a1.2 1.2 0 0 1-1.697 0L10 11.819l-2.651 3.029a1.2 1.2 0 1 1-1.697-1.697l2.758-3.15-2.759-3.152a1.2 1.2 0 1 1 1.697-1.697L10 8.183l2.651-3.031a1.2 1.2 0 1 1 1.697 1.697l-2.758 3.152 2.758 3.15a1.2 1.2 0 0 1 0 1.698z" />
-
+                                <path fill-rule="evenodd" clip-rule="evenodd"
+                                    d="M12.4277 2C11.3139 2 10.2995 2.6007 8.27081 3.80211L7.58466 4.20846C5.55594 5.40987 4.54158 6.01057 3.98466 7C3.42773 7.98943 3.42773 9.19084 3.42773 11.5937V12.4063C3.42773 14.8092 3.42773 16.0106 3.98466 17C4.54158 17.9894 5.55594 18.5901 7.58466 19.7915L8.27081 20.1979C10.2995 21.3993 11.3139 22 12.4277 22C13.5416 22 14.5559 21.3993 16.5847 20.1979L17.2708 19.7915C19.2995 18.5901 20.3139 17.9894 20.8708 17C21.4277 16.0106 21.4277 14.8092 21.4277 12.4063V11.5937C21.4277 9.19084 21.4277 7.98943 20.8708 7C20.3139 6.01057 19.2995 5.40987 17.2708 4.20846L16.5847 3.80211C14.5559 2.6007 13.5416 2 12.4277 2ZM8.67773 12C8.67773 9.92893 10.3567 8.25 12.4277 8.25C14.4988 8.25 16.1777 9.92893 16.1777 12C16.1777 14.0711 14.4988 15.75 12.4277 15.75C10.3567 15.75 8.67773 14.0711 8.67773 12Z"
+                                    fill="#ffffff"></path>
                             </g>
-
                         </svg>
-
-                        <svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" viewBox="0 0 20 20"
-                            stroke="#fff">
-
-                            <g id="SVGRepo_bgCarrier" stroke-width="0" />
-
-                            <g id="SVGRepo_iconCarrier">
-
-                                <path
-                                    d="M14.348 14.849a1.2 1.2 0 0 1-1.697 0L10 11.819l-2.651 3.029a1.2 1.2 0 1 1-1.697-1.697l2.758-3.15-2.759-3.152a1.2 1.2 0 1 1 1.697-1.697L10 8.183l2.651-3.031a1.2 1.2 0 1 1 1.697 1.697l-2.758 3.152 2.758 3.15a1.2 1.2 0 0 1 0 1.698z" />
-
-                            </g>
-
-                        </svg>
-                        <span>Close</span>
+                        <p>General</p>
                     </button>
 
+                    <button id="menubarBtnAbility" class="menubar-button">
+                        <svg width="20px" height="20px" viewBox="0 0 24 24" fill="none"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                            <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+                            <g id="SVGRepo_iconCarrier">
+                                <path
+                                    d="M9.75 12C9.75 10.7574 10.7574 9.75 12 9.75C13.2426 9.75 14.25 10.7574 14.25 12C14.25 13.2426 13.2426 14.25 12 14.25C10.7574 14.25 9.75 13.2426 9.75 12Z"
+                                    fill="#ffffff"></path>
+                                <path fill-rule="evenodd" clip-rule="evenodd"
+                                    d="M2 12C2 13.6394 2.42496 14.1915 3.27489 15.2957C4.97196 17.5004 7.81811 20 12 20C16.1819 20 19.028 17.5004 20.7251 15.2957C21.575 14.1915 22 13.6394 22 12C22 10.3606 21.575 9.80853 20.7251 8.70433C19.028 6.49956 16.1819 4 12 4C7.81811 4 4.97196 6.49956 3.27489 8.70433C2.42496 9.80853 2 10.3606 2 12ZM12 8.25C9.92893 8.25 8.25 9.92893 8.25 12C8.25 14.0711 9.92893 15.75 12 15.75C14.0711 15.75 15.75 14.0711 15.75 12C15.75 9.92893 14.0711 8.25 12 8.25Z"
+                                    fill="#ffffff"></path>
+                            </g>
+                        </svg>
+                        <p>Accessability</p>
+                    </button>
+
+                    <button id="menubarBtnSecurity" class="menubar-button">
+                        <svg width="20px" height="20px" viewBox="0 0 24 24" fill="none"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                            <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+                            <g id="SVGRepo_iconCarrier">
+                                <path fill-rule="evenodd" clip-rule="evenodd"
+                                    d="M3 10.4167C3 7.21907 3 5.62028 3.37752 5.08241C3.75503 4.54454 5.25832 4.02996 8.26491 3.00079L8.83772 2.80472C10.405 2.26824 11.1886 2 12 2C12.8114 2 13.595 2.26824 15.1623 2.80472L15.7351 3.00079C18.7417 4.02996 20.245 4.54454 20.6225 5.08241C21 5.62028 21 7.21907 21 10.4167V11.9914C21 17.6294 16.761 20.3655 14.1014 21.5273C13.38 21.8424 13.0193 22 12 22C10.9807 22 10.62 21.8424 9.89856 21.5273C7.23896 20.3655 3 17.6294 3 11.9914V10.4167ZM14 9C14 10.1046 13.1046 11 12 11C10.8954 11 10 10.1046 10 9C10 7.89543 10.8954 7 12 7C13.1046 7 14 7.89543 14 9ZM12 17C16 17 16 16.1046 16 15C16 13.8954 14.2091 13 12 13C9.79086 13 8 13.8954 8 15C8 16.1046 8 17 12 17Z"
+                                    fill="#ffffff"></path>
+                            </g>
+                        </svg>
+                        <p>Security</p>
+                    </button>
+
+                    <button id="menubarBtnProfile" class="menubar-button">
+                        <svg width="20px" height="20px" viewBox="0 0 24 24" fill="none"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                            <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+                            <g id="SVGRepo_iconCarrier">
+                                <circle cx="12" cy="6" r="4" fill="#ffffff"></circle>
+                                <path
+                                    d="M20 17.5C20 19.9853 20 22 12 22C4 22 4 19.9853 4 17.5C4 15.0147 7.58172 13 12 13C16.4183 13 20 15.0147 20 17.5Z"
+                                    fill="#ffffff"></path>
+                            </g>
+                        </svg>
+                        <p>Profile</p>
+                    </button>
+                </div>
+                <div id="menubarGeneral" class="main-settings-options settings-option-current">
+                    <h2>General Settings</h2>
+                    <div class="settings-option">
+                        <div class="option-selector">
+                            <p>Language</p>
+                            <select name="language" id="language-select">
+                                <option value="en" selected>English</option>
+                                <option value="ua">Українська</option>
+                            </select>
+                        </div>
+
+                    </div>
+
+                    <div class="settings-option">
+                        <p>Theme</p>
+                        <div class="option-selector">
+                            <label for="beigeTheme" class="theme-option">
+                                <input type="radio" name="theme" id="beigeTheme" value="light">
+                                <img src="./src/img/themes/beige-theme.png" alt="Beige theme">
+                            </label>
+
+                            <label for="darkMainTheme" class="theme-option">
+                                <input type="radio" name="theme" value="dark" id="darkMainTheme" checked>
+                                <img src="./src/img/themes/dark-main-theme.png" alt="Dark theme">
+                            </label>
+                        </div>
+                    </div>
+
+                    <button class="save-settings-btn btn35 btn">Save Changes</button>
                 </div>
 
-
-                <hr>
-                <div class="main-settings-container">
-                    <div class="settings-menubar">
-                        <button id="menubarBtnGeneral" class="menubar-button current-menubtn">
-                            <svg width="20px" height="20px" viewBox="0 0 24 24" fill="none"
-                                xmlns="http://www.w3.org/2000/svg">
-                                <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
-                                <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
-                                <g id="SVGRepo_iconCarrier">
-                                    <path fill-rule="evenodd" clip-rule="evenodd"
-                                        d="M12.4277 2C11.3139 2 10.2995 2.6007 8.27081 3.80211L7.58466 4.20846C5.55594 5.40987 4.54158 6.01057 3.98466 7C3.42773 7.98943 3.42773 9.19084 3.42773 11.5937V12.4063C3.42773 14.8092 3.42773 16.0106 3.98466 17C4.54158 17.9894 5.55594 18.5901 7.58466 19.7915L8.27081 20.1979C10.2995 21.3993 11.3139 22 12.4277 22C13.5416 22 14.5559 21.3993 16.5847 20.1979L17.2708 19.7915C19.2995 18.5901 20.3139 17.9894 20.8708 17C21.4277 16.0106 21.4277 14.8092 21.4277 12.4063V11.5937C21.4277 9.19084 21.4277 7.98943 20.8708 7C20.3139 6.01057 19.2995 5.40987 17.2708 4.20846L16.5847 3.80211C14.5559 2.6007 13.5416 2 12.4277 2ZM8.67773 12C8.67773 9.92893 10.3567 8.25 12.4277 8.25C14.4988 8.25 16.1777 9.92893 16.1777 12C16.1777 14.0711 14.4988 15.75 12.4277 15.75C10.3567 15.75 8.67773 14.0711 8.67773 12Z"
-                                        fill="#ffffff"></path>
-                                </g>
-                            </svg>
-                            <p>General</p>
-                        </button>
-
-                        <button id="menubarBtnAbility" class="menubar-button">
-                            <svg width="20px" height="20px" viewBox="0 0 24 24" fill="none"
-                                xmlns="http://www.w3.org/2000/svg">
-                                <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
-                                <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
-                                <g id="SVGRepo_iconCarrier">
-                                    <path
-                                        d="M9.75 12C9.75 10.7574 10.7574 9.75 12 9.75C13.2426 9.75 14.25 10.7574 14.25 12C14.25 13.2426 13.2426 14.25 12 14.25C10.7574 14.25 9.75 13.2426 9.75 12Z"
-                                        fill="#ffffff"></path>
-                                    <path fill-rule="evenodd" clip-rule="evenodd"
-                                        d="M2 12C2 13.6394 2.42496 14.1915 3.27489 15.2957C4.97196 17.5004 7.81811 20 12 20C16.1819 20 19.028 17.5004 20.7251 15.2957C21.575 14.1915 22 13.6394 22 12C22 10.3606 21.575 9.80853 20.7251 8.70433C19.028 6.49956 16.1819 4 12 4C7.81811 4 4.97196 6.49956 3.27489 8.70433C2.42496 9.80853 2 10.3606 2 12ZM12 8.25C9.92893 8.25 8.25 9.92893 8.25 12C8.25 14.0711 9.92893 15.75 12 15.75C14.0711 15.75 15.75 14.0711 15.75 12C15.75 9.92893 14.0711 8.25 12 8.25Z"
-                                        fill="#ffffff"></path>
-                                </g>
-                            </svg>
-                            <p>Accessability</p>
-                        </button>
-
-                        <button id="menubarBtnSecurity" class="menubar-button">
-                            <svg width="20px" height="20px" viewBox="0 0 24 24" fill="none"
-                                xmlns="http://www.w3.org/2000/svg">
-                                <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
-                                <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
-                                <g id="SVGRepo_iconCarrier">
-                                    <path fill-rule="evenodd" clip-rule="evenodd"
-                                        d="M3 10.4167C3 7.21907 3 5.62028 3.37752 5.08241C3.75503 4.54454 5.25832 4.02996 8.26491 3.00079L8.83772 2.80472C10.405 2.26824 11.1886 2 12 2C12.8114 2 13.595 2.26824 15.1623 2.80472L15.7351 3.00079C18.7417 4.02996 20.245 4.54454 20.6225 5.08241C21 5.62028 21 7.21907 21 10.4167V11.9914C21 17.6294 16.761 20.3655 14.1014 21.5273C13.38 21.8424 13.0193 22 12 22C10.9807 22 10.62 21.8424 9.89856 21.5273C7.23896 20.3655 3 17.6294 3 11.9914V10.4167ZM14 9C14 10.1046 13.1046 11 12 11C10.8954 11 10 10.1046 10 9C10 7.89543 10.8954 7 12 7C13.1046 7 14 7.89543 14 9ZM12 17C16 17 16 16.1046 16 15C16 13.8954 14.2091 13 12 13C9.79086 13 8 13.8954 8 15C8 16.1046 8 17 12 17Z"
-                                        fill="#ffffff"></path>
-                                </g>
-                            </svg>
-                            <p>Security</p>
-                        </button>
-
-                        <button id="menubarBtnProfile" class="menubar-button">
-                            <svg width="20px" height="20px" viewBox="0 0 24 24" fill="none"
-                                xmlns="http://www.w3.org/2000/svg">
-                                <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
-                                <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
-                                <g id="SVGRepo_iconCarrier">
-                                    <circle cx="12" cy="6" r="4" fill="#ffffff"></circle>
-                                    <path
-                                        d="M20 17.5C20 19.9853 20 22 12 22C4 22 4 19.9853 4 17.5C4 15.0147 7.58172 13 12 13C16.4183 13 20 15.0147 20 17.5Z"
-                                        fill="#ffffff"></path>
-                                </g>
-                            </svg>
-                            <p>Profile</p>
-                        </button>
-                    </div>
-                    <div id="menubarGeneral" class="main-settings-options settings-option-current">
-                        <h2>General Settings</h2>
-                        <div class="settings-option">
-                            <div class="option-selector">
-                                <p>Language</p>
-                                <select name="language" id="language-select">
-                                    <option value="en" selected>English</option>
-                                    <option value="ua">Українська</option>
-                                </select>
-                            </div>
-
+                <div id="menubarAbility" class="main-settings-options">
+                    <h2>Accessability</h2>
+                    <div class="settings-option">
+                        <div class="option-selector">
+                            <p>Font</p>
+                            <select name="font" id="font-select">
+                                <option value="default" selected>Default(e-Ukraine)</option>
+                                <option value="dyslexic">Dyslexia-Friendly(Lexend)</option>
+                            </select>
                         </div>
-
-                        <div class="settings-option">
-                            <p>Theme</p>
-                            <div class="option-selector">
-                                <label for="beigeTheme" class="theme-option">
-                                    <input type="radio" name="theme" id="beigeTheme" value="light">
-                                    <img src="./src/img/themes/beige-theme.png" alt="Beige theme">
-                                </label>
-
-                                <label for="darkMainTheme" class="theme-option">
-                                    <input type="radio" name="theme" value="dark" id="darkMainTheme" checked>
-                                    <img src="./src/img/themes/dark-main-theme.png" alt="Dark theme">
-                                </label>
-                            </div>
-                        </div>
-
-                        <button class="save-settings-btn btn35 btn">Save Changes</button>
                     </div>
 
-                    <div id="menubarAbility" class="main-settings-options">
-                        <h2>Accessability</h2>
-                        <div class="settings-option">
-                            <div class="option-selector">
-                                <p>Font</p>
-                                <select name="font" id="font-select">
-                                    <option value="default" selected>Default(e-Ukraine)</option>
-                                    <option value="dyslexic">Dyslexia-Friendly(Lexend)</option>
-                                </select>
-                            </div>
+
+
+                    <div class="settings-option">
+                        <div class="option-selector">
+                            <p>Shader</p>
+                            <select name="shader" id="shader-select">
+                                <option value="normal" selected>Default</option>
+                                <option value="protanomaly">Protanomaly</option>
+                                <option value="achromatomaly">Achromatomaly</option>
+                                <option value="deuteranomaly">Deuteranomaly</option>
+                                <option value="tritanomaly">Tritanomaly</option>
+                            </select>
                         </div>
-
-
-
-                        <div class="settings-option">
-                            <div class="option-selector">
-                                <p>Shader</p>
-                                <select name="shader" id="shader-select">
-                                    <option value="normal" selected>Default</option>
-                                    <option value="protanomaly">Protanomaly</option>
-                                    <option value="achromatomaly">Achromatomaly</option>
-                                    <option value="deuteranomaly">Deuteranomaly</option>
-                                    <option value="tritanomaly">Tritanomaly</option>
-                                </select>
-                            </div>
-                        </div>
-
-                        <div class="settings-option">
-                            <div class="option-selector">
-                                <p>Font Size</p>
-                                <div class="numberInputSelector" id="FontSizeSelector">
-                                    <button class="numberInputButtonUp">
-                                        <svg fill="#000000" height="12px" width="12px" version="1.1" id="Layer_1"
-                                            xmlns="http://www.w3.org/2000/svg"
-                                            xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 330.002 330.002"
-                                            xml:space="preserve">
-                                            <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
-                                            <g id="SVGRepo_tracerCarrier" stroke-linecap="round"
-                                                stroke-linejoin="round"></g>
-                                            <g id="SVGRepo_iconCarrier">
-                                                <path id="XMLID_19_"
-                                                    d="M229.966,0.847c-6.011-2.109-12.698-0.19-16.678,4.784L93.288,155.635 c-4.382,5.478-4.382,13.263,0.001,18.741l120,149.996c2.902,3.628,7.245,5.63,11.716,5.63c1.658,0,3.336-0.276,4.962-0.847 c6.012-2.108,10.035-7.784,10.035-14.154v-300C240.001,8.63,235.978,2.955,229.966,0.847z">
-                                                </path>
-                                            </g>
-                                        </svg>
-                                    </button>
-                                    <p class="numberInputParagraph" id="fontSizeInput">16</p>
-                                    <button class="numberInputButtonDown">
-                                        <svg fill="#000000" height="12px" width="12px" version="1.1" id="Layer_1"
-                                            xmlns="http://www.w3.org/2000/svg"
-                                            xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 330.002 330.002"
-                                            xml:space="preserve">
-                                            <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
-                                            <g id="SVGRepo_tracerCarrier" stroke-linecap="round"
-                                                stroke-linejoin="round"></g>
-                                            <g id="SVGRepo_iconCarrier">
-                                                <path id="XMLID_19_"
-                                                    d="M229.966,0.847c-6.011-2.109-12.698-0.19-16.678,4.784L93.288,155.635 c-4.382,5.478-4.382,13.263,0.001,18.741l120,149.996c2.902,3.628,7.245,5.63,11.716,5.63c1.658,0,3.336-0.276,4.962-0.847 c6.012-2.108,10.035-7.784,10.035-14.154v-300C240.001,8.63,235.978,2.955,229.966,0.847z">
-                                                </path>
-                                            </g>
-                                        </svg>
-                                    </button>
-                                </div>
-
-                            </div>
-
-                        </div>
-
-                        <button class="save-settings-btn btn35 btn">Save Changes</button>
                     </div>
+
+                    <div class="settings-option">
+                        <div class="option-selector">
+                            <p>Font Size</p>
+                            <div class="numberInputSelector" id="FontSizeSelector">
+                                <button class="numberInputButtonUp">
+                                    <svg fill="#000000" height="12px" width="12px" version="1.1" id="Layer_1"
+                                        xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+                                        viewBox="0 0 330.002 330.002" xml:space="preserve">
+                                        <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                                        <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round">
+                                        </g>
+                                        <g id="SVGRepo_iconCarrier">
+                                            <path id="XMLID_19_"
+                                                d="M229.966,0.847c-6.011-2.109-12.698-0.19-16.678,4.784L93.288,155.635 c-4.382,5.478-4.382,13.263,0.001,18.741l120,149.996c2.902,3.628,7.245,5.63,11.716,5.63c1.658,0,3.336-0.276,4.962-0.847 c6.012-2.108,10.035-7.784,10.035-14.154v-300C240.001,8.63,235.978,2.955,229.966,0.847z">
+                                            </path>
+                                        </g>
+                                    </svg>
+                                </button>
+                                <p class="numberInputParagraph" id="fontSizeInput">16</p>
+                                <button class="numberInputButtonDown">
+                                    <svg fill="#000000" height="12px" width="12px" version="1.1" id="Layer_1"
+                                        xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+                                        viewBox="0 0 330.002 330.002" xml:space="preserve">
+                                        <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                                        <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round">
+                                        </g>
+                                        <g id="SVGRepo_iconCarrier">
+                                            <path id="XMLID_19_"
+                                                d="M229.966,0.847c-6.011-2.109-12.698-0.19-16.678,4.784L93.288,155.635 c-4.382,5.478-4.382,13.263,0.001,18.741l120,149.996c2.902,3.628,7.245,5.63,11.716,5.63c1.658,0,3.336-0.276,4.962-0.847 c6.012-2.108,10.035-7.784,10.035-14.154v-300C240.001,8.63,235.978,2.955,229.966,0.847z">
+                                            </path>
+                                        </g>
+                                    </svg>
+                                </button>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <button class="save-settings-btn btn35 btn">Save Changes</button>
                 </div>
             </div>
         </div>
+    </div>
 
-        <div class="add-event-overlay">
-            <div class="add-event-window">
-                <h3>Додати подію</h3>
-                <div class="add-event-form">
-                    <form action="">
-                        {% csrf_token %}
-                        <input type="text" placeholder="Назва події">
+    <div class="add-event-overlay">
+        <div class="add-event-window">
+            <h3>Додати подію</h3>
+            <div class="add-event-form">
+                <form action="">
+                    {% csrf_token %}
+                    <input type="text" placeholder="Назва події">
 
-                        <span>Дата: </span>
-                        <input type="date" name="date" id="dateInput">
-                        <div class="time-inputs">
-                            <input type="time" name="time-start" id="timeStart">
-                            <input type="time" name="time-end" id="timeEnd">
-                            <span class="input-placeholder">Початок</span>
-                            <span class="input-placeholder second-placeholder">Кінець</span>
-                        </div>
-                        <span>Тема: </span><input type="text" placeholder="Add Topic">
-                        <textarea name="description" id="desciptionInput" placeholder="Description" rows="4"
-                            cols="50"></textarea>
-                        <p>Колір</p>
-                        <div class="radio-colors">
-                            <label class="outer-color-circle">
-                                <input type="radio" name="color" value="blue" class="color-radio" checked>
-                                <span class="color-circle blue-circle"></span>
-                            </label>
+                    <span>Дата: </span>
+                    <input type="date" name="date" id="dateInput">
+                    <div class="time-inputs">
+                        <input type="time" name="time-start" id="timeStart">
+                        <input type="time" name="time-end" id="timeEnd">
+                        <span class="input-placeholder">Початок</span>
+                        <span class="input-placeholder second-placeholder">Кінець</span>
+                    </div>
+                    <span>Тема: </span><input type="text" placeholder="Add Topic">
+                    <textarea name="description" id="desciptionInput" placeholder="Description" rows="4"
+                        cols="50"></textarea>
+                    <p>Колір</p>
+                    <div class="radio-colors">
+                        <label class="outer-color-circle">
+                            <input type="radio" name="color" value="blue" class="color-radio" checked>
+                            <span class="color-circle blue-circle"></span>
+                        </label>
 
-                            <label class="outer-color-circle">
-                                <input type="radio" name="color" value="red" class="color-radio">
-                                <span class="color-circle red-circle"></span>
-                            </label>
+                        <label class="outer-color-circle">
+                            <input type="radio" name="color" value="red" class="color-radio">
+                            <span class="color-circle red-circle"></span>
+                        </label>
 
-                            <label class="outer-color-circle">
-                                <input type="radio" name="color" value="green" class="color-radio">
-                                <span class="color-circle green-circle"></span>
-                            </label>
+                        <label class="outer-color-circle">
+                            <input type="radio" name="color" value="green" class="color-radio">
+                            <span class="color-circle green-circle"></span>
+                        </label>
 
-                            <label class="outer-color-circle">
-                                <input type="radio" name="color" value="yellow" class="color-radio">
-                                <span class="color-circle yellow-circle"></span>
-                            </label>
+                        <label class="outer-color-circle">
+                            <input type="radio" name="color" value="yellow" class="color-radio">
+                            <span class="color-circle yellow-circle"></span>
+                        </label>
 
-                            <label class="outer-color-circle">
-                                <input type="radio" name="color" value="purple" class="color-radio">
-                                <span class="color-circle purple-circle"></span>
-                            </label>
+                        <label class="outer-color-circle">
+                            <input type="radio" name="color" value="purple" class="color-radio">
+                            <span class="color-circle purple-circle"></span>
+                        </label>
 
-                            <label class="outer-color-circle">
-                                <input type="radio" name="color" value="magenta" class="color-radio">
-                                <span class="color-circle magenta-circle"></span>
-                            </label>
+                        <label class="outer-color-circle">
+                            <input type="radio" name="color" value="magenta" class="color-radio">
+                            <span class="color-circle magenta-circle"></span>
+                        </label>
 
-                            <label class="outer-color-circle">
-                                <input type="radio" name="color" value="cyan" class="color-radio">
-                                <span class="color-circle cyan-circle"></span>
-                            </label>
+                        <label class="outer-color-circle">
+                            <input type="radio" name="color" value="cyan" class="color-radio">
+                            <span class="color-circle cyan-circle"></span>
+                        </label>
 
-                            <label class="outer-color-circle">
-                                <input type="radio" name="color" value="pink" class="color-radio">
-                                <span class="color-circle pink-circle"></span>
-                            </label>
-                        </div>
+                        <label class="outer-color-circle">
+                            <input type="radio" name="color" value="pink" class="color-radio">
+                            <span class="color-circle pink-circle"></span>
+                        </label>
+                    </div>
 
-                        <div class="buttons">
-                            <button onclick="closeAddEvents()" class="overlay-button">Скасувати</button>
-                            <button type="submit">Додати</button>
-                        </div>
-                    </form>
-                </div>
-
+                    <div class="buttons">
+                        <button onclick="closeAddEvents()" class="overlay-button">Скасувати</button>
+                        <button type="submit">Додати</button>
+                    </div>
+                </form>
             </div>
+
         </div>
+    </div>
 
 
     </div>
