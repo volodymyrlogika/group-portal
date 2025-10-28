@@ -29,7 +29,7 @@ class CreateChatView(LoginRequiredMixin, View):
 
         return redirect('chat', chat_pk=chat.id)
     
-#Вью для редагування чату/групи
+# Вью для редагування чату/групи
 class ChatEditView(LoginRequiredMixin, UpdateView):
     model = Chat
     pk_url_kwarg = 'chat_pk'
@@ -43,6 +43,13 @@ class ChatEditView(LoginRequiredMixin, UpdateView):
     
     def get_success_url(self):
         return reverse_lazy('chat', kwargs={'chat_pk': self.object.id})
+    
+# Вью для видалення чату/групи без шаблона
+class ChatDeleteView(LoginRequiredMixin, View):
+    def post(self, request, chat_pk, *args, **kwargs):
+        chat = get_object_or_404(Chat, id=chat_pk, users=request.user)
+        chat.delete()
+        return JsonResponse({'success': True, 'redirect_url': '/'})
     
 #Сторінка для створення групи
 class CreateGroupView(CreateView):
@@ -58,9 +65,8 @@ class CreateGroupView(CreateView):
         form.save_m2m()
         chat.users.add(self.request.user)
         return redirect('chat', chat_pk=chat.id)
-    
 
-#Основна сторінка виведення чату
+# Основна сторінка виведення чату
 class ChatView(LoginRequiredMixin, View):
     template_name = 'messenger/chat.html'
 
@@ -69,7 +75,7 @@ class ChatView(LoginRequiredMixin, View):
         if chat_pk:
             chat = get_object_or_404(Chat, id=chat_pk, users=request.user)
         else:
-            chat = Chat.objects.filter(users=request.user).first()
+            chat = None
 
         messages = []
         if chat:
@@ -114,7 +120,7 @@ class SendMessageView(LoginRequiredMixin, View):
                 "id": message.id, 
                 "user": message.user.username,
                 "text": message.text,
-                "created_at": str(message.created_at)
+                "created_at": message.created_at.strftime("%Y-%m-%d %H:%M:%S"),
             })
         return JsonResponse({'errors': form.errors}, status=400)
 

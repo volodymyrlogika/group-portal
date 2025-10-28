@@ -47,50 +47,64 @@
         {% else %}
           {{ chat }}
         {% endif %}
-        <!--кнопка щоб перейти на сторінеу редагування-->
-        <a href="{% url 'chat_edit' chat.pk %}" class="btn btn-sm btn-outline-secondary ms-2">Редагувати</a>
+        {% if chat.id %}
+        <a href="{% url 'chat_edit' chat.id %}" class="btn btn-sm btn-outline-secondary ms-2">Редагувати</a>
+        <a href="#" class="btn btn-sm btn-outline-danger ms-2" id="chat-delete-btn">Видалити</a>
+        {% endif %}
+        
       </h3>
 
-      <div id="chat-box" class="p-4 mb-3 rounded shadow-sm" 
-      style="height:500px; overflow-y:auto; border:1px solid #ccc;
-       {% if chat.background %}
-           background: url('{{ chat.background.url }}') no-repeat center center;
-           background-size: cover;
-       {% else %}
-            background: url('{% static "default/default_bg.png" %}') no-repeat center center;
-       {% endif %}">
-        {% for message in messages %}
-          <div class="d-flex {% if message.user == request.user %}justify-content-end{% else %}justify-content-start{% endif %} mb-2">
-            <div class="p-2 border rounded message-content {% if message.user == request.user %}bg-primary text-white{% else %}bg-light{% endif %}" 
-                 style="max-width: 80%; width: fit-content; word-wrap: break-word;" 
-                 data-message-id="{{ message.id }}">
-              <div class="text-muted" style="font-size: 0.7em;">{{ message.created_at|date:"H:i, d M Y" }}</div>
-              <strong>{{ message.user.username }}:</strong> {{ message.text }}
-              <div class="mt-1 message-reactions">
-                <div class="reactions-list d-inline-block">
-                  {% for reaction in message.reaction_counts %}
-                    <button class="reaction-btn existing mb-2 mt-2 me-2 p-2 border rounded" data-emoji="{{ reaction.emoji }}">
-                      {{ reaction.emoji }} <small>×{{ reaction.count }}</small>
-                    </button>
-                  {% endfor %}
-                </div>
-                <div class="emoji-picker d-none" style="position:absolute; background:#fff; border:1px solid #ccc; padding:5px; border-radius:5px; z-index:1000; display:flex; flex-wrap:wrap; gap:3px; max-width:200px;">
-                  {% for emoji, label in emoji_choices %}
-                    <span class="emoji-choice" data-emoji="{{ emoji }}" style="cursor:pointer; font-size:1.2em;">{{ emoji }}</span>
-                  {% endfor %}
+      {% if chat.id %}
+        <div id="chat-box" class="p-4 mb-3 rounded shadow-sm" 
+        style="height:500px; overflow-y:auto; border:1px solid #ccc;
+        {% if chat.background %}
+            background: url('{{ chat.background.url }}') no-repeat center center;
+            background-size: cover;
+        {% else %}
+              background: url('media/default/default_bg.png') no-repeat center center;
+        {% endif %}">
+          {% for message in messages %}
+            <div class="d-flex {% if message.user == request.user %}justify-content-end{% else %}justify-content-start{% endif %} mb-2">
+              <div class="p-2 border rounded message-content {% if message.user == request.user %}bg-primary text-white{% else %}bg-light{% endif %}" 
+                  style="max-width: 80%; width: fit-content; word-wrap: break-word;" 
+                  data-message-id="{{ message.id }}">
+                <div class="text-muted" style="font-size: 0.7em;">{{ message.created_at|date:"H:i, d M Y" }}</div>
+                <strong>{{ message.user.username }}:</strong> {{ message.text }}
+                <div class="mt-1 message-reactions">
+                  <div class="reactions-list d-inline-block">
+                    {% for reaction in message.reaction_counts %}
+                      <button class="reaction-btn existing mb-2 mt-2 me-2 p-2 border rounded" data-emoji="{{ reaction.emoji }}">
+                        {{ reaction.emoji }} <small>×{{ reaction.count }}</small>
+                      </button>
+                    {% endfor %}
+                  </div>
+                  <div class="emoji-picker d-none" style="position:absolute; background:#fff; border:1px solid #ccc; padding:5px; border-radius:5px; z-index:1000; display:flex; flex-wrap:wrap; gap:3px; max-width:200px;">
+                    {% for emoji, label in emoji_choices %}
+                      <span class="emoji-choice" data-emoji="{{ emoji }}" style="cursor:pointer; font-size:1.2em;">{{ emoji }}</span>
+                    {% endfor %}
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-        {% endfor %}
-      </div>
+          {% endfor %}
+        </div>
 
-      <form id="message-form" class="d-flex" method="post" action="javascript:void(0)">
-        {% csrf_token %}
-        {{ form.text }}
-        <button type="submit" class="btn btn-primary ms-2">Надіслати</button>
-      </form>
-    </div>
+        <form id="message-form" class="d-flex" method="post" action="javascript:void(0)">
+          {% csrf_token %}
+          {{ form.text }}
+          <button type="submit" class="btn btn-primary ms-2">Надіслати</button>
+        </form>
+      </div>
+      {% else %}
+        <div id="chat-box" class="p-4 mb-3 rounded shadow-sm justify-content-center align-items-center d-flex"
+          style="height:500px; overflow-y:auto; border:1px solid #ccc;
+                background: url('media/default/default_bg.png') no-repeat center center;
+                background-size: cover;">
+          <p class="text-muted card text-center border-2 p-2 m-2 fs-4">
+            Виберіть чат або користувача, щоб почати спілкування.
+          </p>
+        </div>
+      {% endif %}
   </div>
 </div>
 <script>
@@ -109,9 +123,7 @@
     this.classList.replace('btn-outline-secondary', 'btn-primary');
     document.getElementById('btn-users').classList.replace('btn-primary', 'btn-outline-primary');
   });
-  </script>
   
-<script>
 const chatId = {{ chat.id }};
 const reactionButtons = document.querySelectorAll('.reaction-btn');
 const chatBox = document.querySelector('#chat-box');
@@ -181,6 +193,30 @@ reactionButtons.forEach(btn => {
   });
 });
 
+const deleteBtn = document.getElementById('chat-delete-btn');
+{% if chat.id  %}
+deleteBtn.addEventListener('click', function(e){
+    e.preventDefault();
+
+    const confirmed = confirm("Ви впевнені що хочете видалити цей чат?");
+    if (!confirmed) return;
+
+    fetch("{% url 'chat_delete' chat.id %}", {
+        method: "POST",
+        headers: {
+            "X-CSRFToken": "{{ csrf_token }}",
+            "Accept": "application/json",
+        }
+    })
+    .then(res => res.json())
+    .then(data => {
+        if (data.success) {
+            window.location.href = data.redirect_url;
+        }
+    })
+    .catch(err => console.error(err));
+});
+{% endif %}
 form.addEventListener('submit', e => {
   e.preventDefault();
   const text = textInput.value.trim();

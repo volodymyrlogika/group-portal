@@ -30,7 +30,6 @@ class Chat(BaseModel):
         verbose_name = 'Чат'
         verbose_name_plural = 'Чати'
 
-
 class Message(BaseModel):
     chat = models.ForeignKey(Chat, on_delete=models.CASCADE, related_name='messages', null=False)
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='messages', null=False)
@@ -43,18 +42,6 @@ class Message(BaseModel):
         ordering = ["created_at"]
         verbose_name = 'Повідомлення'
         verbose_name_plural = 'Повідомлення'
-
-class Attachment(BaseModel):
-    message = models.ForeignKey(Message, on_delete=models.CASCADE, related_name='attachments')
-    attachment = models.FileField(blank=False, null=False, verbose_name = 'Вкладення')
-
-    def __str__(self):
-        return f"Вкладення до повідомлення {self.message}"
-    
-    class Meta: 
-        ordering = ["created_at"]
-        verbose_name = 'Вкладення'
-        verbose_name_plural = 'Вкладення'
 
 class Reaction(BaseModel):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='reactions', null=False)
