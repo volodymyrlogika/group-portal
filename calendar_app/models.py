@@ -26,6 +26,7 @@ class CalendarEvent(models.Model):
 
     tags = models.ManyToManyField('Tag', blank=True, verbose_name="Теґи")
     color = models.CharField(choices=COLORS, max_length=100, default='blue')
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='events')
     
     def __str__(self):
         return f'{self.name} на {self.date}'

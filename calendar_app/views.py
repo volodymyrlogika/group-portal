@@ -5,6 +5,7 @@ from datetime import date, timedelta
 import calendar
 from django.utils.translation import gettext as _
 
+
 def calendar_view(request):
     today = date.today()
     
@@ -61,3 +62,4 @@ def calendar_view(request):
     }
 
     return render(request, 'calendar_app/calendar_tasks.html', context)
+

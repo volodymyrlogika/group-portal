@@ -221,6 +221,20 @@ body {
     padding-right: 12px;
 }
 
+.area-block.flex * {
+    padding: 5px 12px 5px 12px;
+    font-size: 12px;
+    margin: 0;
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 100px;
+    user-select: none;
+}
+
+.flex {
+    display: flex;
+    gap: 4px;
+}
+
 .side-tag:hover {
     background-color: color-mix(in srgb, var(--popup-color-blue) 95%, var(--mixable-color));
 }
@@ -980,16 +994,29 @@ input[placeholder='Event Name'] {
     z-index: 300000; /* оверлеї завжди вище за дропдауни */
 }
 
-.list-event {
+.filtered-list {
     margin: 0;
-    padding: 15px;
     position: absolute;
     top: 10vh;
     left: 245px;
     width: calc(100vw - 245px);
     box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+}
+
+.list-event {
+    padding: 15px;
     border-bottom: 1px solid var(--secondary-color);
     cursor: pointer;
+    overflow: hidden;
+    height: auto;
+    max-height: 15px;
+}
+
+.main-list-info {
+    padding-bottom: 15px;
+    border-bottom: 1px solid var(--secondary-color);
 }
 
 .main-list-info {
@@ -1006,8 +1033,120 @@ input[placeholder='Event Name'] {
     font-weight: 100;
     color: rgba(255, 255, 255, 0.3);
     font-style: italic;
+    opacity: 1;
 }
 
 .list-time {
-    color: rgba(255, 255, 255, 0.3)
+    color: rgba(255, 255, 255, 0.3);
+    opacity: 1;
+}
+
+.expanded-area .date {
+    margin: 0;
+    margin-top: 5px;
+    padding: 0;
+    font-size: 12px;
+    font-weight: 200;
+}
+
+.area-block {
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.area-block * {
+    margin: 2px 0 0 0;
+    padding: 0;
+    font-size: 13px;
+}
+
+.description-paragraph {
+    padding: 10px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    margin-top: 8px;
+}
+
+.expanded-area .user {
+    margin-top: 2px;
+    padding: 0;
+    font-size: 12px;
+}
+
+.bg-blue {
+    background-color: var(--popup-color-blue);
+}
+
+.bg-red {
+    background-color: var(--popup-color-red);
+}
+
+.bg-green {
+    background-color: var(--popup-color-green);
+}
+
+.bg-yellow {
+    background-color: var(--popup-color-yellow);
+}
+
+.bg-purple {
+    background-color: var(--popup-color-purple);
+}
+
+.bg-magenta {
+    background-color: var(--popup-color-magenta);
+}
+
+.bg-cyan {
+    background-color: var(--popup-color-cyan);
+}
+
+.bg-pink {
+    background-color: var(--popup-color-pink);
+}
+
+.list-event.expand {
+    max-height: 1500px;
+}
+
+.e-time {
+    opacity: 1;
+}
+
+.list-event.expand .list-description, .list-event.expand .e-time, .list-event.expand .list-time {
+    opacity: 0;
+}
+
+
+/* ...existing code... */
+
+/* початково ховаємо filtered-list, показуємо коли JS увімкне */
+.filtered-list {
+    margin: 0;
+    position: absolute;
+    top: 10vh;
+    left: 245px;
+    width: calc(100vw - 245px);
+    box-sizing: border-box;
+    display: none; /* змінено: спочатку приховано */
+    flex-direction: column;
+}
+
+/* стиль для виділеного (active) тегу у сайдбарі */
+.side-tag.selected {
+    background: var(--popup-color-blue-complete);
+    color: var(--color-bg);
+}
+
+/* ...existing code... */
+.days-navigation.filtered, .grid3.filtered {
+    display: none;
+}
+
+.filtered-list {
+    display: none;
+}
+
+.filtered-list.filtered {
+    display: block;
 }

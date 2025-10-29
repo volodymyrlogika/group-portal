@@ -282,3 +282,68 @@ function closeAllDropdowns(skip = null) {
         if (!d.classList.contains('hide')) d.classList.add('hide');
     });
 }
+
+const listEvents = document.querySelectorAll('.list-event');
+
+listEvents.forEach(listEvent => {
+    listEvent.addEventListener('click', () => {
+        listEvent.classList.toggle('expand')
+    })
+})
+
+
+// ...existing code...
+const sideTags = document.querySelectorAll('.side-tag')
+const daysNav = document.querySelector('.days-navigation')
+const grid3 = document.querySelector('.grid3')
+const filteredList = document.querySelector('.filtered-list')
+
+function updateFilteredState() {
+    // зібрати вибрані теги (в нижньому регістрі для порівняння)
+    const selectedTags = Array.from(document.querySelectorAll('.side-tag.selected'))
+        .map(t => t.textContent.trim().toLowerCase());
+
+    const anySelected = selectedTags.length > 0;
+
+    // показ/приховування основних областей
+    if (grid3) grid3.classList.toggle('filtered', anySelected);
+    if (daysNav) daysNav.classList.toggle('filtered', anySelected);
+    if (filteredList) filteredList.classList.toggle('filtered', anySelected);
+
+    // якщо немає filtered-list або немає вибраних тегів — показуємо всі події у списку (або приховуємо список)
+    if (!filteredList) return;
+
+    const listItems = Array.from(filteredList.querySelectorAll('.list-event'));
+
+    // Функція отримує теги події (з .tag-block) в нижньому регістрі
+    const getEventTags = (item) => Array.from(item.querySelectorAll('.tag-block'))
+        .map(x => x.textContent.trim().toLowerCase());
+
+    listItems.forEach(item => {
+        const eventTags = getEventTags(item);
+
+        let shouldShow = true;
+        if (selectedTags.length === 0) {
+            shouldShow = true;
+        } else if (selectedTags.length === 1) {
+            // при одному вибраному тегі — показуємо якщо eventTags містить цей тег
+            shouldShow = eventTags.includes(selectedTags[0]);
+        } else {
+            // при кількох — подія повинна містити всі вибрані теги (AND)
+            shouldShow = selectedTags.every(t => eventTags.includes(t));
+        }
+
+        item.style.display = shouldShow ? '' : 'none';
+    });
+}
+
+sideTags.forEach(sideTag => {
+    sideTag.addEventListener('click', () => {
+        sideTag.classList.toggle('selected');
+        updateFilteredState();
+    })
+})
+
+// ініціалізація стану при завантаженні сторінки
+updateFilteredState();
+// ...existing code...

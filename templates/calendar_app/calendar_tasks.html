@@ -205,7 +205,7 @@
                             <div class="popup-date popup-{{ event.color }}">
                                 <span>{{ event.date | date:'d.m'}}</span>
                             </div>
-                            <span class="popup-event-name">{{ event.name }}</span>
+                            <span class="popup-event-name">{{ event.name|truncatechars:25 }}</span>
                         </div>
                         {% empty %}
                         <p style="font-size: 12px; font-weight: 200">Поки що немає подій</p>
@@ -232,7 +232,7 @@
             </div>
         </div>
     </div>
-    <!-- <div class="days-navigation">
+    <div class="days-navigation">
         <div class="inner-days-container">
             <div class="inner-days-frame">
                 <p class="date-frame">19</p>
@@ -847,14 +847,14 @@
             </div>
 
         </div>
-    </div> -->
+    </div>
 
     <div class="filtered-list">
         {% for event in events %}
-            <div class="list-event">
+            <div class="list-event bg-{{ event.color }}">
                 <div class="main-list-info">
-                    <span>{{ event.name }}</span>
-                    <span class="list-description">{{ event.description }}</span>
+                    <span>{{ event.name|truncatechars:25 }}</span>
+                    <span class="list-description">{{ event.topic|truncatechars:100 }}</span>
                     <div class="e-time">
                         {% if not event.time_start %}
                             <span>{{ event.date|date:'d.m' }}</span>
@@ -865,16 +865,31 @@
                         {% if event.time_start and event.time_finish %}
                             <span class="list-time">{{ event.time_start }}-{{ event.time_finish }}</span>
                         {% endif %}
+                        
                     </div>
                 </div>
-                <p>{{ event.date|ukr_date }}</p>
-                <p>Опис: {{ event.description }}</p>
-                
-                {% if event.time_start and event.time_finish %}
-                    <p>Час: {{ event.time_start }}-{{ event.time_finish }}</p>
-                {% else %}
-                    <p>Час: Весь день</p>
-                {% endif %}
+                <div class="expanded-area">
+                    <p class="date">{{ event.date|ukr_date }}</p>
+                    <p class="user">{{ event.user }}</p>
+                    <div class="area-block">
+                        {% if event.time_start and event.time_finish %}
+                            <p>Час: {{ event.time_start }}-{{ event.time_finish }}</p>
+                        {% else %}
+                            <p>Час: Весь день</p>
+                        {% endif %}
+                        <p>Тема: {{ event.topic }}</p>
+                    </div>
+                    <div class="area-block">
+                        <p>Опис</p>
+                        <p class="description-paragraph">{{ event.description }}</p>
+                    </div>
+                    <div class="area-block flex">
+                        {% for tag in event.tags.all %}
+                            <span class="tag-block">{{ tag.name }}</span>
+                        {% endfor %}
+                    </div>
+                </div>
+
             </div>
         {% endfor %}
     </div>
