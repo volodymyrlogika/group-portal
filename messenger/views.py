@@ -51,6 +51,13 @@ class ChatDeleteView(LoginRequiredMixin, View):
         chat.delete()
         return JsonResponse({'success': True, 'redirect_url': '/'})
     
+# Вью для видалення повідомлення без шаблона
+class MessageDeleteView(LoginRequiredMixin, View):
+    def post(self, request, message_pk, *args, **kwargs):
+        message = get_object_or_404(Message, id=message_pk, user=request.user)
+        message.delete()
+        return JsonResponse({"success": True})
+
 #Сторінка для створення групи
 class CreateGroupView(CreateView):
     model = Chat
@@ -59,12 +66,10 @@ class CreateGroupView(CreateView):
     success_url = reverse_lazy('main')
     
     def form_valid(self, form):
-        chat = form.save(commit=False)
-        chat.is_group = True
-        chat.save()
-        form.save_m2m()
-        chat.users.add(self.request.user)
-        return redirect('chat', chat_pk=chat.id)
+        form.instance.is_group = True
+        response = super().form_valid(form)
+        self.object.users.add(self.request.user)
+        return redirect('chat', chat_pk=self.object.id)
 
 # Основна сторінка виведення чату
 class ChatView(LoginRequiredMixin, View):
@@ -78,6 +83,8 @@ class ChatView(LoginRequiredMixin, View):
             chat = None
 
         messages = []
+        user_reaction_map = {}
+
         if chat:
             messages = (
                 chat.messages.all()
@@ -85,13 +92,22 @@ class ChatView(LoginRequiredMixin, View):
                 .prefetch_related("reactions")
             )
 
+            user_reaction_map = {
+                r.message_id: r.emoji
+                for r in Reaction.objects.filter(
+                    message__chat=chat,
+                    user=request.user
+                )
+            }
+
             for msg in messages:
                 msg.reaction_counts = (
                     msg.reactions.values("emoji")
                     .annotate(count=Count("emoji"))
                     .order_by()
                 )
-
+                msg.user_reacted_emoji = user_reaction_map.get(msg.id) 
+                
         context = {
             "chat": chat,
             "messages": messages,

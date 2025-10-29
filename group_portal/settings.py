@@ -71,7 +71,7 @@ TEMPLATES = [
     },
 ]
 
-# WSGI_APPLICATION = 'group_portal.wsgi.application'
+WSGI_APPLICATION = 'group_portal.wsgi.application'
 ASGI_APPLICATION = 'group_portal.asgi.application'
 
 CHANNEL_LAYERS = {
