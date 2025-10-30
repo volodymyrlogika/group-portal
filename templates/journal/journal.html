@@ -99,7 +99,7 @@
         </div>
     </div>
 
-    {% if user.is_superuser %}
+    {% if user.is_superuser or user.is_staff %}
     <div class="text-center mt-5 mb-5">
         <a href="{% url 'edit_journal' %}" class="btn btn-primary px-5 py-2 shadow-sm">
             Редагувати журнал
