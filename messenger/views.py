@@ -50,7 +50,29 @@ class ChatDeleteView(LoginRequiredMixin, View):
         chat = get_object_or_404(Chat, id=chat_pk, users=request.user)
         chat.delete()
         return JsonResponse({'success': True, 'redirect_url': '/'})
-    
+
+# Вью для редагування повідомлення без шаблона
+class MessageEditView(LoginRequiredMixin, View):
+    def post(self, request, message_pk, *args, **kwargs):
+        message = get_object_or_404(Message, id=message_pk, user=request.user)
+        data = json.loads(request.body)
+        text = data.get("text")
+
+        if not text.strip():
+            return JsonResponse({"success": False, "error": "Порожнє повідомлення"}, status=400)
+
+        message.text = text
+        message.save()
+
+        return JsonResponse({
+            "success": True,
+            "message": {
+                "id": message.id,
+                "text": message.text,
+                "created_at": message.created_at.strftime("%Y-%m-%d %H:%M:%S"),
+            }
+        })
+
 # Вью для видалення повідомлення без шаблона
 class MessageDeleteView(LoginRequiredMixin, View):
     def post(self, request, message_pk, *args, **kwargs):

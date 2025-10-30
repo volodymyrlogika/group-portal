@@ -21,11 +21,15 @@
   }
 
   .reaction-new-btn {
-    background: linear-gradient(45deg, #00DDDD, ##0095B6);
+    background: linear-gradient(45deg, #00DDDD, #0095B6);
     color: black;
     box-shadow: 0 0 8px #00DDDD;
     transform: scale(1.15);
   }
+  .message-content.editing {
+    box-shadow: 0 0 10px 2px orange;
+  }
+  
 </style>
 
 <div class="container mt-4">
@@ -96,7 +100,8 @@
                   style="max-width: 80%; width: fit-content; word-wrap: break-word;" 
                   data-message-id="{{ message.id }}">
                 <div class="text-muted" style="font-size: 0.7em;">{{ message.created_at|date:"H:i, d M Y" }}</div>
-                <strong>{{ message.user.username }}:</strong> {{ message.text }}
+                <strong>{{ message.user.username }}:</strong>
+                <span class="message-text"> {{ message.text|linebreaksbr }} </span>
                 <div class="mt-1 message-reactions">
                   <div class="reactions-list d-inline-block">
                     {% for reaction in message.reaction_counts %}
@@ -117,10 +122,12 @@
                       <span class="emoji-choice" data-emoji="{{ emoji }}" style="cursor:pointer; font-size:1.2em;">{{ emoji }}</span>
                     {% endfor %}
                     {% if message.user == request.user %}
-                    <div style="width:100%; height:1px; border-bottom:1px solid #ccc; margin:5px 0;"></div>
-                      <div>
+                    <div class="justify-content-between align-content-between d-flex mt-2">
+                      <div style="width:100%; height:1px; border-bottom:1px solid #ccc; margin:5px 0;"></div>
                         <a href='#' class="btn btn-sm btn-outline-danger ms-2 message-delete-btn fs-6" data-message-id="{{ message.id }}" style="cursor:pointer;">Видалити</a>
-                      </div>
+                      <div style="width:100%; height:1px; border-bottom:1px solid #ccc; margin:5px 0;"></div>
+                        <a href='{% url "message_edit" message.pk %}' class="btn btn-sm btn-outline-warning ms-2 message-update-btn fs-6" data-message-id="{{ message.id }}" style="cursor:pointer;">Редагувати</a>
+                    </div>
                     {% endif %}
                   </div>
                 </div>
@@ -203,7 +210,8 @@
                data-message-id="${data.id}"
                style="max-width:80%; width:fit-content; word-wrap:break-word;">
             <div class="text-muted" style="font-size:0.7em;">${data.time}</div>
-            <strong>${data.user}:</strong> ${data.text}
+            <strong>${data.user}:</strong> 
+            <span class="message-text">${data.text}</span>
             <div class="mt-1 message-reactions">
               <div class="reactions-list d-inline-block"></div>
               <div class="emoji-picker d-none" 
@@ -212,6 +220,14 @@
                   <span class="emoji-choice" data-emoji="{{ emoji }}" 
                         style="cursor:pointer; font-size:1.2em;">{{ emoji }}</span>
                 {% endfor %}
+                {% if message.user == request.user %}
+                  <div class="justify-content-between align-content-between d-flex mt-2">
+                    <div style="width:100%; height:1px; border-bottom:1px solid #ccc; margin:5px 0;"></div>
+                      <a href='#' class="btn btn-sm btn-outline-danger ms-2 message-delete-btn fs-6" data-message-id="${data.id}" style="cursor:pointer;">Видалити</a>
+                    <div style="width:100%; height:1px; border-bottom:1px solid #ccc; margin:5px 0;"></div>
+                      <a href='{% url "message_edit" message.pk %}' class="btn btn-sm btn-outline-warning ms-2 message-update-btn fs-6" data-message-id="${data.id}" style="cursor:pointer;">Редагувати</a>
+                  </div>
+                {% endif %}
               </div>
             </div>
           </div>
@@ -290,20 +306,74 @@
       .catch(err => console.error(err));
     });
   });
-  
+
+  let editingMessageId = null;
+  const sendBtn = form.querySelector('button[type="submit"]');
+
+  document.querySelectorAll(".message-update-btn").forEach(btn => {
+    btn.addEventListener("click", function (e) {
+      e.preventDefault();
+      const messageBlock = this.closest('.message-content');
+      const messageId = this.dataset.messageId;
+      const messageTextEl = messageBlock.querySelector('.message-text');
+      const messageText = messageTextEl ? messageTextEl.innerText.trim() : '';
+
+      document.querySelectorAll('.message-content').forEach(el => el.classList.remove('editing'));
+      messageBlock.classList.add('editing');
+
+
+      textInput.value = messageText;
+      textInput.focus();
+
+      editingMessageId = messageId;
+      sendBtn.textContent = "Зберегти зміни";
+      sendBtn.classList.remove("btn-primary");
+      sendBtn.classList.add("btn-warning");
+    });
+  });
+
   form.addEventListener('submit', e => {
     e.preventDefault();
     const text = textInput.value.trim();
     if (!text) return;
   
-    socket.send(JSON.stringify({
-      type: 'chat_message',
-      text: text
-    }));
+    if (editingMessageId) {
+      fetch(`/message/${editingMessageId}/edit/`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "X-CSRFToken": "{{ csrf_token }}"
+        },
+        body: JSON.stringify({ text })
+      })
+        .then(res => res.json())
+        .then(data => {
+          if (data.success) {
+            const msgEl = document.querySelector(`[data-message-id="${data.message.id}"]`);
+            const messageTextEl = msgEl.querySelector('.message-text');
+            if (messageTextEl) {
+              messageTextEl.innerText = data.message.text;
+              msgEl.classList.remove('editing');
+            }
   
-    textInput.value = '';
-  });
-  
+            textInput.value = "";
+            editingMessageId = null;
+            sendBtn.textContent = "Надіслати";
+            sendBtn.classList.remove("btn-warning");
+            sendBtn.classList.add("btn-primary");
+          }
+        })
+        .catch(err => console.error(err));
+    } 
+    else {
+      socket.send(JSON.stringify({
+        type: 'chat_message',
+        text: text
+      }));
+      textInput.value = '';
+    }
+  });  
+
   function scrollToBottom() {
     chatBox.scrollTop = chatBox.scrollHeight;
   }
