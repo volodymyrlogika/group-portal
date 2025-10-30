@@ -1,5 +1,6 @@
 from django.db import models
-from django.contrib.auth.models import User
+
+from group_portal import settings
 from .choices.emoji import EMOJI_CHOICES
 
 class BaseModel(models.Model):
@@ -10,7 +11,7 @@ class BaseModel(models.Model):
         abstract = True
 
 class Chat(BaseModel):
-    users = models.ManyToManyField(User, related_name='chats', blank=False)
+    users = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='chats', blank=False)
     background = models.ImageField(upload_to='backgrounds/', null=True, blank=True, default='default/default_bg.png', verbose_name = 'Фон')
     is_group = models.BooleanField(default=False, verbose_name = 'Група')
     title = models.CharField(max_length=200, blank=True, null=True, verbose_name = 'Назва')
@@ -32,7 +33,7 @@ class Chat(BaseModel):
 
 class Message(BaseModel):
     chat = models.ForeignKey(Chat, on_delete=models.CASCADE, related_name='messages', null=False)
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='messages', null=False)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='messages', null=False)
     text = models.TextField(null=True, blank=True, verbose_name = 'Текст')
 
     def __str__(self):
@@ -44,7 +45,7 @@ class Message(BaseModel):
         verbose_name_plural = 'Повідомлення'
 
 class Reaction(BaseModel):
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='reactions', null=False)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='reactions', null=False)
     message = models.ForeignKey(Message, on_delete=models.CASCADE, related_name='reactions')
     emoji = models.CharField(max_length=10, choices=EMOJI_CHOICES, verbose_name = 'Емодзі')
 

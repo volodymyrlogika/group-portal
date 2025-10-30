@@ -1,7 +1,7 @@
 from django.views.generic import View, CreateView, UpdateView
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
-from django.contrib.auth.models import User
+from group_portal import settings
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy
 from .models import Chat, Message, Reaction
@@ -19,7 +19,7 @@ class CreateChatView(LoginRequiredMixin, View):
         if not other_user_id:
             return JsonResponse({'error': 'Не вказано користувача'}, status=400)
 
-        other_user = get_object_or_404(User, id=other_user_id)
+        other_user = get_object_or_404(settings.AUTH_USER_MODEL, id=other_user_id)
 
         chat = Chat.objects.filter(is_group=False, users=current_user).filter(users=other_user).first()
         
@@ -146,7 +146,7 @@ class ChatView(LoginRequiredMixin, View):
         context = {
             "chat": chat,
             "messages": messages,
-            "users": User.objects.exclude(id=request.user.id),
+            "users": settings.AUTH_USER_MODEL.objects.exclude(id=request.user.id),
             "chats": Chat.objects.filter(users=request.user),
             "form": MessageForm(),
             "emoji_choices": EMOJI_CHOICES,
