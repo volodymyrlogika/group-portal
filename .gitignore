@@ -5,6 +5,8 @@ env/
 venv/
 ENV/
 __pycache__/
+/media/attachments/
+/media/backgrounds/
 .idea
 *.log
 local_settings.py
