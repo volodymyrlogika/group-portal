@@ -1,21 +1,69 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<div class="container" style="color: black; text-align: center; background-color: aquamarine;">
-    <div class="row" style="margin-top: 50px;">
-        <h1>Журнал</h1>
-    </div>
+<style>
+    body {
+        background: linear-gradient(135deg, #d6f0ff, #eafbea);
+        min-height: 100vh;
+    }
 
-    <div class="row" style="margin-top: 40px;">
+    .header-box {
+        background: #ffffff;
+        color: #0d3b66;
+        border-radius: 35px;
+        padding: 30px 0;
+        margin-bottom: 50px;
+    }
+
+    .header-box h1 {
+        font-family: 'Poppins', sans-serif;
+        font-weight: 700;
+        letter-spacing: 1px;
+        margin: 0;
+    }
+
+    .card {
+        border-radius: 35px;
+        background-color: #ffffffd9;
+        backdrop-filter: blur(5px);
+    }
+
+    .table thead {
+        background-color: #bfe5ff;
+    }
+
+    .lesson {
+        transition: all 0.3s ease;
+    }
+
+    .lesson:hover {
+        background-color: #e0f3ff;
+        transform: translateY(-3px);
+    }
+
+    .btn-primary {
+        background-color: #0084ff;
+        border: none;
+        border-radius: 20px;
+        transition: background-color 0.3s ease;
+    }
+</style>
+
+<div class="container text-center header-box">
+    <h1>Журнал</h1>
+</div>
+
+<div class="container">
+    <div class="row g-4 justify-content-center align-items-start">
         <div class="col-md-6">
-            <div class="container" style="background-color: rgb(255, 255, 255); width: 800px; height: 300px; border-radius: 10px;">
-                <table class="table table-bordered" 
-                style="width: 100%; border-radius: 10px; background-color: #e9f7ef00; position: relative; border-top-color:#e9f7ef00; border-bottom-color: black; border-left-color: none; border-right-color: none">
-                    <thead>
+            <div class="card p-4">
+                <h4 class="mb-3 text-center fw-semibold text-primary">Оцінки студентів</h4>
+                <table class="table table-hover align-middle">
+                    <thead class="table-info">
                         <tr>
                             <th>Ім'я студента</th>
                             <th>Оцінка</th>
-                            <th>Оцінка за домашнє завдання</th>
+                            <th>Д/з оцінка</th>
                             <th>Дата</th>
                         </tr>
                     </thead>
@@ -27,29 +75,37 @@
                             <td>{{ journal_student.homework_grade }}</td>
                             <td>{{ journal_student.date }}</td>
                         </tr>
+                        {% empty %}
+                        <tr><td colspan="4" class="text-center text-muted">Поки немає записів</td></tr>
                         {% endfor %}
                     </tbody>
                 </table>
             </div>
-            <div class="col-md-6 text-start">
-            {% for lesson in lessons %}
-                <div class="lesson mb-4 p-3 border rounded" style="background-color: #e9f7ef;">
-                    <h4>{{ lesson.topic }}</h4>
-                    <p><strong>Дата:</strong> {{ lesson.date }}</p>
-                    <p><strong>Д/З:</strong> {{ lesson.homework }}</p>
+        </div>
+
+        <div class="col-md-6">
+            <div class="card p-4">
+                <h4 class="mb-3 text-center fw-semibold text-primary">Уроки</h4>
+                {% for lesson in lessons %}
+                <div class="lesson p-3 mb-3 border rounded-3" style="background-color: #f3faff;">
+                    <h5 class="mb-2 fw-semibold">{{ lesson.topic }}</h5>
+                    <p class="mb-1"><strong>Дата:</strong> {{ lesson.date }}</p>
+                    <p class="mb-0"><strong>Д/З:</strong> {{ lesson.homework }}</p>
                 </div>
-            {% endfor %}
+                {% empty %}
+                <p class="text-muted text-center">Поки що немає уроків</p>
+                {% endfor %}
             </div>
         </div>
     </div>
 
-    <div class="row">
     {% if user.is_superuser %}
-        <div class="col text-center" style="margin-top: 20px; margin-bottom: 20px;">
-            <a href="{% url 'edit_journal' %}" class="btn btn-primary">Редагувати журнал</a>
-        </div>
-    {% endif %}
+    <div class="text-center mt-5 mb-5">
+        <a href="{% url 'edit_journal' %}" class="btn btn-primary px-5 py-2 shadow-sm">
+            Редагувати журнал
+        </a>
     </div>
+    {% endif %}
 </div>
-
 {% endblock %}
+

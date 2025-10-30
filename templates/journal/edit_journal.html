@@ -1,42 +1,120 @@
 {% extends 'base.html' %}
 
 {% block content %}
+<style>
+    body {
+        background: linear-gradient(135deg, #d6f0ff, #eafbea);
+        min-height: 100vh;
+    }
 
-<div class="container" style="color: black; text-align: center;">
-    <div class="me-auto" style="margin-top: 50px;">
-        <h1>Журнал</h1>
-        <table class="table table-bordered" style="width: 60% ; margin-top: 40px;">
-            <thead>
-                <tr>
-                    <th>Ім'я студента</th>
-                    <th>Оцінка</th>
-                    <th>Оцінка за домашнє завдання</th>
-                    <th>Дата</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for journal_student in journal_students %}
-                <tr>
-                    <td>{{ journal_student.student_user }}</td>
-                    <td><input type="text" value="{{ journal_student.grade }}" class="form-control" /></td>
-                    <td><input type="text" value="{{ journal_student.homework_grade }}" class="form-control" /></td>
-                    <td><input type="text" value="{{ journal_student.date }}" class="form-control" /></td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-        <div class="container" style="margin-left: 400px; max-width: 40%;">
-            {% for lesson in lessons %}
-                <div class="lesson">
-                    <h2><input type="text" value="{{ lesson.topic }}" class="form-control" /></h2>
-                    <p><input type="text" value="{{ lesson.date }}" class="form-control" /></p>
-                    <p><input type="text" value="{{ lesson.homework }}" class="form-control" /></p>
-                </div>
-            {% endfor %}
-        </div>
-        
+    .header-box {
+        background: #ffffff;
+        color: #0d3b66;
+        border-radius: 35px;
+        padding: 30px 0;
+        margin-bottom: 50px;
+    }
 
-    </div>
+    .header-box h1 {
+        font-family: 'Poppins', sans-serif;
+        font-weight: 700;
+        letter-spacing: 1px;
+        margin: 0;
+    }
+
+    .card {
+        border-radius: 35px;
+        background-color: #ffffffd9;
+        backdrop-filter: blur(5px);
+        box-shadow: none !important;
+    }
+
+    .table thead {
+        background-color: #bfe5ff;
+    }
+
+    .lesson {
+        background-color: #f3faff;
+        border-radius: 20px;
+        border: 1px solid #d6eaff;
+        padding: 15px;
+        margin-bottom: 20px;
+        transition: all 0.3s ease;
+    }
+
+    .lesson:hover {
+        background-color: #e0f3ff;
+        transform: translateY(-3px);
+    }
+
+    .form-control {
+        border-radius: 15px;
+        border: 1px solid #bfe5ff;
+        box-shadow: none;
+        background-color: #ffffffcc;
+    }
+
+    .form-control:focus {
+        border-color: #80bfff;
+        box-shadow: 0 0 5px rgba(0, 132, 255, 0.3);
+    }
+
+</style>
+
+<div class="container text-center header-box">
+    <h1>Журнал</h1>
 </div>
 
+<div class="container">
+    <div class="row g-4 justify-content-center align-items-start">
+        <div class="col-md-7">
+            <div class="card p-4">
+                <h4 class="mb-3 text-center fw-semibold text-primary">Оцінки студентів</h4>
+                <form method="POST" action="{% url 'save_journal' %}">
+                {% csrf_token %}
+                    <table class="table table-bordered align-middle text-center">
+                        <thead>
+                            <tr>
+                                <th>Ім'я студента</th>
+                                <th>Оцінка</th>
+                                <th>Д/з оцінка</th>
+                                <th>Дата</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for journal_student in journal_students %}
+                            <tr>
+                                <td>{{ journal_student.student_user }}</td>
+                                <td><input type="text" name="grade_{{ journal_student.id }}" value="{{ journal_student.grade }}" class="form-control"></td>
+                                <td><input type="text" name="homework_grade_{{ journal_student.id }}" value="{{ journal_student.homework_grade }}" class="form-control"></td>
+                                <td><input type="date" name="date_{{ journal_student.id }}" value="{{ journal_student.date }}" class="form-control"></td>
+                            </tr>
+                            {% empty %}
+                            <tr><td colspan="4" class="text-muted text-center">Поки немає записів</td></tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                    <div class="d-flex justify-content-center mt-4">
+                        <button type="submit" class="btn btn-primary px-4 py-2">Зберегти зміни</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div class="col-md-5">
+            <div class="card p-4">
+                <h4 class="mb-3 text-center fw-semibold text-primary">Уроки</h4>
+                {% for lesson in lessons %}
+                <div class="lesson">
+                    <input type="text" value="{{ lesson.topic }}" class="form-control mb-2 fw-semibold text-center">
+                    <input type="text" value="{{ lesson.date }}" class="form-control mb-2 text-center">
+                    <input type="text" value="{{ lesson.homework }}" class="form-control text-center">
+                </div>
+                {% empty %}
+                <p class="text-muted text-center">Поки що немає уроків</p>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}
