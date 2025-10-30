@@ -1150,3 +1150,92 @@ input[placeholder='Event Name'] {
 .filtered-list.filtered {
     display: block;
 }
+
+/* ...existing code... */
+
+/* --- ЗАМІНА: стабільна навігація днів + стрілки по краях --- */
+.days-navigation{
+    /* фіксуємо панель над календарем, вирівнюємо по ширині робочої області */
+    position: fixed;
+    top: 9vh;
+    left: 245px; /* ширина сайдбару */
+    width: calc(100vw - 245px);
+    height: 10vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    z-index: 150; /* має бути вище за grid3 (20) */
+    pointer-events: auto;
+    padding: 0;
+}
+
+/* внутрішня панель днів — займає ширину за вирахуванням місця під стрілки */
+.days-navigation .inner-days-container{
+    width: calc(100% - 96px); /* залишаємо простір по 48px з обох боків для стрілок */
+    max-width: 1300px;
+    height: 100%;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(7, 1fr); /* 7 колонок для днів */
+    align-items: center;
+    gap: 0;
+    box-sizing: border-box;
+}
+
+/* окремий фрейм дня */
+.inner-days-frame{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+/* стрілки позиціонуються абсолютно всередині .days-navigation — не віднімають ширину від .inner-days-container */
+.days-navigation .month-arrow{
+    position: absolute;
+    top: 60%;
+    transform: translateY(-50%);
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    font-size: 28px;
+    color: var(--color-text);
+    background: transparent;
+    border-radius: 6px;
+    transition: background .12s;
+    z-index: 200;
+    pointer-events: auto;
+}
+
+/* розташування стрілок — ліворуч і праворуч по краях панелі */
+.days-navigation .month-arrow.left{ left: 12px; }
+.days-navigation .month-arrow.right{ right: 12px; }
+
+.days-navigation .month-arrow:hover{
+    background: rgba(255,255,255,0.04);
+}
+
+/* НЕ чіпаємо стрілки в сайдбарі (вони в .month-scrolling-arrows) */
+.month-scrolling-arrows .month-arrow {
+    position: static;
+    width: 20px;
+    height: 20px;
+    font-size: 18px;
+    padding: 2px;
+    background: none;
+}
+
+/* адаптив */
+@media (max-width: 800px){
+    .days-navigation .inner-days-container{ width: calc(100% - 72px); }
+    .days-navigation .month-arrow.left{ left: 8px; }
+    .days-navigation .month-arrow.right{ right: 8px; }
+    .days-navigation .month-arrow{ width: 34px; height:34px; font-size:22px; }
+}
+
+/* ...existing code... */
