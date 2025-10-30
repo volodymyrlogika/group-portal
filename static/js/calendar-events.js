@@ -347,3 +347,36 @@ sideTags.forEach(sideTag => {
 // ініціалізація стану при завантаженні сторінки
 updateFilteredState();
 // ...existing code...
+
+
+// --- "Більше / Менше" у сайдбарі ---
+document.addEventListener('DOMContentLoaded', () => {
+  const LIMIT = 3;
+
+  function applyState(container, expanded) {
+    const events = Array.from(container.querySelectorAll('.event-popup'));
+    events.forEach((el, i) => {
+      el.classList.toggle('hidden', !expanded && i >= LIMIT);
+    });
+
+    const btn = container.querySelector('.see-more-popups');
+    if (btn) {
+      btn.textContent = expanded ? 'Менше' : 'Більше';
+      btn.setAttribute('aria-expanded', expanded ? 'true' : 'false');
+    }
+
+    container.dataset.expanded = expanded ? '1' : '0';
+  }
+
+  // Ініціалізація всіх блоків у сайдбарі
+  document.querySelectorAll('.events-side-container').forEach(container => {
+    applyState(container, false); // початково згорнуто
+    const btn = container.querySelector('.see-more-popups');
+    if (!btn) return;
+
+    btn.addEventListener('click', () => {
+      const expanded = container.dataset.expanded === '1';
+      applyState(container, !expanded);
+    });
+  });
+});

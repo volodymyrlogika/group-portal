@@ -1239,4 +1239,46 @@ input[placeholder='Event Name'] {
     .days-navigation .month-arrow{ width: 34px; height:34px; font-size:22px; }
 }
 
+.tag-checkboxes {
+    margin-top: 8px;
+}
+
+textarea {
+  resize: none;
+}
+
 /* ...existing code... */
+.checkbox-wrapper input {
+    /* Повне вимкнення стандартного стилю */
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+
+    /* Приховуємо все, але залишаємо доступним для натискання */
+    width: 0;
+    height: 0;
+    opacity: 0;
+    position: absolute;
+    cursor: pointer;
+}
+
+.checkbox-wrapper span {
+    margin: 0;
+    padding: 5px;
+    background-color: var(--popup-color-blue);
+    width: fit-content;
+    font-size: 12px;
+    border-radius: 100px;
+    user-select: none;
+    cursor: pointer;
+    padding-left: 12px;
+    padding-right: 12px;
+    
+}
+
+.checkbox-wrapper input:checked + span {
+    background-color: var(--popup-color-blue-complete);
+    color: var(--secondary-color);
+}
+
+.event-popup.hidden { display: none; }

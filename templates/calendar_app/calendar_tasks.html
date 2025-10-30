@@ -618,10 +618,10 @@
             <div class="add-event-form">
                 <form method="post" action="">
                     {% csrf_token %}
-                    <input type="text" name="name" placeholder="Назва події">
+                    <input required type="text" name="name" placeholder="Назва події">
 
                     <span>Дата: </span>
-                    <input type="date" name="date" id="dateInput">
+                    <input required type="date" name="date" id="dateInput">
                     <div class="time-inputs">
                         <input type="time" name="time-start" id="timeStart">
                         <input type="time" name="time-end" id="timeEnd">
@@ -684,8 +684,9 @@
                         <p>Теги</p>
                         <div class="tag-checkboxes">
                             {% for tag in tags %}
-                            <label style="margin-right:8px;">
-                                <input type="checkbox" name="tags" value="{{ tag.id }}"> {{ tag.name }}
+                            <label class="checkbox-wrapper">
+                                <input type="checkbox" name="tags" value="{{ tag.id }}">
+                                <span>{{ tag.name }}</span>
                             </label>
                             {% endfor %}
                         </div>
