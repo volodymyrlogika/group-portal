@@ -29,6 +29,7 @@ class GroupForm(forms.ModelForm):
                 'class': 'form-control',
             }),
         }
+        title = forms.CharField(required=True)
 
 class ChatForm(forms.ModelForm):
     class Meta:

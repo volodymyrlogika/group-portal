@@ -80,18 +80,31 @@ class MessageDeleteView(LoginRequiredMixin, View):
         message.delete()
         return JsonResponse({"success": True})
 
-#Сторінка для створення групи
 class CreateGroupView(CreateView):
     model = Chat
     form_class = GroupForm
     template_name = 'messenger/create_group.html'
     success_url = reverse_lazy('main')
-    
+
     def form_valid(self, form):
         form.instance.is_group = True
         response = super().form_valid(form)
         self.object.users.add(self.request.user)
-        return redirect('chat', chat_pk=self.object.id)
+
+        users = self.object.users.all()
+        title = self.object.title.strip() if self.object.title else ""
+
+        if not title:
+            if users.count() >= 4:
+                title = "Група без назви"
+            else:
+                user_names = users.values_list('username', flat=True)
+                title = " and ".join(user_names)
+
+        self.object.title = title
+        self.object.save()
+
+        return redirect('chat', chat_pk=self.object.pk)
 
 # Основна сторінка виведення чату
 class ChatView(LoginRequiredMixin, View):
