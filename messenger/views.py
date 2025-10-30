@@ -115,7 +115,7 @@ class ChatView(LoginRequiredMixin, View):
         if chat_pk:
             chat = get_object_or_404(Chat, id=chat_pk, users=request.user)
         else:
-            chat = None
+            chat = ''
 
         messages = []
         user_reaction_map = {}

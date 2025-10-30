@@ -3,6 +3,14 @@
 {% block content %}
 
 <style>
+  body {
+  {% comment %}
+    Зроби легкий плавний градієнт темно білого та темнопсірого та куча відтінків кольорів для фону сторінки. який переливаєтсья
+  {% endcomment %}
+    background: linear-gradient(270deg, #f0f0f0, #d9d9d9, #bfbfbf, #d9d9d9, #f0f0f0);
+    background-size: 400% 400%;
+    animation: gradientBG 15s ease infinite;
+  }
   .active-reaction-btn {
     background: linear-gradient(45deg, #f59e0b, #d97706); 
     color: white;
@@ -28,6 +36,18 @@
   }
   .message-content.editing {
     box-shadow: 0 0 10px 2px orange;
+  }
+
+  .active-chat {
+    background: linear-gradient(45deg, #4f46e5, #3b82f6);
+    color: white !important;
+    border-radius: 10px;
+    box-shadow: 0 0 8px rgba(59, 130, 246, 0.6);
+  }
+  
+  .active-chat:hover {
+    background: linear-gradient(45deg, #4338ca, #2563eb);
+    color: white;
   }
   
 </style>
@@ -58,7 +78,8 @@
       <div id="chat-list" class="list-group">
         <a href="{% url 'create_group' %}" class=" mb-2 btn btn btn-outline-primary text-muted">Створити чат</a>
         {% for c in chats %}
-          <a href="{% url 'chat' c.id %}" class="list-group-item list-group-item-action">
+          <a href="{% url 'chat' c.id %}"
+            class="list-group-item list-group-item-action {% if c.pk == chat.pk %}active-chat{% endif %}">
             {% if c.is_group %}
               💬 {{ c.title }}
             {% else %}
@@ -66,7 +87,7 @@
             {% endif %}
           </a>
         {% empty %}
-          <p class="text-muted px-3">Немає чатів.</p>
+          <div class="text-muted text-center mt-2">Немає чатів</div>
         {% endfor %}
       </div>
     </div>
@@ -87,7 +108,7 @@
 
       {% if chat.id %}
         <div id="chat-box" class="p-4 mb-3 rounded shadow-sm" 
-        style="height:500px; overflow-y:auto; border:1px solid #ccc;
+        style="height:600px; overflow-y:auto; border:1px solid #ccc;
         {% if chat.background %}
             background: url('{{ chat.background.url }}') no-repeat center center;
             background-size: cover;
@@ -171,7 +192,7 @@
     document.getElementById('btn-users').classList.replace('btn-primary', 'btn-outline-primary'); 
   });
   
-  const chatId = {{ chat.id }};
+  const chatId = {{ chat.id|default:'null' }};
   const chatBox = document.querySelector('#chat-box');
   const form = document.querySelector('#message-form');
   const textInput = form.querySelector('input[name="text"]');
