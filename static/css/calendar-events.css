@@ -850,6 +850,7 @@ input[placeholder='Event Name'] {
 
 .dropdown-info {
     min-width: 350px;
+    max-width: 400px;
     top: -20px;
     left: -0px;
     cursor: default;

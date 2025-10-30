@@ -276,558 +276,87 @@
             <span>23</span>
         </div>
         <div class="calendar-main-container">
-            <div class="clock-0">
-                <div class="day-mon e-frame">
+            {% comment %} Рендеримо по годинах і днях. {% endcomment %}
+            {% for h in hours %}
+            <div class="clock-{{ h }}">
+                {% for day_idx in weekday_indices %}
+                <div class="day-{{ day_idx }} e-frame">
+                    {# показати all-day події зверху (в годині 0) #}
+                    {% if h == 0 %}
+                        {% for ev in all_day|get_item:day_idx %}
+                        <div class="event-frame {{ ev.frame_class }}">
+                            <p class="frame-title">{{ ev.name }}</p>
+                            <div class="dropdown-info dropdown-basis" id="dropdown-{{ ev.id }}">
+                                <h4>{{ ev.name }}</h4>
+                                <p class="full-date">{{ ev.date|date:"%A, %d %B" }}</p>
+
+                            </div>
+                        </div>
+                        {% endfor %}
+                    {% endif %}
+
+                    {# вивести таймінгові події, якщо є для (h, day_idx) #}
+                    {% with day_map=grid_events_by_hour|get_item:h %}
+                        {% for ev in day_map|get_item:day_idx %}
+                            {% if ev.kind == 'start' %}
+                            <div class="event-frame {{ ev.frame_class }}" id="start-event-{{ ev.event_id }}">
+                                <div class="orb {{ ev.orb_class }}">
+                                    <div class="inner-orb {{ ev.inner_orb_class }} starting-orb"></div>
+                                </div>
+                                <p class="frame-title">{{ ev.name }}</p>
+                                <div class="dropdown-info dropdown-basis" id="dropdown{{ ev.event_id }}-s">
+                                    <h4>{{ ev.name }}</h4>
+                                    <p class="full-date">{{ ev.date|ukr_date }}, {{ ev.user }}</p>
+                                    <p>Час:
+                                        {% if ev.time_start %}
+                                            {{ ev.time_start }}{% if ev.time_finish %}-{{ ev.time_finish }}{% endif %}
+                                        {% else %}
+                                            Весь день
+                                        {% endif %}
+                                    </p>
+                                    {% if ev.topic %}<p>Тема: {{ ev.topic }}</p>{% endif %}
+                                    {% if ev.description %}
+                                    <p class="description-paragraph">{{ ev.description }}</p>{% endif %}
+                                    {% if ev.tags %}
+                                        {% for tag in ev.tags %}<span class="info-tag">{{ tag }}</span>{% if not forloop.last %}, {% endif %}{% endfor %}
+                                    </p>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            {% else %}
+                            <div class="event-frame {{ ev.frame_class }}" id="end-event-{{ ev.event_id }}">
+                                <div class="orb {{ ev.orb_class }}">
+                                    <div class="inner-orb {{ ev.inner_orb_class }} ending-orb"></div>
+                                </div>
+                                <p class="frame-title">{{ ev.name }}</p>
+                                <div class="dropdown-info dropdown-basis" id="dropdown{{ ev.event_id }}-e">
+                                    <h4>{{ ev.name }}</h4>
+                                    <p class="full-date">{{ ev.date|ukr_date }}, {{ ev.user }}</p>
+                                    <p>Час:
+                                        {% if ev.time_start %}
+                                            {{ ev.time_start }}{% if ev.time_finish %}-{{ ev.time_finish }}{% endif %}
+                                        {% else %}
+                                            Весь день
+                                        {% endif %}
+                                    </p>
+                                    {% if ev.topic %}<p>Тема: {{ ev.topic }}</p>{% endif %}
+                                    {% if ev.description %}
+                                    <p class="description-paragraph">{{ ev.description }}</p>{% endif %}
+                                    {% if ev.tags %}
+                                        {% for tag in ev.tags %}<span class="info-tag">{{ tag }}</span>{% if not forloop.last %}, {% endif %}{% endfor %}
+                                    </p>
+                                    {% endif %}
+                                    
+                                </div>
+                            </div>
+                            {% endif %}
+                        {% empty %}
+                        {% endfor %}
+                    {% endwith %}
                 </div>
-                <div class="day-tue e-frame"></div>
-                <div class="day-wed e-frame">
-                    <div class="event-frame purple-frame">
-                        <p class="frame-title">Hackathon</p>
-                        <div class="dropdown-info dropdown-basis" id="dropdown3-s">
-                            <h4>Therapy</h4>
-                            <p class="full-date">Неділя, вересень 25</p>
-
-                            <div class="all-info-div">
-                                <div class="info-flex">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 8 8"
-                                        fill="none">
-                                        <g clip-path="url(#clip0_273_1166)">
-                                            <path
-                                                d="M4.00098 0.666992C5.84191 0.666992 7.33398 2.15905 7.33398 4C7.33398 5.84093 5.84191 7.33301 4.00098 7.33301C2.16006 7.33297 0.667973 5.84091 0.667969 4C0.667969 2.15907 2.16006 0.667029 4.00098 0.666992ZM4.00098 2.41699C3.86291 2.41699 3.75098 2.52892 3.75098 2.66699V4C3.75098 4.0663 3.77732 4.12989 3.82422 4.17676L4.65723 5.00977C4.75486 5.1074 4.91311 5.10739 5.01074 5.00977C5.10838 4.91213 5.10838 4.75388 5.01074 4.65625L4.25098 3.89648V2.66699C4.25098 2.52892 4.13904 2.41699 4.00098 2.41699Z"
-                                                fill="white" />
-                                        </g>
-                                        <defs>
-                                            <clipPath id="clip0_273_1166">
-                                                <rect width="8" height="8" fill="white" />
-                                            </clipPath>
-                                        </defs>
-                                    </svg>
-                                    <span>Час: 19:00-23:00</span>
-                                </div>
-                            </div>
-                            <div class="tags-info">
-                                <div class="info-tag">
-                                    Терапія
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="day-thu e-frame"></div>
-                <div class="day-fri e-frame"></div>
-                <div class="day-sat e-frame"></div>
-                <div class="day-sun e-frame"></div>
+                {% endfor %}
             </div>
-            <div class="clock-1">
-                <div class="day-mon e-frame"></div>
-                <div class="day-tue e-frame"></div>
-                <div class="day-wed e-frame"></div>
-                <div class="day-thu e-frame"></div>
-                <div class="day-fri e-frame"></div>
-                <div class="day-sat e-frame"></div>
-                <div class="day-sun e-frame"></div>
-            </div>
-            <div class="clock-2">
-                <div class="day-mon e-frame"></div>
-                <div class="day-tue e-frame"></div>
-                <div class="day-wed e-frame"></div>
-                <div class="day-thu e-frame"></div>
-                <div class="day-fri e-frame"></div>
-                <div class="day-sat e-frame"></div>
-                <div class="day-sun e-frame"></div>
-            </div>
-            <div class="clock-3">
-                <div class="day-mon e-frame"></div>
-                <div class="day-tue e-frame"></div>
-                <div class="day-wed e-frame"></div>
-                <div class="day-thu e-frame"></div>
-                <div class="day-fri e-frame"></div>
-                <div class="day-sat e-frame"></div>
-                <div class="day-sun e-frame"></div>
-            </div>
-            <div class="clock-4">
-                <div class="day-mon e-frame"></div>
-                <div class="day-tue e-frame"></div>
-                <div class="day-wed e-frame"></div>
-                <div class="day-thu e-frame"></div>
-                <div class="day-fri e-frame"></div>
-                <div class="day-sat e-frame"></div>
-                <div class="day-sun e-frame"></div>
-            </div>
-            <div class="clock-5">
-                <div class="day-mon e-frame"></div>
-                <div class="day-tue e-frame"></div>
-                <div class="day-wed e-frame"></div>
-                <div class="day-thu e-frame"></div>
-                <div class="day-fri e-frame"></div>
-                <div class="day-sat e-frame"></div>
-                <div class="day-sun e-frame"></div>
-            </div>
-            <div class="clock-6">
-                <div class="day-mon e-frame"></div>
-                <div class="day-tue e-frame"></div>
-                <div class="day-wed e-frame"></div>
-                <div class="day-thu e-frame"></div>
-                <div class="day-fri e-frame"></div>
-                <div class="day-sat e-frame"></div>
-                <div class="day-sun e-frame"></div>
-            </div>
-            <div class="clock-7">
-                <div class="day-mon e-frame"></div>
-                <div class="day-tue e-frame"></div>
-                <div class="day-wed e-frame"></div>
-                <div class="day-thu e-frame"></div>
-                <div class="day-fri e-frame"></div>
-                <div class="day-sat e-frame"></div>
-                <div class="day-sun e-frame"></div>
-            </div>
-            <div class="clock-8">
-                <div class="day-mon e-frame"></div>
-                <div class="day-tue e-frame"></div>
-                <div class="day-wed e-frame"></div>
-                <div class="day-thu e-frame"></div>
-                <div class="day-fri e-frame"></div>
-                <div class="day-sat e-frame"></div>
-                <div class="day-sun e-frame"></div>
-            </div>
-            <div class="clock-9">
-                <div class="day-mon e-frame"></div>
-                <div class="day-tue e-frame"></div>
-                <div class="day-wed e-frame"></div>
-                <div class="day-thu e-frame"></div>
-                <div class="day-fri e-frame"></div>
-                <div class="day-sat e-frame"></div>
-                <div class="day-sun e-frame"></div>
-            </div>
-            <div class="clock-10">
-                <div class="day-mon e-frame"></div>
-                <div class="day-tue e-frame"></div>
-                <div class="day-wed e-frame"></div>
-                <div class="day-thu e-frame"></div>
-                <div class="day-fri e-frame"></div>
-                <div class="day-sat e-frame"></div>
-                <div class="day-sun e-frame"></div>
-            </div>
-            <div class="clock-11">
-                <div class="day-mon e-frame"></div>
-                <div class="day-tue e-frame"></div>
-                <div class="day-wed e-frame"></div>
-                <div class="day-thu e-frame"></div>
-                <div class="day-fri e-frame"></div>
-                <div class="day-sat e-frame"></div>
-                <div class="day-sun e-frame"></div>
-            </div>
-            <div class="clock-12">
-                <div class="day-mon e-frame"></div>
-                <div class="day-tue e-frame"></div>
-                <div class="day-wed e-frame"></div>
-                <div class="day-thu e-frame"></div>
-                <div class="day-fri e-frame"></div>
-                <div class="day-sat e-frame"></div>
-                <div class="day-sun e-frame"></div>
-            </div>
-            <div class="clock-13">
-                <div class="day-mon e-frame"></div>
-                <div class="day-tue e-frame"></div>
-                <div class="day-wed e-frame"></div>
-                <div class="day-thu e-frame"></div>
-                <div class="day-fri e-frame"></div>
-                <div class="day-sat e-frame"></div>
-                <div class="day-sun e-frame"></div>
-            </div>
-            <div class="clock-14">
-                <div class="day-mon e-frame"></div>
-                <div class="day-tue e-frame"></div>
-                <div class="day-wed e-frame"></div>
-                <div class="day-thu e-frame"></div>
-                <div class="day-fri e-frame"></div>
-                <div class="day-sat e-frame"></div>
-                <div class="day-sun e-frame"></div>
-            </div>
-            <div class="clock-15">
-                <div class="day-mon e-frame"></div>
-                <div class="day-tue e-frame"></div>
-                <div class="day-wed e-frame"></div>
-                <div class="day-thu e-frame"></div>
-                <div class="day-fri e-frame"></div>
-                <div class="day-sat e-frame">
-                    <div class="event-frame blue-frame" id="start-event-1">
-                        <div class="orb blue-orb">
-                            <div class="inner-orb blue-inner-orb starting-orb"></div>
-                        </div>
-                        <p class="frame-title">Початок: Lesson #18</p>
-                        <div class="dropdown-info dropdown-basis" id="dropdown1-s">
-                            <h4>Lesson #18</h4>
-                            <p class="full-date">Субота, вересень 24</p>
-
-                            <div class="all-info-div">
-                                <div class="info-flex">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 8 8"
-                                        fill="none">
-                                        <g clip-path="url(#clip0_273_1158)">
-                                            <path d="M4.69739 3.58331L4.44739 4.41665H3.30273L3.55273 3.58331H4.69739Z"
-                                                fill="white" />
-                                            <path fill-rule="evenodd" clip-rule="evenodd"
-                                                d="M3.99935 0.666687C2.1584 0.666687 0.666016 2.15907 0.666016 4.00002C0.666016 5.84095 2.1584 7.33335 3.99935 7.33335C5.84028 7.33335 7.33268 5.84095 7.33268 4.00002C7.33268 2.15907 5.84028 0.666687 3.99935 0.666687ZM3.73785 2.0939C3.87012 2.13358 3.94515 2.27295 3.90548 2.4052L3.70202 3.08336H4.84668L5.09322 2.26152C5.13292 2.12927 5.27228 2.05423 5.40452 2.0939C5.53678 2.13358 5.61181 2.27295 5.57215 2.4052L5.36868 3.08336H5.99935C6.13742 3.08336 6.24935 3.19529 6.24935 3.33335C6.24935 3.47142 6.13742 3.58335 5.99935 3.58335H5.21868L4.96868 4.41669H5.66602C5.80408 4.41669 5.91602 4.52862 5.91602 4.66669C5.91602 4.80475 5.80408 4.91669 5.66602 4.91669H4.81868L4.57215 5.73852C4.53245 5.87079 4.39308 5.94582 4.26085 5.90615C4.12858 5.86649 4.05355 5.72709 4.09322 5.59485L4.29668 4.91669H3.15202L2.90547 5.73852C2.8658 5.87079 2.72643 5.94582 2.59418 5.90615C2.46193 5.86649 2.38689 5.72709 2.42656 5.59485L2.63001 4.91669H1.99935C1.86128 4.91669 1.74935 4.80475 1.74935 4.66669C1.74935 4.52862 1.86128 4.41669 1.99935 4.41669H2.78001L3.03001 3.58335H2.33268C2.19461 3.58335 2.08268 3.47142 2.08268 3.33335C2.08268 3.19529 2.19461 3.08336 2.33268 3.08336H3.18001L3.42655 2.26152C3.46625 2.12927 3.60562 2.05423 3.73785 2.0939Z"
-                                                fill="white" />
-                                        </g>
-                                        <defs>
-                                            <clipPath id="clip0_273_1158">
-                                                <rect width="8" height="8" fill="white" />
-                                            </clipPath>
-                                        </defs>
-                                    </svg>
-                                    <span>Тема: Data analysis and machine learning</span>
-                                </div>
-
-                                <div class="info-flex">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 8 8"
-                                        fill="none">
-                                        <g clip-path="url(#clip0_273_1166)">
-                                            <path
-                                                d="M4.00098 0.666992C5.84191 0.666992 7.33398 2.15905 7.33398 4C7.33398 5.84093 5.84191 7.33301 4.00098 7.33301C2.16006 7.33297 0.667973 5.84091 0.667969 4C0.667969 2.15907 2.16006 0.667029 4.00098 0.666992ZM4.00098 2.41699C3.86291 2.41699 3.75098 2.52892 3.75098 2.66699V4C3.75098 4.0663 3.77732 4.12989 3.82422 4.17676L4.65723 5.00977C4.75486 5.1074 4.91311 5.10739 5.01074 5.00977C5.10838 4.91213 5.10838 4.75388 5.01074 4.65625L4.25098 3.89648V2.66699C4.25098 2.52892 4.13904 2.41699 4.00098 2.41699Z"
-                                                fill="white" />
-                                        </g>
-                                        <defs>
-                                            <clipPath id="clip0_273_1166">
-                                                <rect width="8" height="8" fill="white" />
-                                            </clipPath>
-                                        </defs>
-                                    </svg>
-                                    <span>Час: 03:00-05:00</span>
-                                </div>
-                            </div>
-                            <div class="tags-info">
-                                <div class="info-tag">
-                                    Програмування
-                                </div>
-
-                                <div class="info-tag">
-                                    Програма майбутніх лідерів
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="day-sun e-frame"></div>
-            </div>
-            <div class="clock-16">
-                <div class="day-mon e-frame"></div>
-                <div class="day-tue e-frame"></div>
-                <div class="day-wed e-frame"></div>
-                <div class="day-thu e-frame"></div>
-                <div class="day-fri e-frame"></div>
-                <div class="day-sat e-frame"></div>
-                <div class="day-sun e-frame"></div>
-            </div>
-            <div class="clock-17">
-                <div class="day-mon e-frame"></div>
-                <div class="day-tue e-frame"></div>
-                <div class="day-wed e-frame"></div>
-                <div class="day-thu e-frame"></div>
-                <div class="day-fri e-frame"></div>
-                <div class="day-sat e-frame">
-                    <div class="event-frame blue-frame" id="end-event-1">
-                        <div class="orb blue-orb">
-                            <div class="inner-orb blue-inner-orb ending-orb"></div>
-                        </div>
-                        <p class="frame-title">Кінець: Lesson #18</p>
-                        <div class="dropdown-info dropdown-basis" id="dropdown1-e">
-                            <h4>Lesson #18</h4>
-                            <p class="full-date">Субота, вересень 24</p>
-
-                            <div class="all-info-div">
-                                <div class="info-flex">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 8 8"
-                                        fill="none">
-                                        <g clip-path="url(#clip0_273_1158)">
-                                            <path d="M4.69739 3.58331L4.44739 4.41665H3.30273L3.55273 3.58331H4.69739Z"
-                                                fill="white" />
-                                            <path fill-rule="evenodd" clip-rule="evenodd"
-                                                d="M3.99935 0.666687C2.1584 0.666687 0.666016 2.15907 0.666016 4.00002C0.666016 5.84095 2.1584 7.33335 3.99935 7.33335C5.84028 7.33335 7.33268 5.84095 7.33268 4.00002C7.33268 2.15907 5.84028 0.666687 3.99935 0.666687ZM3.73785 2.0939C3.87012 2.13358 3.94515 2.27295 3.90548 2.4052L3.70202 3.08336H4.84668L5.09322 2.26152C5.13292 2.12927 5.27228 2.05423 5.40452 2.0939C5.53678 2.13358 5.61181 2.27295 5.57215 2.4052L5.36868 3.08336H5.99935C6.13742 3.08336 6.24935 3.19529 6.24935 3.33335C6.24935 3.47142 6.13742 3.58335 5.99935 3.58335H5.21868L4.96868 4.41669H5.66602C5.80408 4.41669 5.91602 4.52862 5.91602 4.66669C5.91602 4.80475 5.80408 4.91669 5.66602 4.91669H4.81868L4.57215 5.73852C4.53245 5.87079 4.39308 5.94582 4.26085 5.90615C4.12858 5.86649 4.05355 5.72709 4.09322 5.59485L4.29668 4.91669H3.15202L2.90547 5.73852C2.8658 5.87079 2.72643 5.94582 2.59418 5.90615C2.46193 5.86649 2.38689 5.72709 2.42656 5.59485L2.63001 4.91669H1.99935C1.86128 4.91669 1.74935 4.80475 1.74935 4.66669C1.74935 4.52862 1.86128 4.41669 1.99935 4.41669H2.78001L3.03001 3.58335H2.33268C2.19461 3.58335 2.08268 3.47142 2.08268 3.33335C2.08268 3.19529 2.19461 3.08336 2.33268 3.08336H3.18001L3.42655 2.26152C3.46625 2.12927 3.60562 2.05423 3.73785 2.0939Z"
-                                                fill="white" />
-                                        </g>
-                                        <defs>
-                                            <clipPath id="clip0_273_1158">
-                                                <rect width="8" height="8" fill="white" />
-                                            </clipPath>
-                                        </defs>
-                                    </svg>
-                                    <span>Тема: Data analysis and machine learning</span>
-                                </div>
-
-                                <div class="info-flex">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 8 8"
-                                        fill="none">
-                                        <g clip-path="url(#clip0_273_1166)">
-                                            <path
-                                                d="M4.00098 0.666992C5.84191 0.666992 7.33398 2.15905 7.33398 4C7.33398 5.84093 5.84191 7.33301 4.00098 7.33301C2.16006 7.33297 0.667973 5.84091 0.667969 4C0.667969 2.15907 2.16006 0.667029 4.00098 0.666992ZM4.00098 2.41699C3.86291 2.41699 3.75098 2.52892 3.75098 2.66699V4C3.75098 4.0663 3.77732 4.12989 3.82422 4.17676L4.65723 5.00977C4.75486 5.1074 4.91311 5.10739 5.01074 5.00977C5.10838 4.91213 5.10838 4.75388 5.01074 4.65625L4.25098 3.89648V2.66699C4.25098 2.52892 4.13904 2.41699 4.00098 2.41699Z"
-                                                fill="white" />
-                                        </g>
-                                        <defs>
-                                            <clipPath id="clip0_273_1166">
-                                                <rect width="8" height="8" fill="white" />
-                                            </clipPath>
-                                        </defs>
-                                    </svg>
-                                    <span>Час: 03:00-05:00</span>
-                                </div>
-                            </div>
-                            <div class="tags-info">
-                                <div class="info-tag">
-                                    Програмування
-                                </div>
-
-                                <div class="info-tag">
-                                    Програма майбутніх лідерів
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="day-sun e-frame"></div>
-            </div>
-            <div class="clock-18">
-                <div class="day-mon e-frame"></div>
-                <div class="day-tue e-frame"></div>
-                <div class="day-wed e-frame"></div>
-                <div class="day-thu e-frame"></div>
-                <div class="day-fri e-frame"></div>
-                <div class="day-sat e-frame"></div>
-                <div class="day-sun e-frame">
-                    <div class="event-frame red-frame" id="start-event-2">
-                        <div class="orb red-orb">
-                            <div class="inner-orb red-inner-orb starting-orb"></div>
-                        </div>
-                        <p class="frame-title">Початок: Lesson #19</p>
-                        <div class="dropdown-info dropdown-basis" id="dropdown2-s">
-                            <h4>Lesson #19</h4>
-                            <p class="full-date">Неділя, вересень 25</p>
-
-                            <div class="all-info-div">
-                                <div class="info-flex">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 8 8"
-                                        fill="none">
-                                        <g clip-path="url(#clip0_273_1158)">
-                                            <path d="M4.69739 3.58331L4.44739 4.41665H3.30273L3.55273 3.58331H4.69739Z"
-                                                fill="white" />
-                                            <path fill-rule="evenodd" clip-rule="evenodd"
-                                                d="M3.99935 0.666687C2.1584 0.666687 0.666016 2.15907 0.666016 4.00002C0.666016 5.84095 2.1584 7.33335 3.99935 7.33335C5.84028 7.33335 7.33268 5.84095 7.33268 4.00002C7.33268 2.15907 5.84028 0.666687 3.99935 0.666687ZM3.73785 2.0939C3.87012 2.13358 3.94515 2.27295 3.90548 2.4052L3.70202 3.08336H4.84668L5.09322 2.26152C5.13292 2.12927 5.27228 2.05423 5.40452 2.0939C5.53678 2.13358 5.61181 2.27295 5.57215 2.4052L5.36868 3.08336H5.99935C6.13742 3.08336 6.24935 3.19529 6.24935 3.33335C6.24935 3.47142 6.13742 3.58335 5.99935 3.58335H5.21868L4.96868 4.41669H5.66602C5.80408 4.41669 5.91602 4.52862 5.91602 4.66669C5.91602 4.80475 5.80408 4.91669 5.66602 4.91669H4.81868L4.57215 5.73852C4.53245 5.87079 4.39308 5.94582 4.26085 5.90615C4.12858 5.86649 4.05355 5.72709 4.09322 5.59485L4.29668 4.91669H3.15202L2.90547 5.73852C2.8658 5.87079 2.72643 5.94582 2.59418 5.90615C2.46193 5.86649 2.38689 5.72709 2.42656 5.59485L2.63001 4.91669H1.99935C1.86128 4.91669 1.74935 4.80475 1.74935 4.66669C1.74935 4.52862 1.86128 4.41669 1.99935 4.41669H2.78001L3.03001 3.58335H2.33268C2.19461 3.58335 2.08268 3.47142 2.08268 3.33335C2.08268 3.19529 2.19461 3.08336 2.33268 3.08336H3.18001L3.42655 2.26152C3.46625 2.12927 3.60562 2.05423 3.73785 2.0939Z"
-                                                fill="white" />
-                                        </g>
-                                        <defs>
-                                            <clipPath id="clip0_273_1158">
-                                                <rect width="8" height="8" fill="white" />
-                                            </clipPath>
-                                        </defs>
-                                    </svg>
-                                    <span>Тема: Generative AI. LLM.</span>
-                                </div>
-
-                                <div class="info-flex">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 8 8"
-                                        fill="none">
-                                        <g clip-path="url(#clip0_273_1166)">
-                                            <path
-                                                d="M4.00098 0.666992C5.84191 0.666992 7.33398 2.15905 7.33398 4C7.33398 5.84093 5.84191 7.33301 4.00098 7.33301C2.16006 7.33297 0.667973 5.84091 0.667969 4C0.667969 2.15907 2.16006 0.667029 4.00098 0.666992ZM4.00098 2.41699C3.86291 2.41699 3.75098 2.52892 3.75098 2.66699V4C3.75098 4.0663 3.77732 4.12989 3.82422 4.17676L4.65723 5.00977C4.75486 5.1074 4.91311 5.10739 5.01074 5.00977C5.10838 4.91213 5.10838 4.75388 5.01074 4.65625L4.25098 3.89648V2.66699C4.25098 2.52892 4.13904 2.41699 4.00098 2.41699Z"
-                                                fill="white" />
-                                        </g>
-                                        <defs>
-                                            <clipPath id="clip0_273_1166">
-                                                <rect width="8" height="8" fill="white" />
-                                            </clipPath>
-                                        </defs>
-                                    </svg>
-                                    <span>Час: 18:00-21:00</span>
-                                </div>
-                            </div>
-                            <div class="tags-info">
-                                <div class="info-tag">
-                                    Програмування
-                                </div>
-
-                                <div class="info-tag">
-                                    Програма майбутніх лідерів
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="clock-19">
-                <div class="day-mon e-frame"></div>
-                <div class="day-tue e-frame"></div>
-                <div class="day-wed e-frame"></div>
-                <div class="day-thu e-frame"></div>
-                <div class="day-fri e-frame"></div>
-                <div class="day-sat e-frame"></div>
-                <div class="day-sun e-frame">
-                    <div class="event-frame frame-reverse green-frame" id="start-event-3">
-                        <div class="orb green-orb">
-                            <div class="inner-orb green-inner-orb starting-orb"></div>
-                        </div>
-                        <p class="frame-title">Початок: Therapy</p>
-                        <div class="dropdown-info dropdown-basis" id="dropdown3-s">
-                            <h4>Therapy</h4>
-                            <p class="full-date">Неділя, вересень 25</p>
-
-                            <div class="all-info-div">
-                                <div class="info-flex">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 8 8"
-                                        fill="none">
-                                        <g clip-path="url(#clip0_273_1166)">
-                                            <path
-                                                d="M4.00098 0.666992C5.84191 0.666992 7.33398 2.15905 7.33398 4C7.33398 5.84093 5.84191 7.33301 4.00098 7.33301C2.16006 7.33297 0.667973 5.84091 0.667969 4C0.667969 2.15907 2.16006 0.667029 4.00098 0.666992ZM4.00098 2.41699C3.86291 2.41699 3.75098 2.52892 3.75098 2.66699V4C3.75098 4.0663 3.77732 4.12989 3.82422 4.17676L4.65723 5.00977C4.75486 5.1074 4.91311 5.10739 5.01074 5.00977C5.10838 4.91213 5.10838 4.75388 5.01074 4.65625L4.25098 3.89648V2.66699C4.25098 2.52892 4.13904 2.41699 4.00098 2.41699Z"
-                                                fill="white" />
-                                        </g>
-                                        <defs>
-                                            <clipPath id="clip0_273_1166">
-                                                <rect width="8" height="8" fill="white" />
-                                            </clipPath>
-                                        </defs>
-                                    </svg>
-                                    <span>Час: 19:00-23:00</span>
-                                </div>
-                            </div>
-                            <div class="tags-info">
-                                <div class="info-tag">
-                                    Therapy
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="clock-20">
-                <div class="day-mon e-frame"></div>
-                <div class="day-tue e-frame"></div>
-                <div class="day-wed e-frame"></div>
-                <div class="day-thu e-frame"></div>
-                <div class="day-fri e-frame"></div>
-                <div class="day-sat e-frame"></div>
-                <div class="day-sun e-frame"></div>
-            </div>
-            <div class="clock-21">
-                <div class="day-mon e-frame"></div>
-                <div class="day-tue e-frame"></div>
-                <div class="day-wed e-frame"></div>
-                <div class="day-thu e-frame"></div>
-                <div class="day-fri e-frame"></div>
-                <div class="day-sat e-frame"></div>
-                <div class="day-sun e-frame">
-                    <div class="event-frame red-frame" id="end-event-2">
-                        <div class="orb red-orb">
-                            <div class="inner-orb red-inner-orb starting-orb"></div>
-                        </div>
-                        <p class="frame-title">Кінець: Lesson #19</p>
-                        <div class="dropdown-info dropdown-basis" id="dropdown2-e">
-                            <h4>Lesson #19</h4>
-                            <p class="full-date">Неділя, вересень 25</p>
-
-                            <div class="all-info-div">
-                                <div class="info-flex">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 8 8"
-                                        fill="none">
-                                        <g clip-path="url(#clip0_273_1158)">
-                                            <path d="M4.69739 3.58331L4.44739 4.41665H3.30273L3.55273 3.58331H4.69739Z"
-                                                fill="white" />
-                                            <path fill-rule="evenodd" clip-rule="evenodd"
-                                                d="M3.99935 0.666687C2.1584 0.666687 0.666016 2.15907 0.666016 4.00002C0.666016 5.84095 2.1584 7.33335 3.99935 7.33335C5.84028 7.33335 7.33268 5.84095 7.33268 4.00002C7.33268 2.15907 5.84028 0.666687 3.99935 0.666687ZM3.73785 2.0939C3.87012 2.13358 3.94515 2.27295 3.90548 2.4052L3.70202 3.08336H4.84668L5.09322 2.26152C5.13292 2.12927 5.27228 2.05423 5.40452 2.0939C5.53678 2.13358 5.61181 2.27295 5.57215 2.4052L5.36868 3.08336H5.99935C6.13742 3.08336 6.24935 3.19529 6.24935 3.33335C6.24935 3.47142 6.13742 3.58335 5.99935 3.58335H5.21868L4.96868 4.41669H5.66602C5.80408 4.41669 5.91602 4.52862 5.91602 4.66669C5.91602 4.80475 5.80408 4.91669 5.66602 4.91669H4.81868L4.57215 5.73852C4.53245 5.87079 4.39308 5.94582 4.26085 5.90615C4.12858 5.86649 4.05355 5.72709 4.09322 5.59485L4.29668 4.91669H3.15202L2.90547 5.73852C2.8658 5.87079 2.72643 5.94582 2.59418 5.90615C2.46193 5.86649 2.38689 5.72709 2.42656 5.59485L2.63001 4.91669H1.99935C1.86128 4.91669 1.74935 4.80475 1.74935 4.66669C1.74935 4.52862 1.86128 4.41669 1.99935 4.41669H2.78001L3.03001 3.58335H2.33268C2.19461 3.58335 2.08268 3.47142 2.08268 3.33335C2.08268 3.19529 2.19461 3.08336 2.33268 3.08336H3.18001L3.42655 2.26152C3.46625 2.12927 3.60562 2.05423 3.73785 2.0939Z"
-                                                fill="white" />
-                                        </g>
-                                        <defs>
-                                            <clipPath id="clip0_273_1158">
-                                                <rect width="8" height="8" fill="white" />
-                                            </clipPath>
-                                        </defs>
-                                    </svg>
-                                    <span>Тема: Generative AI. LLM.</span>
-                                </div>
-
-                                <div class="info-flex">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 8 8"
-                                        fill="none">
-                                        <g clip-path="url(#clip0_273_1166)">
-                                            <path
-                                                d="M4.00098 0.666992C5.84191 0.666992 7.33398 2.15905 7.33398 4C7.33398 5.84093 5.84191 7.33301 4.00098 7.33301C2.16006 7.33297 0.667973 5.84091 0.667969 4C0.667969 2.15907 2.16006 0.667029 4.00098 0.666992ZM4.00098 2.41699C3.86291 2.41699 3.75098 2.52892 3.75098 2.66699V4C3.75098 4.0663 3.77732 4.12989 3.82422 4.17676L4.65723 5.00977C4.75486 5.1074 4.91311 5.10739 5.01074 5.00977C5.10838 4.91213 5.10838 4.75388 5.01074 4.65625L4.25098 3.89648V2.66699C4.25098 2.52892 4.13904 2.41699 4.00098 2.41699Z"
-                                                fill="white" />
-                                        </g>
-                                        <defs>
-                                            <clipPath id="clip0_273_1166">
-                                                <rect width="8" height="8" fill="white" />
-                                            </clipPath>
-                                        </defs>
-                                    </svg>
-                                    <span>Час: 18:00-21:00</span>
-                                </div>
-                            </div>
-                            <div class="tags-info">
-                                <div class="info-tag">
-                                    Програмування
-                                </div>
-
-                                <div class="info-tag">
-                                    Програма майбутніх лідерів
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="clock-22">
-                <div class="day-mon e-frame"></div>
-                <div class="day-tue e-frame"></div>
-                <div class="day-wed e-frame"></div>
-                <div class="day-thu e-frame"></div>
-                <div class="day-fri e-frame"></div>
-                <div class="day-sat e-frame"></div>
-                <div class="day-sun e-frame"></div>
-            </div>
-            <div class="clock-23">
-                <div class="day-mon e-frame"></div>
-                <div class="day-tue e-frame"></div>
-                <div class="day-wed e-frame"></div>
-                <div class="day-thu e-frame"></div>
-                <div class="day-fri e-frame"></div>
-                <div class="day-sat e-frame"></div>
-                <div class="day-sun e-frame">
-                    <div class="event-frame frame-reverse green-frame" id="end-event-3">
-                        <div class="orb green-orb">
-                            <div class="inner-orb green-inner-orb starting-orb"></div>
-                        </div>
-                        <p class="frame-title">Кінець: Therapy</p>
-                        <div class="dropdown-info dropdown-basis" id="dropdown3-e">
-                            <h4>Therapy</h4>
-                            <p class="full-date">Неділя, вересень 25</p>
-
-                            <div class="all-info-div">
-                                <div class="info-flex">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 8 8"
-                                        fill="none">
-                                        <g clip-path="url(#clip0_273_1166)">
-                                            <path
-                                                d="M4.00098 0.666992C5.84191 0.666992 7.33398 2.15905 7.33398 4C7.33398 5.84093 5.84191 7.33301 4.00098 7.33301C2.16006 7.33297 0.667973 5.84091 0.667969 4C0.667969 2.15907 2.16006 0.667029 4.00098 0.666992ZM4.00098 2.41699C3.86291 2.41699 3.75098 2.52892 3.75098 2.66699V4C3.75098 4.0663 3.77732 4.12989 3.82422 4.17676L4.65723 5.00977C4.75486 5.1074 4.91311 5.10739 5.01074 5.00977C5.10838 4.91213 5.10838 4.75388 5.01074 4.65625L4.25098 3.89648V2.66699C4.25098 2.52892 4.13904 2.41699 4.00098 2.41699Z"
-                                                fill="white" />
-                                        </g>
-                                        <defs>
-                                            <clipPath id="clip0_273_1166">
-                                                <rect width="8" height="8" fill="white" />
-                                            </clipPath>
-                                        </defs>
-                                    </svg>
-                                    <span>Час: 19:00-23:00</span>
-                                </div>
-                            </div>
-                            <div class="tags-info">
-                                <div class="info-tag">
-                                    Терапія
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
+            {% endfor %}
         </div>
     </div>
 
