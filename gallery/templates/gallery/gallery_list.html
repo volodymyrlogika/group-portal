@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>Gallery group</h2>
+
+<div class="gallery-container">
+    {% for item in items %}
+        <div class="gallery-item">
+            {% if item.media_type == "photo" %}
+                <img src="{{ item.file.url }}" alt="{{ item.title }}">
+            {% else %}
+                <video controls>
+                    <source src="{{ item.file.url }}" type="video/mp4">
+                </video>
+            {% endif %}
+            <p>{{ item.title }}</p>
+        </div>
+    {% empty %}
+        <p>No materials yet</p>
+    {% endfor %}
+</div>
+
+<a href="{% url 'gallery_upload' %}" class="btn">Add a new photo/video</a>
+{% endblock %}
