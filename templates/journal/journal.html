@@ -1,0 +1,111 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<style>
+    body {
+        background: linear-gradient(135deg, #d6f0ff, #eafbea);
+        min-height: 100vh;
+    }
+
+    .header-box {
+        background: #ffffff;
+        color: #0d3b66;
+        border-radius: 35px;
+        padding: 30px 0;
+        margin-bottom: 50px;
+    }
+
+    .header-box h1 {
+        font-family: 'Poppins', sans-serif;
+        font-weight: 700;
+        letter-spacing: 1px;
+        margin: 0;
+    }
+
+    .card {
+        border-radius: 35px;
+        background-color: #ffffffd9;
+        backdrop-filter: blur(5px);
+    }
+
+    .table thead {
+        background-color: #bfe5ff;
+    }
+
+    .lesson {
+        transition: all 0.3s ease;
+    }
+
+    .lesson:hover {
+        background-color: #e0f3ff;
+        transform: translateY(-3px);
+    }
+
+    .btn-primary {
+        background-color: #0084ff;
+        border: none;
+        border-radius: 20px;
+        transition: background-color 0.3s ease;
+    }
+</style>
+
+<div class="container text-center header-box">
+    <h1>Журнал</h1>
+</div>
+
+<div class="container">
+    <div class="row g-4 justify-content-center align-items-start">
+        <div class="col-md-6">
+            <div class="card p-4">
+                <h4 class="mb-3 text-center fw-semibold text-primary">Оцінки студентів</h4>
+                <table class="table table-hover align-middle">
+                    <thead class="table-info">
+                        <tr>
+                            <th>Ім'я студента</th>
+                            <th>Оцінка</th>
+                            <th>Д/з оцінка</th>
+                            <th>Дата</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for journal_student in journal_students %}
+                        <tr>
+                            <td>{{ journal_student.student_user }}</td>
+                            <td>{{ journal_student.grade }}</td>
+                            <td>{{ journal_student.homework_grade }}</td>
+                            <td>{{ journal_student.date }}</td>
+                        </tr>
+                        {% empty %}
+                        <tr><td colspan="4" class="text-center text-muted">Поки немає записів</td></tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="card p-4">
+                <h4 class="mb-3 text-center fw-semibold text-primary">Уроки</h4>
+                {% for lesson in lessons %}
+                <div class="lesson p-3 mb-3 border rounded-3" style="background-color: #f3faff;">
+                    <h5 class="mb-2 fw-semibold">{{ lesson.topic }}</h5>
+                    <p class="mb-1"><strong>Дата:</strong> {{ lesson.date }}</p>
+                    <p class="mb-0"><strong>Д/З:</strong> {{ lesson.homework }}</p>
+                </div>
+                {% empty %}
+                <p class="text-muted text-center">Поки що немає уроків</p>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+    {% if user.is_superuser or user.is_staff %}
+    <div class="text-center mt-5 mb-5">
+        <a href="{% url 'edit_journal' %}" class="btn btn-primary px-5 py-2 shadow-sm">
+            Редагувати журнал
+        </a>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
+

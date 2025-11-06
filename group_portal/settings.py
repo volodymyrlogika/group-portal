@@ -41,7 +41,9 @@ INSTALLED_APPS = [
     'channels',
     'main',
     'accounts',
-    'messenger'
+    'messenger',
+    "journalapp",
+
 ]
 
 MIDDLEWARE = [
