@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block title %}{{ survey.title }}{% endblock %}
+
+{% block content %}
+<div class="card shadow-sm border-0">
+  <div class="card-body">
+    <h3 class="card-title">{{ survey.title }}</h3>
+    <p class="card-text text-muted">{{ survey.description }}</p>
+    <hr>
+    <div class="d-flex gap-2">
+      <a href="{% url 'surveys:survey_question' survey.id 1 %}" class="btn btn-success">
+        Почати / Перепройти
+      </a>
+      <a href="{% url 'surveys:survey_results' survey.id %}" class="btn btn-outline-primary">
+        Переглянути результати
+      </a>
+    </div>
+  </div>
+  <div class="card-footer text-muted">
+    Створено: {{ survey.created_at|date:"d.m.Y H:i" }} | Оновлено: {{ survey.updated_at|date:"d.m.Y H:i" }}
+  </div>
+</div>
+{% endblock %}
