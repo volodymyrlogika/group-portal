@@ -3,14 +3,14 @@ from django.contrib.auth.decorators import login_required
 from .models import GalleryItem
 from .forms import MediaUploadForm
 from gallery.models import GalleryItem
-GalleryItem.objects.all()
+
 
 def gallery_list(request):
     items = GalleryItem.objects.all()
     return render(request, 'gallery/gallery_list.html', {'items': items})
 
 def gallery_detail(request, pk):
-    item = get_object_or_404(MediaItem, pk=pk)
+    item = get_object_or_404(GalleryItem, pk=pk)
     return render(request, 'gallery/gallery_detail.html', context={'item': item})
 
 @login_required

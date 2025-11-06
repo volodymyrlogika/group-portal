@@ -1,4 +1,4 @@
-% extends "base.html" %}
+{% extends "base.html" %}
 {% block content %}
 <h2>Gallery Group</h2>
 
@@ -19,5 +19,5 @@
    {% endfor %}
 </div>
 
-<a href="{% url 'gallery_upload' %}" class="btn">Add a new photo/video</a>
+<a href="{% url 'gallery_upload' %}" class="btn btn-primary">Add a new photo/video</a>
 {% endblock %}
