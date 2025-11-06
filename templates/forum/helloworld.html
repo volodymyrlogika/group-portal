@@ -1,0 +1,270 @@
+{% load static %}
+<style>
+    body{
+        background-color: rgb(15, 15, 15);
+        overflow-x: hidden;
+        overflow-y: hidden;
+    }
+    .background{
+        position: relative;
+        left: 40vw;
+        top: 10rem;
+        background-image: url("{% static 'img\hiworldbackground.jpg' %}");
+        height: 300px;
+        width: 300px;
+        background-size: cover;    
+        background-position: center;  
+        background-repeat: no-repeat;
+    }
+    .helloworld {
+       
+        position: relative;
+        left: 43vw;
+        top: 8rem;
+        user-select: none;
+        width: 0;
+        overflow: hidden;
+        white-space: nowrap;
+        border-right: 10px solid rgb(0, 97, 44);
+        font-family: monospace;
+        font-size: 24px;
+        color: rgb(0, 97, 44);
+        /* дві анімації одночасно */
+        animation: typing 4s steps(40, end) forwards, blink 0.75s step-end infinite, hideCursor 0s 4s ease-in forwards, hidetext 0s 6s ease-in-out forwards;
+        }
+
+        /* Друкування тексту */
+        @keyframes typing {
+        from { width: 0; }
+        to { width: 10%; }
+        }
+
+        /* Моргання курсору під час друку */
+        @keyframes blink {
+        0%, 50%, 100% { border-color: rgb(0, 97, 44); }
+        25%, 75% { border-color: transparent; }
+        }
+
+        /* Після завершення анімації тексту курсор зникає */
+        .helloworld::after {
+        content: '';
+        border-color: transparent;
+        }
+
+        @keyframes hideCursor {
+        to { border-color: transparent; }
+        }
+
+        @keyframes hidetext {
+            from { opacity: 1;}
+            to { opacity: 0;
+            }
+        }
+
+    .blackfone{
+        position: absolute;
+        background-color: transparent;
+        z-index: 1;
+        height: 100vh;
+        width: 100vw;
+        left: 0rem;
+        top: 0rem;
+        animation: fonevisibly 7s ease forwards;
+        animation-delay: 1s;
+        
+    }
+    @keyframes fonevisibly {
+            from {opacity: 0;}
+
+            to {
+                
+                opacity: 1;
+                background-color: black;
+            }
+        }
+    
+    .textnothing{
+        position: absolute;
+        overflow: hidden;
+        white-space: nowrap;
+        color: white;
+        font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+        font-weight: 400;
+        font-size: 5rem;
+        top: 46%;
+        opacity: 0;
+        left: 11%;
+        height: 100vh;
+        z-index: 1;
+        width: 100vw;
+        animation:  textvisibly 7s steps(800, end) 8.2s forwards, texthiden 7s steps(800, end) 15.3s forwards;
+        text-shadow: 0 0 10px #ffffff;
+        user-select: none;
+    }
+
+    @keyframes textvisibly {
+        from {
+            opacity: 0;
+            width: 0;
+            }
+        to {
+            opacity: 1;
+            width: 70cm;
+        }
+    }
+    @keyframes texthiden{
+        from {
+            opacity: 1;
+            width: 70cm;
+        }
+        to {
+            opacity: 0;
+            width: 70cm;
+            letter-spacing: 40px;
+            left: -20rem
+        }
+    }
+
+    .you{
+        position: absolute;
+        overflow: hidden;
+        white-space: nowrap;
+        color: white;
+        font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+        font-weight: 400;
+        font-size: 5rem;
+        top: 41%;
+        opacity: 0;
+        left: 43%;
+        height: 100vh;
+        z-index: 1;
+        width: 100vw;
+        animation: youvisible 4s steps(600, end) 22.3s forwards, youhiden 5s steps(600, end) 26.3s forwards;
+        text-shadow: 0 0 10px #ffffff;
+        user-select: none;
+    }
+
+    @keyframes youvisible {
+        from {
+            opacity: 0;
+            width: 0;
+        }
+        to {
+            opacity: 1;
+            width: 70rem;
+            
+        }
+    }
+    @keyframes youhiden {
+        from {
+            opacity: 1;
+            width: 70cm;
+            
+        }
+        to {
+            opacity: 0;
+            letter-spacing: 120px;
+            left: 35%;
+        }
+    }
+
+    .turnback{
+        position: absolute;
+        overflow: hidden;
+        white-space: nowrap;
+        color: white;
+        font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+        font-weight: 400;
+        font-size: 5rem;
+        top: 49%;
+        opacity: 0;
+        left: 40%;
+        height: 100vh;
+        z-index: 1;
+        width: 100vw;
+        animation: youvisible 4s steps(600, end) 23.3s forwards, youhidenback 5s steps(800, end) 26.3s forwards;
+        text-shadow: 0 0 10px #ffffff;
+        user-select: none;
+    }
+    @keyframes youhidenback {
+        from {
+            opacity: 1;
+            width: 70cm;
+            
+        }
+        to {
+            opacity: 0;
+            letter-spacing: 120px;
+            left: 20%;
+        }
+    }
+    
+    .btn{
+        left: 43%;
+        position: absolute;
+        overflow: hidden;
+        white-space: nowrap;
+        display: block;
+        opacity: 0;
+        background-image: url("{% static 'img\closedoor.png' %}");
+        background-color: transparent;
+        width: 12rem;
+        height: 20rem;  
+        background-size: contain;
+        background-position: center;  
+        background-repeat: no-repeat;
+        z-index: 1;
+        animation: door 4s 33s forwards;
+        transition: 0.5s ease;
+        border: none;          
+        outline: none;
+        cursor: not-allowed;
+        pointer-events: none;
+    }
+
+    @keyframes door {
+        from{
+            opacity: 0;
+        }
+        to{
+            opacity: 1;
+            pointer-events: all;
+            cursor: alias;
+            transition: ease;
+        }
+    }
+    .btn:hover{
+        background-image: url("{% static 'img\opendoor.jpg' %}");
+        background-color: transparent;
+        width: 12rem;
+        height: 20rem;
+        background-size: contain;
+        background-position: center;  
+        background-repeat: no-repeat;
+        transform: none;
+        transition: 0.5s ease;
+        box-shadow: 0 0 200000px #272727;
+        text-shadow: 0 0 200000px #181818;;
+    }
+</style>
+
+<body>
+    <div class="background"> </div>
+    <div class="blackfone"></div>
+    <div class="textnothing">There's nothing here, you can go back.</div>
+    <div class="you">{{ user.username }}</div>
+    <div class="turnback">turn back</div>
+   <div class="returnpage"></div>
+    <div class="helloworld">Hello world :)
+    </div> 
+
+    <a class="btn" href="{% url 'subredts' %}">
+        <audio id="music" src="{% static 'music\helloworld.mp3' %}" preload="auto"></audio>
+    </a>
+</body>
+<script>
+document.body.addEventListener("click", () => {
+  document.getElementById("music").play();
+  music.muted = false;
+});
+</script>

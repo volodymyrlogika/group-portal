@@ -1,6 +1,6 @@
 from django.urls import path
 from .views import forum , post_form , update_form,\
-del_post, add_comment, del_comment, add_answer , del_answer
+del_post, add_comment, del_comment, add_answer , del_answer , helloworldpage
 
 
 urlpatterns = [
@@ -12,4 +12,5 @@ urlpatterns = [
    path('del_comment-post/<int:id_com>/', del_comment, name="dlcom"),
    path('add_answer-comment/<int:id_com>/', add_answer, name="addanswer"),
    path('del_answer-comment/<int:id_answer>/', del_answer, name="delanswer"),
+   path("helloworld", helloworldpage, name="hiworldp"),
 ]

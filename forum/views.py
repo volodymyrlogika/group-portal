@@ -59,7 +59,7 @@ def update_form(request, id_post):
             form = Post(request.POST, request.FILES, instance=post)
             if form.is_valid():
                 form.save()
-                return redirect("updform", id_post=post.id)
+                return redirect("subredts")
         else:
             form = Post(instance=post)
     return render(request, "forum/updform.html", {"form":form,
@@ -115,3 +115,8 @@ def del_answer(request, id_answer):
             answer.delete()
         
     return redirect("subredts")
+
+@login_required
+def helloworldpage(request):
+    username = request.user
+    return render(request, "forum/helloworld.html" , {"user":username})

@@ -39,14 +39,29 @@
             font-size: 18px;
             top: 2rem;
         }
+        
+        .btnrecord{
+        background-color: rgba(27, 23, 23, 0.678);
+        transition:  1s ease-in-out;
+    }
 
-
+    .btnrecord:hover{
+        background-image: url("{% static 'img\record.jpg' %}");
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-position: center;
+        transition:  1s ease-in-out;
+        color: rgb(216, 107, 134);
+        font-weight: 900;
+        font-size: 20px;
+    }
+    
     </style>
     <form method="post" class="formbackground">
         <div class="formm">
         {% csrf_token %}
         {{comment.as_div}}
-        <button type="submit" class="btn btn-primary mt-2">
+        <button type="submit" class="btn btn-secondary mt-2 btnrecord">
             Додати коментар
         </button>
         </div>

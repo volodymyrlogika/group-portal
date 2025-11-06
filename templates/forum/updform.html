@@ -10,17 +10,18 @@
 
         .title_{
             position: absolute;
-            left: 61rem;
-            top: 15vw;
+            left: 52rem;
+            top: 12vw;
             height: 14cm;
             z-index: 1;
+            user-select: none;
         }
 
         .text-center{
             position: relative;
-            top: 9cm;
+            top: 5cm;
             font-size: 3rem;
-            left: -1.7rem;
+            left: -4rem;
             color: azure;
             user-select: none;
         }
@@ -30,8 +31,8 @@
             display: flex;
             flex-direction: row-reverse;
             justify-content: space-evenly;
-            top: 13vw;
-            height: 14cm;
+            top: 10vw;
+            height: 16cm;
             width: 12cm;
             left: 37.5vh;
             backdrop-filter: blur(10px);
@@ -44,11 +45,26 @@
             position: relative;
             color: black;
             font-size: 18px;
-            top: 5rem;
+            top: 4rem;
         }
+        .btnrecord{
+            background-color: rgba(27, 23, 23, 0.678);
+            transition:  1s ease-in-out;
+       
+    }
 
-
-    </style>
+        .btnrecord:hover{
+            background-image: url("{% static 'img\record.jpg' %}");
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-position: center;
+            transition:  1s ease-in-out;
+            color: rgb(216, 107, 134);
+            font-weight: 900;
+            font-size: 20px;
+        }
+        
+        </style>
     <h1 class="title_">Зміни</h1>
     
     <form method="post" enctype="multipart/form-data" class="formbackground">
@@ -56,7 +72,7 @@
         {% csrf_token %}
         {{form.as_div}}
         
-        <button type="submit" class="btn btn-primary mt-2">
+        <button type="submit" class="btn btn-secondary mt-2 btnrecord">
             Внести зміни
         </button>
 
