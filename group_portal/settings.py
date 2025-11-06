@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'gallery',
     'calendar_app',
     'surveysystem',
+    'announcements'
 
 ]
 
