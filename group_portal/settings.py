@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     "journalapp",
     'gallery',
     'calendar_app',
+    'surveysystem',
 
 ]
 

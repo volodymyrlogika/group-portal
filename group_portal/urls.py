@@ -27,6 +27,7 @@ urlpatterns = [
     path("journal/", include('journalapp.urls')),
     path('gallery/', include('gallery.urls')),
     path('calendar/', include('calendar_app.urls')),
+    path('surveysystem/', include('surveysystem.urls')),
 ]
 
 if settings.DEBUG:
