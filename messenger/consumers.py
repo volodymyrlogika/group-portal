@@ -99,6 +99,34 @@ class ChatConsumer(AsyncWebsocketConsumer):
                 'message_id': message_id
             })
 
+        elif data['type'] == "update_message":
+            from .models import Message
+
+            message_id = data['message_id']
+            new_text = data['text'].strip()
+            if not new_text:
+                return
+
+            message = await sync_to_async(Message.objects.filter(id=message_id, user=user).first)()
+            if not message:
+                return
+
+            old_text = message.text
+            if old_text == new_text:
+                return
+
+            message.text = new_text
+            await sync_to_async(message.save)()
+
+            await self.channel_layer.group_send(self.room_group_name, {
+                'type': 'update_message',
+                'id': message.id,
+                'user': user.username,
+                'text': message.text,
+                'time': message.created_at.strftime("%H:%M, %d %b %Y"),
+                'is_own': False,
+            })
+
 
     async def chat_message(self, event):
         await self.send(text_data=json.dumps(event))
@@ -109,3 +137,5 @@ class ChatConsumer(AsyncWebsocketConsumer):
     async def message_deleted(self, event):
         await self.send(text_data=json.dumps(event))
         
+    async def update_message(self, event):
+        await self.send(text_data=json.dumps(event))

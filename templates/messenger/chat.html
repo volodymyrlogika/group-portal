@@ -162,8 +162,8 @@
       </div>
       {% else %}
         <div id="chat-box" class="p-4 mb-3 rounded shadow-sm justify-content-center align-items-center d-flex"
-          style="height:500px; overflow-y:auto; border:1px solid #ccc;
-                background: url('media/default/default_bg.png') no-repeat center center;
+          style="height:600px; overflow-y:auto; border:1px solid #ccc;
+                background: url('{{ default_background }}'); no-repeat center center;
                 background-size: cover;">
           <p class="text-muted card text-center border-2 p-2 m-2 fs-4">
             Виберіть чат або користувача, щоб почати спілкування.
@@ -272,6 +272,16 @@
       const msg = document.querySelector(`[data-message-id="${data.message_id}"]`);
       if (msg) msg.remove();
     }
+    if (data.type === 'update_message') { 
+      const msgEl = document.querySelector(`[data-message-id="${data.id}"]`);
+      if (msgEl) {
+        const messageTextEl = msgEl.querySelector('.message-text');
+        if (messageTextEl) {
+          messageTextEl.innerText = data.text;
+          msgEl.classList.remove('editing');
+        }
+      }
+    }    
   };
 
   document.querySelectorAll('.reaction-btn').forEach(btn => {
@@ -353,40 +363,25 @@
     if (!text) return;
   
     if (editingMessageId) {
-      fetch(`/message/${editingMessageId}/edit/`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "X-CSRFToken": "{{ csrf_token }}"
-        },
-        body: JSON.stringify({ text })
-      })
-        .then(res => res.json())
-        .then(data => {
-          if (data.success) {
-            const msgEl = document.querySelector(`[data-message-id="${data.message.id}"]`);
-            const messageTextEl = msgEl.querySelector('.message-text');
-            if (messageTextEl) {
-              messageTextEl.innerText = data.message.text;
-              msgEl.classList.remove('editing');
-            }
-  
-            textInput.value = "";
-            editingMessageId = null;
-            sendBtn.textContent = "Надіслати";
-            sendBtn.classList.remove("btn-warning");
-            sendBtn.classList.add("btn-primary");
-          }
-        })
-        .catch(err => console.error(err));
-    } 
+      socket.send(JSON.stringify({
+        type: "update_message",
+        message_id: editingMessageId,
+        text: text
+      }));
+    
+      textInput.value = "";
+      editingMessageId = null;
+      sendBtn.textContent = "Надіслати";
+      sendBtn.classList.remove("btn-warning");
+      sendBtn.classList.add("btn-primary");
+    }
     else {
       socket.send(JSON.stringify({
         type: 'chat_message',
         text: text
       }));
       textInput.value = '';
-    }
+    }    
   });  
 
   function scrollToBottom() {

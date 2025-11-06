@@ -1,14 +1,17 @@
 from django.views.generic import View, CreateView, UpdateView
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
-from django.contrib.auth.models import User
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy
 from .models import Chat, Message, Reaction
 from .forms import MessageForm, GroupForm, ChatForm
 from django.db.models import Count
 from .choices.emoji import EMOJI_CHOICES
+from django.contrib.auth import get_user_model
+from django.conf import settings
 import json
+
+User = get_user_model()
 
 #Вью для створення чату
 class CreateChatView(LoginRequiredMixin, View):
@@ -79,6 +82,28 @@ class MessageDeleteView(LoginRequiredMixin, View):
         message = get_object_or_404(Message, id=message_pk, user=request.user)
         message.delete()
         return JsonResponse({"success": True})
+    
+# Вью для редагування повідомлення без шаблона
+class MessageUpdateView(LoginRequiredMixin, View):
+    def post(self, request, message_pk, *args, **kwargs):
+        message = get_object_or_404(Message, id=message_pk, user=request.user)
+        data = json.loads(request.body)
+        text = data.get("text")
+
+        if not text.strip():
+            return JsonResponse({"success": False, "error": "Порожнє повідомлення"}, status=400)
+
+        message.text = text
+        message.save()
+
+        return JsonResponse({
+            "success": True,
+            "message": {
+                "id": message.id,
+                "text": message.text,
+                "created_at": message.created_at.strftime("%Y-%m-%d %H:%M:%S"),
+            }
+        })
 
 class CreateGroupView(CreateView):
     model = Chat
@@ -142,6 +167,8 @@ class ChatView(LoginRequiredMixin, View):
                     .order_by()
                 )
                 msg.user_reacted_emoji = user_reaction_map.get(msg.id) 
+
+        default_background = Chat._meta.get_field('background').default
                 
         context = {
             "chat": chat,
@@ -150,6 +177,7 @@ class ChatView(LoginRequiredMixin, View):
             "chats": Chat.objects.filter(users=request.user),
             "form": MessageForm(),
             "emoji_choices": EMOJI_CHOICES,
+            "default_background": settings.MEDIA_URL + default_background,
         }
 
         return render(request, self.template_name, context)
