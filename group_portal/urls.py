@@ -22,11 +22,11 @@ from . import settings
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include('main.urls')),
     path('', include('accounts.urls')),
     path('messenger/', include('messenger.urls')),
     path("journal/", include('journalapp.urls')),
     path('gallery/', include('gallery.urls')),
+    path('calendar/', include('calendar_app.urls')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 if settings.DEBUG:

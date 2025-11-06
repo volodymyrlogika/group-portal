@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'messenger',
     "journalapp",
     'gallery',
+    'calendar_app',
 
 ]
 

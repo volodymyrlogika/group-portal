@@ -1,0 +1,1284 @@
+:root {
+  --popup-color-blue-complete: #3b82f6;
+  --popup-color-red-complete: #ef4444;
+  --popup-color-green-complete: #10b981;
+  --popup-color-yellow-complete: #f59e0b;
+  --popup-color-magenta-complete: #d946ef;
+  --popup-color-pink-complete: #f472b6;
+  --popup-color-purple-complete: #8b5cf6;
+  --popup-color-cyan-complete: #06b6d4;
+  --border-outline-color: rgba(0,0,0,0.12);
+  --mixable-color: rgba(255,255,255,0.06);
+}
+
+body {
+    overflow: hidden;
+    user-select: none;
+}
+
+#add-event-button {
+    padding: 15px;
+    border-radius: 10px;
+    background-color: var(--inner-color);
+    color: var(--text-color);
+    width: 99%;
+    margin-top: 15px;
+}
+
+#add-event-button svg {
+    margin-right: 5px;
+}
+
+#add-event-button svg line {
+    stroke: var(--third-color);
+}
+
+#add-event-button:hover, .see-more-popups:hover {
+    background-color: var(--inner-hover);
+}
+
+.log-out-button {
+    color: var(--danger-color);
+}
+
+.month-arrow {
+    background: none;
+    border-radius: 50%;
+    padding: 2px;
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.month-arrow:hover {
+    background: var(--third-color);
+}
+
+.month-scrolling-arrows {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.month-name {
+    display: flex;
+    align-items: center;
+    margin-top: 35px;
+    gap: 15px;
+    justify-content: space-between;
+}
+
+.month-name h3 {
+    padding: 0;
+    margin: 0;
+}
+
+.small-calendar-table {
+    width: 107%;
+    margin-top: 30px;
+    margin-left: -7px;
+}
+
+.small-calendar-table td, .small-calendar-table th {
+    text-align: center;
+    font-size: 12px;
+    font-weight: 200;
+    padding: 9px;
+    margin: 4px;
+    user-select: none;
+}
+
+.small-calendar-table th {
+    font-weight: 400;
+}
+
+.another-month {
+    color: var(--sixth-color);
+}
+
+.current-date {
+    color: var(--color-bg);
+    background: var(--primary-color);
+    border-radius: 50%;
+    font-weight: 400;
+}
+
+.small-calendar-table thead * {
+    padding-bottom: 10px;
+}
+
+.calendar-sidebar {
+    padding: 0px 5px 0px 10px;
+    width: 230px;
+    border-right: 1px var(--border-color) solid;
+    height: 90vh;
+    bottom: 0;
+    position: absolute;
+    overflow-y: auto;
+    overflow-x: hidden;
+    z-index: 1000;
+    background: var(--color-bg);
+    scrollbar-width: thin;
+    scrollbar-color: color-mix(in srgb, var(--border-color) 0%, transparent) transparent;
+    transition: scrollbar-color 0.2s;
+    margin: 0;
+}
+
+.calendar-sidebar:hover {
+    scrollbar-color: color-mix(in srgb, var(--border-color) 100%, transparent) transparent;
+
+}
+
+.sidebar-header {
+    font-size: 17px;
+    margin-bottom: 15px;
+}
+
+.event-popup {
+    display: flex;
+    width: 99%;
+    height: 35px;
+    align-items: center;
+    border-radius: 10px;
+    overflow: hidden;
+    margin-bottom: 8px;
+
+}
+
+.popup-date {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    font-size: 14px;
+    width: 25%;
+    justify-content: center;
+
+}
+
+.popup-event-name {
+    margin-left: 10px;
+    font-size: 14px;
+}
+
+.events-side-container {
+    margin-top: 15px;
+}
+
+.popup-blue {
+    background-color: var(--popup-color-blue);
+}
+
+.popup-red {
+    background-color: var(--popup-color-red);
+}
+
+.popup-green {
+    background-color: var(--popup-color-green);
+}
+
+.popup-yellow {
+    background-color: var(--popup-color-yellow);
+}
+
+.popup-magenta {
+    background-color: var(--popup-color-magenta);
+}
+
+.popup-cyan {
+    background-color: var(--popup-color-cyan);
+}
+
+.popup-purple {
+    background-color: var(--popup-color-purple);
+}
+
+.popup-pink {
+    background-color: var(--popup-color-pink)
+}
+
+.see-more-popups {
+    width: 99%;
+    height: 25px;
+    border-radius: 7px;
+    background: var(--inner-color);
+    color: var(--text-color);
+    font-size: 12px;
+    font-weight: 300;
+}
+
+.side-tag {
+    margin: 0;
+    padding: 5px;
+    background-color: var(--popup-color-blue);
+    width: fit-content;
+    font-size: 12px;
+    border-radius: 100px;
+    user-select: none;
+    cursor: pointer;
+    padding-left: 12px;
+    padding-right: 12px;
+}
+
+.area-block.flex * {
+    padding: 5px 12px 5px 12px;
+    font-size: 12px;
+    margin: 0;
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 100px;
+    user-select: none;
+}
+
+.flex {
+    display: flex;
+    gap: 4px;
+}
+
+.side-tag:hover {
+    background-color: color-mix(in srgb, var(--popup-color-blue) 95%, var(--mixable-color));
+}
+
+.tags-side {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 50px;
+
+}
+
+.calendar-sidebar::-webkit-scrollbar {
+  width: 8px; /* ширина скролу */
+}
+
+.calendar-sidebar::-webkit-scrollbar-track {
+  background: transparent; /* прибрали фон */
+}
+.calendar-sidebar::-webkit-scrollbar-thumb {
+    background-color: transparent;
+    border-radius: 10px;
+    transition: background-color 0.5s;
+}
+
+.calendar-sidebar:hover::-webkit-scrollbar-thumb {
+  background-color: var(--border-color); /* колір повзунка */
+  
+}
+
+.calendar-sidebar::-webkit-scrollbar-thumb:hover {
+  background-color: var(--border-color); /* світліший при наведенні */
+}
+
+/* grid */
+
+.grid-container {
+    display: grid;
+    grid-template-columns: repeat(10, 1fr);
+    grid-template-rows: repeat(10, 1fr);
+    gap: 0px;
+}
+    
+.grid1 {
+    grid-column: span 10 / span 10;
+}
+
+.grid2 {
+    grid-column: span 2 / span 2;
+    grid-row: span 9 / span 9;
+    grid-row-start: 2;
+}
+
+.hours-grid * {
+    margin: 0;
+    padding: 4px 4px 0 0;
+    height: 90px;
+    box-sizing: border-box;
+    position: relative;
+    font-size: 13px;
+    user-select: none;
+    
+}
+
+.hours-grid *::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 1.5px; /* товщина лінії */
+    width: 100%; /* довжина */
+    background: linear-gradient(
+        to left,
+        var(--border-color) 0%,
+        var(--border-color) 50%,
+        color-mix(in srgb, var(--border-color) 0%, transparent) 50%,
+        color-mix(in srgb, var(--border-color) 0%, transparent) 100%
+    );
+}
+
+
+.hours-grid {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    width: 2.5%;
+    text-align: right;
+    
+}
+
+.grid3{
+    top: 22vh;
+    left: 245px;
+    position: absolute;
+    width: calc(100vw - 245px);
+    height: calc(78vh - 40px);
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: color-mix(in srgb, var(--border-color) 100%, transparent) transparent;
+    transition: scrollbar-color 0.2s;
+    overflow-y: overlay;
+    z-index: 20; /* піднімаємо вище */
+    padding-bottom: 40px;
+}
+
+.grid3::-webkit-scrollbar-thumb {
+    background: var(--border-color);
+    border-radius: 4px;
+}
+.grid3::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.grid3::-webkit-scrollbar {
+    width: 8px;
+    position: relative;
+    z-index: 9999;
+}
+
+.fixed-navbar {
+    position: absolute !important;
+    height: 10vh;
+    margin: 0;
+}
+
+.calendar-main-container {
+    width: 95%;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(7, 1fr); /* 7 columns */
+    gap: 0px;                              /* spacing between frames */
+    box-sizing: border-box;
+}
+
+[class^='clock-'] .e-frame:last-of-type {
+    border-right: 2px solid var(--border-color);
+    
+}
+
+[class='clock-23'] .e-frame {
+    border-bottom: 2px solid var(--border-color);
+    
+}
+
+.e-frame {
+    border-top: 2px solid var(--border-color);
+    border-left: 2px solid var(--border-color);
+    width: 100%;
+    height: 90px;
+    box-sizing: border-box;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    padding: 8px;
+}
+
+[class^="clock-"] {
+    display: contents;
+}
+
+.days-navigation {
+    width: calc(100vw - 255px);
+    height: 10vh;
+    position: fixed;
+    top: 9vh;
+    left: 245px;
+    
+    
+}
+
+.inner-days-container {
+    margin: 0 auto;
+    width: 95%;
+    height: 100%;
+    display: grid;
+    grid-template-columns: repeat(7, 1fr); /* 7 columns */
+    grid-auto-rows: 90px;                  /* row height — adjust if needed */
+    gap: 0px;                              /* spacing between frames */
+    box-sizing: border-box;
+}
+
+.inner-days-frame {
+    margin: 0 auto;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.day-frame {
+    font-size: 18px;
+    margin: 0;
+    
+    
+}
+
+.date-frame {
+    
+    font-size: 18px;
+    margin: 0;
+    padding: 5px;
+    border-radius: 50%;
+    margin-top: 4px;
+}
+
+.current-date-frame {
+    background: var(--primary-color);
+    color: var(--color-bg);
+}
+
+.red-frame {
+    background: var(--popup-color-red);
+    border: 2px solid color-mix(in srgb, var(--popup-color-red) 100%, var(--popup-color-red) 100%);
+}
+
+.blue-frame {
+    background: var(--popup-color-blue);
+    border: 2px solid color-mix(in srgb, var(--popup-color-blue) 100%, var(--popup-color-blue) 100%);
+}
+
+.green-frame {
+    background: var(--popup-color-green);
+    border: 2px solid color-mix(in srgb, var(--popup-color-green) 100%, var(--popup-color-green) 100%);
+}
+
+.yellow-frame {
+    background: var(--popup-color-yellow);
+    border: 2px solid color-mix(in srgb, var(--popup-color-yellow) 100%, var(--popup-color-yellow) 100%);
+}
+
+.purple-frame {
+    background: var(--popup-color-purple);
+    border: 2px solid color-mix(in srgb, var(--popup-color-purple) 100%, var(--popup-color-purple) 100%);
+}
+
+.magenta-frame {
+    background: var(--popup-color-magenta);
+    border: 2px solid color-mix(in srgb, var(--popup-color-magenta) 100%, var(--popup-color-magenta) 100%);
+}
+
+.pink-frame {
+    background: var(--popup-color-pink);
+    border: 2px solid color-mix(in srgb, var(--popup-color-pink) 100%, var(--popup-color-pink) 100%);
+}
+
+.cyan-frame {
+    background: var(--popup-color-cyan);
+    border: 2px solid color-mix(in srgb, var(--popup-color-cyan) 100%, var(--popup-color-cyan) 100%);
+}
+
+.event-frame {
+    width: 100%;
+    height: 30%;
+    border-radius: 1000px;
+    font-size: 12px;
+    padding: 4px 4px;
+    align-items: center;
+    display: flex;
+    cursor: pointer;
+    user-select: none;
+    gap: 4px;
+}
+
+.frame-title {
+    margin: 0;
+}
+
+.orb {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    box-sizing: border-box;
+    padding: 0;
+}
+
+.inner-orb {
+    width: 12px;
+    height: 12px;
+    background: #000;
+    border-radius: 50%;
+}
+
+.blue-orb {
+    border: 2px solid color-mix(in srgb, var(--popup-color-blue) 100%, var(--popup-color-blue) 100%);
+}
+
+.blue-inner-orb {
+    background: color-mix(in srgb, var(--popup-color-blue) 100%, var(--mixable-color) 10%);
+}
+
+.red-orb {
+    border: 2px solid color-mix(in srgb, var(--popup-color-red) 100%, var(--popup-color-red) 100%);
+}
+
+.red-inner-orb {
+    background: color-mix(in srgb, var(--popup-color-red) 100%, var(--mixable-color) 10%);
+}
+
+.green-orb {
+    border: 2px solid color-mix(in srgb, var(--popup-color-green) 100%, var(--popup-color-green) 100%);
+}
+
+.green-inner-orb {
+    background: color-mix(in srgb, var(--popup-color-green) 100%, var(--mixable-color) 10%);
+}
+
+.yellow-orb {
+    border: 2px solid color-mix(in srgb, var(--popup-color-yellow) 100%, var(--popup-color-yellow) 100%);
+}
+
+.yellow-inner-orb {
+    background: color-mix(in srgb, var(--popup-color-yellow) 100%, var(--mixable-color) 10%);
+}
+
+.magenta-orb {
+    border: 2px solid color-mix(in srgb, var(--popup-color-magenta) 100%, var(--popup-color-magenta) 100%);
+}
+
+.magenta-inner-orb {
+    background: color-mix(in srgb, var(--popup-color-magenta) 100%, var(--mixable-color) 10%);
+}
+
+.cyan-orb {
+    border: 2px solid color-mix(in srgb, var(--popup-color-cyan) 100%, var(--popup-color-cyan) 100%);
+}
+
+.cyan-inner-orb {
+    background: color-mix(in srgb, var(--popup-color-cyan) 100%, var(--mixable-color) 10%);
+}
+
+.purple-orb {
+    border: 2px solid color-mix(in srgb, var(--popup-color-purple) 100%, var(--popup-color-purple) 100%);
+}
+
+.purple-inner-orb {
+    background: color-mix(in srgb, var(--popup-color-purple) 100%, var(--mixable-color) 10%);
+}
+
+.pink-orb {
+    border: 2px solid color-mix(in srgb, var(--popup-color-pink) 100%, var(--popup-color-pink) 100%);
+}
+
+.pink-inner-orb {
+    background: color-mix(in srgb, var(--popup-color-pink) 100%, var(--mixable-color) 10%);
+}
+
+.frame-reverse {
+    flex-direction: row-reverse;
+}
+
+.main-shadow {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    height: 10%;
+    background: linear-gradient(to top, color-mix(in srgb, var(--color-bg) 80%, 
+    transparent), color-mix(in srgb, var(--color-bg) 0%, transparent));
+    z-index: 1001;
+
+}
+
+.orb-connector {
+    position: absolute;
+    height: 2px;
+    border-radius: 2px;
+    transform-origin: left center;
+    pointer-events: none;
+    z-index: 25;
+    background-color: var(--popup-color-blue);
+}
+
+.add-event-overlay.enabled-overlay {
+    top: 0;
+}
+
+.add-event-overlay {
+    position: fixed;
+    top: -100vh;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    backdrop-filter: blur(20px);
+    z-index: 300000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: top 0.5s;
+}
+
+.add-event-window {
+    width: 500px;
+    height: 80vh;
+    background-color: var(--menu-box-bg-color);
+    border-radius: 25px;
+    position: relative;
+    overflow-y: auto;
+}
+
+.add-event-window h3 {
+    margin: 0;
+    padding: 0;
+    margin-top: 15px;
+    margin-bottom: 20px;
+    font-size: 16px;
+    text-align: center;
+    width: 100%;
+}
+
+.add-event-window input {
+    background: none;
+    border: 1.5px solid var(--fifth-color);
+    padding: 10px;
+    border-radius: 10px;
+    color: var(--text-color);
+    fill: var(--text-color);
+}
+
+.add-event-form {
+    padding: 12px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.add-event-window hr {
+    padding: 0;
+    margin-bottom: 10px;
+}
+
+.add-event-form input {
+    margin-top: 0;
+    margin-bottom: 15px;
+}
+
+input[placeholder='Event Name'] {
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.time-inputs {
+    display: flex;
+    gap: 10px;
+    position: relative;
+}
+
+.time-inputs * {
+    width: calc(100% - 10px);
+}
+
+.input-placeholder {
+    position: absolute;
+    font-size: 10px;
+    width:fit-content;
+    background: var(--secondary-color);
+    padding: 3px;
+    top: -8px;
+    left: 7px;
+}
+
+.input-placeholder.second-placeholder {
+    left: calc(50% + 10px);
+}
+
+.add-event-form textarea {
+    width: 100%;
+    background: none;
+    color: var(--text-color);
+    box-sizing: border-box;
+    border-radius: 10px;
+    padding: 5px;
+    border: 1px solid var(--fifth-color);
+}
+
+.add-event-form button {
+    padding: 8px;
+    padding-left: 18px;
+    padding-right: 18px;
+    border-radius: 100px;
+    box-sizing: border-box;
+
+}
+
+.add-event-form .buttons {
+    display: flex;
+    position: absolute;
+    bottom: 12px;
+    right: 12px;
+    gap: 4px;
+    box-sizing: border-box;
+    z-index: 200000;
+}
+
+.overlay-button {
+    color: var(--button-bg);
+    border: 1px solid var(--button-bg);
+    background: none;
+    box-sizing: border-box;
+    backdrop-filter: blur(10px);
+    
+}
+
+.overlay-button:hover {
+    background: var(--button-bg);
+    border: none;
+    color: var(--button-text);
+}
+
+/* Контейнер */
+.outer-color-circle {
+  width: 35px;
+  height: 35px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  cursor: pointer;
+  position: relative;
+  transition: border 0.5s ease;
+  border: 2px solid color-mix(in srgb, var(--secondary-color) 100%, var(--mixable-color) 10%)
+}
+
+/* Прихований input */
+.color-radio {
+  position: absolute;
+  opacity: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  cursor: pointer;
+  z-index: 2;
+}
+
+/* Внутрішнє коло */
+.color-circle {
+  width: 25px;
+  height: 25px;
+  border-radius: 50%;
+  position: relative;
+  z-index: 1;
+}
+
+.color-circle::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1.5px;
+  background: linear-gradient(
+    to bottom left,
+    var(--border-outline-color) 0%,
+    color-mix(in srgb, var(--mixable-color) 50%, transparent) 10%,
+    color-mix(in srgb, var(--mixable-color) 0%, transparent) 75%,
+    var(--border-outline-color) 100%
+  );
+  mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  -webkit-mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+}
+
+/* Активний стан (рамка навколо зовнішнього кола) */
+.color-radio:checked + .color-circle {
+  outline: 2px solid var(--popup-color-blue-complete);
+  outline-offset: 5px; /* щоб рамка була зовні */
+}
+
+/* Приклади кольорів */
+.blue-circle {
+  background: var(--popup-color-blue-complete);
+}
+
+.red-circle {
+  background: var(--popup-color-red-complete);
+}
+
+.radio-colors {
+    display: flex;
+    gap: 4px;
+}
+
+.green-circle {
+  background: var(--popup-color-green-complete);
+}
+
+.cyan-circle {
+  background: var(--popup-color-cyan-complete);
+}
+
+.yellow-circle {
+  background: var(--popup-color-yellow-complete);
+}
+
+.magenta-circle {
+  background: var(--popup-color-magenta-complete);
+}
+
+.pink-circle {
+  background: var(--popup-color-pink-complete);
+}
+
+.purple-circle {
+  background: var(--popup-color-purple-complete);
+}
+
+.dropdown-info {
+    min-width: 350px;
+    max-width: 400px;
+    top: -20px;
+    left: -0px;
+    cursor: default;
+    border-radius: 25px;
+    overflow: hidden;
+    opacity: 0;
+    z-index: 6000;
+    backdrop-filter: blur(20px);
+
+
+    /* нове: щоб не перехоплював кліки коли прихований */
+    pointer-events: none;
+    will-change: transform, opacity;
+}
+
+.dropdown-info.show {
+    animation: dropdown-info-open 1s cubic-bezier(0.22, 1.2, 0.36, 1) forwards;
+    pointer-events: auto;
+}
+
+.dropdown-info.hide {
+    animation: dropdown-info-hide 0.8s cubic-bezier(0.5, -0, 0.7, -0.2) forwards;
+    pointer-events: none;
+}
+
+@keyframes dropdown-info-open {
+    0% {
+        transform: scale(0);
+        min-width: 0;
+        filter: blur(20px);
+        opacity: 0;
+        left: 0;
+        transform-origin: top left;
+    }
+
+    25% {
+        margin-top: 30px;
+    }
+
+    80% {
+        filter: blur(0px);
+        opacity: 1;
+    }
+
+    100% {
+        transform: scale(1);
+        padding: 20px;
+        left: -400px;
+        margin-left: 0;
+        opacity: 1;
+    }
+}
+
+@keyframes dropdown-info-hide {
+    0% {
+        transform: scale(1);
+        padding: 20px;
+        left: -400px;
+        margin-left: 0;
+        filter: blur(0px);
+        opacity: 1;
+    }
+    20% {
+        filter: blur(0px);
+        opacity: 1;
+    }
+
+    75% {
+        margin-top: 30px;
+    }
+    100% {
+        transform: scale(0);
+        min-width: 0;
+        filter: blur(20px);
+        opacity: 0;
+        left: 0px;
+        transform-origin: top left;
+    }
+}
+
+.dropdown-info h4 {
+    font-size: 16px;
+    margin: 0;
+    padding: 0;
+}
+
+.event-frame {
+    position: relative;
+}
+
+.full-date {
+    font-size: 11px;
+    margin: 2px 0 0 0;
+    padding: 0;
+    font-weight: 200;
+}
+
+.all-info-div {
+    margin-top: 30px;
+}
+
+.info-flex {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    margin-top: 4px;
+    font-weight: 200;
+}
+
+.info-tag {
+    background: var(--popup-color-blue);
+    width: fit-content;
+    padding: 4px;
+    border-radius: 1000px;
+    padding-left: 10px;
+    padding-right: 10px;
+    font-weight: 200;
+}
+
+.tags-info {
+    display: flex;
+    margin-top: 12px;
+    gap: 4px;
+}
+
+.dropdown-info {
+    position: absolute; /* щоб при переміщенні в body позиціювати через top/left */
+    min-width: 350px;
+    top: -20px;
+    left: 0;
+    cursor: default;
+    border-radius: 25px;
+    overflow: hidden;
+    opacity: 0;
+    z-index: 200000; /* базовий z — JS ще піднімає inline z */
+    pointer-events: none;
+    will-change: transform, opacity;
+}
+/* ...existing code... */
+.add-event-overlay.enabled-overlay,
+.settings-menu {
+    z-index: 300000; /* оверлеї завжди вище за дропдауни */
+}
+
+.filtered-list {
+    margin: 0;
+    position: absolute;
+    top: 10vh;
+    left: 245px;
+    width: calc(100vw - 245px);
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+}
+
+.list-event {
+    padding: 15px;
+    border-bottom: 1px solid var(--secondary-color);
+    cursor: pointer;
+    overflow: hidden;
+    height: auto;
+    max-height: 15px;
+}
+
+.main-list-info {
+    padding-bottom: 15px;
+    border-bottom: 1px solid var(--secondary-color);
+}
+
+.main-list-info {
+    display: flex;
+    justify-content: space-between;
+}
+
+.list-event * {
+    font-size: 14px;
+    
+}
+
+.list-description {
+    font-weight: 100;
+    color: rgba(255, 255, 255, 0.3);
+    font-style: italic;
+    opacity: 1;
+}
+
+.list-time {
+    color: rgba(255, 255, 255, 0.3);
+    opacity: 1;
+}
+
+.expanded-area .date {
+    margin: 0;
+    margin-top: 5px;
+    padding: 0;
+    font-size: 12px;
+    font-weight: 200;
+}
+
+.area-block {
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.area-block * {
+    margin: 2px 0 0 0;
+    padding: 0;
+    font-size: 13px;
+}
+
+.description-paragraph {
+    padding: 10px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    margin-top: 8px;
+}
+
+.expanded-area .user {
+    margin-top: 2px;
+    padding: 0;
+    font-size: 12px;
+}
+
+.bg-blue {
+    background-color: var(--popup-color-blue);
+}
+
+.bg-red {
+    background-color: var(--popup-color-red);
+}
+
+.bg-green {
+    background-color: var(--popup-color-green);
+}
+
+.bg-yellow {
+    background-color: var(--popup-color-yellow);
+}
+
+.bg-purple {
+    background-color: var(--popup-color-purple);
+}
+
+.bg-magenta {
+    background-color: var(--popup-color-magenta);
+}
+
+.bg-cyan {
+    background-color: var(--popup-color-cyan);
+}
+
+.bg-pink {
+    background-color: var(--popup-color-pink);
+}
+
+.list-event.expand {
+    max-height: 1500px;
+}
+
+.e-time {
+    opacity: 1;
+}
+
+.list-event.expand .list-description, .list-event.expand .e-time, .list-event.expand .list-time {
+    opacity: 0;
+}
+
+
+/* ...existing code... */
+
+/* початково ховаємо filtered-list, показуємо коли JS увімкне */
+.filtered-list {
+    margin: 0;
+    position: absolute;
+    top: 10vh;
+    left: 245px;
+    width: calc(100vw - 245px);
+    box-sizing: border-box;
+    display: none; /* змінено: спочатку приховано */
+    flex-direction: column;
+}
+
+/* стиль для виділеного (active) тегу у сайдбарі */
+.side-tag.selected {
+    background: var(--popup-color-blue-complete);
+    color: var(--color-bg);
+}
+
+/* ...existing code... */
+.days-navigation.filtered, .grid3.filtered {
+    display: none;
+}
+
+.filtered-list {
+    display: none;
+}
+
+.filtered-list.filtered {
+    display: block;
+}
+
+/* ...existing code... */
+
+/* --- ЗАМІНА: стабільна навігація днів + стрілки по краях --- */
+.days-navigation{
+    /* фіксуємо панель над календарем, вирівнюємо по ширині робочої області */
+    position: fixed;
+    top: 9vh;
+    left: 245px; /* ширина сайдбару */
+    width: calc(100vw - 245px);
+    height: 10vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    z-index: 150; /* має бути вище за grid3 (20) */
+    pointer-events: auto;
+    padding: 0;
+}
+
+/* внутрішня панель днів — займає ширину за вирахуванням місця під стрілки */
+.days-navigation .inner-days-container{
+    width: calc(100% - 96px); /* залишаємо простір по 48px з обох боків для стрілок */
+    max-width: 1300px;
+    height: 100%;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(7, 1fr); /* 7 колонок для днів */
+    align-items: center;
+    gap: 0;
+    box-sizing: border-box;
+}
+
+/* окремий фрейм дня */
+.inner-days-frame{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+/* стрілки позиціонуються абсолютно всередині .days-navigation — не віднімають ширину від .inner-days-container */
+.days-navigation .month-arrow{
+    position: absolute;
+    top: 60%;
+    transform: translateY(-50%);
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    font-size: 28px;
+    color: var(--color-text);
+    background: transparent;
+    border-radius: 6px;
+    transition: background .12s;
+    z-index: 200;
+    pointer-events: auto;
+}
+
+/* розташування стрілок — ліворуч і праворуч по краях панелі */
+.days-navigation .month-arrow.left{ left: 12px; }
+.days-navigation .month-arrow.right{ right: 12px; }
+
+.days-navigation .month-arrow:hover{
+    background: rgba(255,255,255,0.04);
+}
+
+/* НЕ чіпаємо стрілки в сайдбарі (вони в .month-scrolling-arrows) */
+.month-scrolling-arrows .month-arrow {
+    position: static;
+    width: 20px;
+    height: 20px;
+    font-size: 18px;
+    padding: 2px;
+    background: none;
+}
+
+/* адаптив */
+@media (max-width: 800px){
+    .days-navigation .inner-days-container{ width: calc(100% - 72px); }
+    .days-navigation .month-arrow.left{ left: 8px; }
+    .days-navigation .month-arrow.right{ right: 8px; }
+    .days-navigation .month-arrow{ width: 34px; height:34px; font-size:22px; }
+}
+
+.tag-checkboxes {
+    margin-top: 8px;
+}
+
+textarea {
+  resize: none;
+}
+
+/* ...existing code... */
+.checkbox-wrapper input {
+    /* Повне вимкнення стандартного стилю */
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+
+    /* Приховуємо все, але залишаємо доступним для натискання */
+    width: 0;
+    height: 0;
+    opacity: 0;
+    position: absolute;
+    cursor: pointer;
+}
+
+.checkbox-wrapper span {
+    margin: 0;
+    padding: 5px;
+    background-color: var(--popup-color-blue);
+    width: fit-content;
+    font-size: 12px;
+    border-radius: 100px;
+    user-select: none;
+    cursor: pointer;
+    padding-left: 12px;
+    padding-right: 12px;
+    
+}
+
+.checkbox-wrapper input:checked + span {
+    background-color: var(--popup-color-blue-complete);
+    color: var(--secondary-color);
+}
+
+.event-popup.hidden { display: none; }

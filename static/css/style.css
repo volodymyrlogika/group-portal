@@ -1,0 +1,297 @@
+@font-face {
+    font-family: 'e-Ukraine', sans-serif;
+    src: url('../fonts/e-Ukraine/e-Ukraine-Regular.otf') format('opentype');
+    font-weight: 400;
+    font-style: 'normal';
+}
+
+@font-face {
+    font-family: 'e-Ukraine', sans-serif;
+    src: url('../fonts/e-Ukraine/e-Ukraine-Light.otf') format('opentype');
+    font-weight: 300;
+    font-style: 'normal';
+}
+
+@font-face {
+    font-family: 'e-Ukraine', sans-serif;
+    src: url('../fonts/e-Ukraine/e-Ukraine-UltraLight.otf') format('opentype');
+    font-weight: 200;
+    font-style: 'normal';
+}
+
+@font-face {
+    font-family: 'e-Ukraine', sans-serif;
+    src: url('../fonts/e-Ukraine/e-Ukraine-Thin.otf') format('opentype');
+    font-weight: 100;
+    font-style: 'normal';
+}
+
+@font-face {
+    font-family: 'e-Ukraine', sans-serif;
+    src: url('../fonts/e-Ukraine/e-Ukraine-Medium.otf') format('opentype');
+    font-weight: 700;
+    font-style: 'normal';
+}
+
+@font-face {
+    font-family: 'e-Ukraine', sans-serif;
+    src: url('../fonts/e-Ukraine/e-Ukraine-Bold.otf') format('opentype');
+    font-weight: 900;
+    font-style: 'normal';
+}
+
+
+@font-face {
+    font-family: 'e-Ukraine Head', sans-serif;
+    src: url('../fonts/e-Ukraine Head/e-UkraineHead-LOGO.otf') format('opentype');
+    font-weight: 900;
+    font-style: 'normal';
+}
+
+@font-face {
+    font-family: 'e-Ukraine Head', sans-serif;
+    src: url('../fonts/e-Ukraine Head/e-UkraineHead-Bold.otf') format('opentype');
+    font-weight: 800;
+    font-style: 'normal';
+}
+
+@font-face {
+    font-family: 'e-Ukraine Head', sans-serif;
+    src: url('../fonts/e-Ukraine Head/e-UkraineHead-Medium.otf') format('opentype');
+    font-weight: 600;
+    font-style: 'normal';
+}
+
+@font-face {
+    font-family: 'e-Ukraine Head', sans-serif;
+    src: url('../fonts/e-Ukraine Head/e-UkraineHead-Regular.otf') format('opentype');
+    font-weight: 400;
+    font-style: 'normal';
+}
+
+@font-face {
+    font-family: 'e-Ukraine Head', sans-serif;
+    src: url('../fonts/e-Ukraine Head/e-UkraineHead-Light.otf') format('opentype');
+    font-weight: 300;
+    font-style: 'normal';
+}
+
+@font-face {
+    font-family: 'e-Ukraine Head', sans-serif;
+    src: url('../fonts/e-Ukraine Head/e-UkraineHead-UltraLight.otf') format('opentype');
+    font-weight: 200;
+    font-style: 'normal';
+}
+
+@font-face {
+    font-family: 'e-Ukraine Head', sans-serif;
+    src: url('../fonts/e-Ukraine Head/e-UkraineHead-Thin.otf') format('opentype');
+    font-weight: 100;
+    font-style: 'normal';
+}
+
+
+
+
+body {
+    background-color: #000;
+    box-sizing: border-box;
+    font-family: 'e-Ukraine', sans-serif;
+    font-weight: 400;
+    font-size: 16px;
+    display: flex;
+    justify-content: center;
+    margin: 0;
+    color: white;
+}
+
+.container {
+    width: 1512px;
+    height: 3723px;
+    border: 3px solid red;
+    overflow-x: hidden;
+}
+
+main {
+    width: 100%;
+    height: 100vh;
+    background: url(../img/backgrounds/main-bg-black.png);
+    background-size: cover;
+    padding-left: 37px
+    
+}
+
+#research {
+    width: 100%;
+    height: 583px;
+    background-color: pink;
+}
+
+#graph {
+    width: 100%;
+    height: 1398px;
+    background-color: skyblue;
+}
+
+#join-us {
+    width: 100%;
+    height: 245px;
+    background-color: lightgreen;
+}
+
+footer {
+    width: 100%;
+    height: 411px;
+    background-color: lightcoral;
+}
+
+
+
+nav {
+    margin: 22px auto 0 auto;
+    width: 1438px;
+    height: 72px;
+    
+}
+
+main h1 {
+    font-size: 40px;
+    margin-bottom: 8px;
+    padding-top: 30vh;;
+}
+
+main h3 {
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 20px;
+    
+}
+
+
+
+.service-card {
+    width: 370px;
+    height: 230px;
+    background: rgba(26, 26, 26, 0.5);
+    backdrop-filter: blur(10px);
+    border-radius: 25px;
+    padding: 16px;
+    position: relative;
+    cursor: pointer;
+    overflow: hidden;
+    transition: background 0.3s;
+}
+
+/* Псевдоелемент для бордера */
+.service-card::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: 25px;
+    padding: 2px;
+    background: var(--border-gradient, transparent);
+    mask: 
+        linear-gradient(#fff 0 0) content-box, 
+        linear-gradient(#fff 0 0);
+    -webkit-mask: 
+        linear-gradient(#fff 0 0) content-box, 
+        linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    pointer-events: none;
+    opacity: var(--border-active, 0);
+    transition: opacity 0.3s, background 0.2s;
+}
+
+
+
+.service-card-heading {
+    font-family: 'e-Ukraine Head';
+    font-size: 20px;
+}
+
+.services {
+    display: inline-flex;
+    gap: 12px;
+    position: relative;
+    width: max-content;
+    overflow: visible;
+
+}
+
+.card-divider {
+    width: calc(100% + 32px);
+    height: 1px;
+    margin-top: 12px;
+    margin-bottom: 20px;
+    background-color: #3f3f3f;
+    display: flex;
+    justify-self: center;
+}
+
+.card-info {
+    font-size: 14px;
+    font-family: 'e-Ukraine';
+    font-style: normal;
+    font-weight: 300;
+    line-height: 140%;
+    width: 336px;
+    white-space: normal; /* Додаємо! */
+    overflow-wrap: break-word;
+}
+
+
+
+.learn-more-btn {
+    font-size: 14px;
+    padding: 8px 18px;
+    position: absolute; /* Added */
+    left: 16px;         /* Added */
+    bottom: 16px; 
+}
+
+
+
+.services-scroller {
+    position: fixed;
+    left: 0;
+    top: 60px;
+    width: 100vw;
+    height: 262px;
+    white-space: nowrap;
+    scrollbar-width: none;
+    overflow: visible;
+    -ms-overflow-style: none;
+    z-index: 100; /* перекриває main */
+    padding: 0;
+    right: 0;
+    
+}
+
+.services-scroller::-webkit-scrollbar {
+    display: none; /* Chrome/Safari */
+}
+
+.services {
+    display: inline-flex;
+    gap: 12px;
+    position: relative;
+    width: max-content;
+    margin-left: -16px;
+    /* Видалити position: absolute; і bottom: 16px */
+}
+
+main > .services-scroller {
+    left: 0;
+    width: 100vw;
+    margin-left: -36px;
+}
+
+.service-card {
+    transition: transform 0.3s ease, background 0.3s ease, z-index 0s;
+    z-index: 1;
+}
+
+.service-card.hovered {
+    z-index: 10; /* підіймаємо картку над іншими */
+}

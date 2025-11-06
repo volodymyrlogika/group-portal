@@ -1,0 +1,90 @@
+:root {
+    /* Background colors */
+    --color-bg: beige;
+    
+    --background: linear-gradient(atan(100vh / 100vw),
+            #587CFF 0%,
+            #FFBE63 50%,
+            #BA4AFF 100%);
+
+    --background2: url(../img/backgrounds/main-bg-black.png);
+
+    /* Text colors */
+    --color-text: #000;
+
+    /* Accent colors */
+    --primary-color: #5E81FF;
+    --danger-color: #FF4040;
+    --success-color: #3DFF43;
+    --success-color2: #3DFF43;
+    --warning-color: #ffe91f;
+    --secondary-color: rgba(255, 255, 255, 0.5);
+    --third-color: #eee;
+    --fourth-color: #f3f3f3;
+    --fifth-color: #f3f3f3;
+    --sixth-color: #f5f5f5;
+    --border-color: #999;
+
+    /* Icon colors */
+    --icon-color: #000;
+
+    /* Buttons */
+    --button-bg: #000;
+    --button-text: #fff;
+    --button-bg-hover: #1d1d1d;
+
+    /* Fonts */
+    --main-font: 'e-Ukraine';
+    --header-font: 'e-Ukraine Head';
+
+    /* Settings */
+    --overflow-bg-color: #e5e5e530;
+    --select-bg-color: #f1f1f170;
+    --menubar-bg-color: rgba(255, 255, 255, 0);
+    --menu-box-bg-color: #ffffffcc;
+
+    /* Article */
+    --quote-bg: #5e81ff17;
+    --title-header-shadow-color: rgba(0, 0, 0, 0.1);
+    --title-header-bg-color: #eeeeee75;
+
+    --article-nav-links-color: #00000050;
+    --article-nav-links-hover-color: #00000070;
+    --header-border-color: #bbb;
+
+    /* Navbar */
+    --hr-nav-color: #000;
+
+    /* Footer */
+    --footer-bg-color: #ECE1D2;
+    --footer-text-color: #686868;
+    --footer-text-color-hover: #353535;
+
+    /* Calendar Colors */
+    --popup-color-magenta: rgba(185, 64, 255, 0.4);
+    --popup-color-cyan: rgba(94, 255, 252, 0.4);
+    --popup-color-purple: rgba(137, 94, 255, 0.4);
+    --popup-color-pink: rgba(255, 94, 215, 0.4);
+    --popup-color-yellow: rgba(255, 229, 0, 0.4);
+    --popup-color-red: rgba(255, 41, 41, 0.4);
+    --popup-color-blue: rgba(94, 129, 255, 0.4);
+    --popup-color-green: rgba(61, 255, 67, 0.4);
+
+    /* Other */
+    --border-outline-color: rgb(155, 155, 155);
+    --inner-color: rgba(0,0,0,0.1);
+    --inner-hover: rgba(0,0,0,0.2);
+    --mixable-color: black;
+
+    /* Complete calendar colors */
+    --popup-color-magenta-complete: rgba(185, 64, 255, 1);
+    --popup-color-cyan-complete: rgba(94, 255, 252, 1);
+    --popup-color-purple-complete: rgba(137, 94, 255, 1);
+    --popup-color-pink-complete: rgba(255, 94, 215, 1);
+    --popup-color-yellow-complete: rgba(255, 229, 0, 1);
+    --popup-color-red-complete: rgba(255, 41, 41, 1);
+    --popup-color-blue-complete: rgba(94, 129, 255, 1);
+    --popup-color-green-complete: rgba(61, 255, 67, 1);
+
+
+}
