@@ -28,7 +28,7 @@ urlpatterns = [
     path('gallery/', include('gallery.urls')),
     path('calendar/', include('calendar_app.urls')),
     path('surveysystem/', include('surveysystem.urls')),
-     path('', include('announcements.urls')),
+    path('announcements/', include('announcements.urls')),
 
 ]
 
