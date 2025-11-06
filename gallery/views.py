@@ -1,11 +1,13 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
-from .models import MediaItem
+from .models import GalleryItem
 from .forms import MediaUploadForm
+from gallery.models import GalleryItem
+GalleryItem.objects.all()
 
 def gallery_list(request):
-    items = MediaItem.objects.filter(approved=True).order_by('-created_at')
-    return render(request, 'gallery/gallery_list.html', context={'items': items})
+    items = GalleryItem.objects.all()
+    return render(request, 'gallery/gallery_list.html', {'items': items})
 
 def gallery_detail(request, pk):
     item = get_object_or_404(MediaItem, pk=pk)
@@ -22,4 +24,4 @@ def gallery_upload(request):
             return redirect('gallery_list')
     else:
         form = MediaUploadForm()
-    return render(request, 'gallery/gallery_upload.html', context={'form': form})
+    return render(request, 'gallery/gallery_upload.html', {'form': form})
