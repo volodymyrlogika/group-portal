@@ -7,7 +7,7 @@
 /* e-Ukraine */
 @font-face {
     font-family: 'e-Ukraine', sans-serif;
-    src: url('../fonts/e-Ukraine/e-Ukraine-Regular.otf') format('opentype');
+    src: url('/static/fonts//e-Ukraine/e-Ukraine-Regular.otf') format('opentype');
     font-weight: 400;
     font-style: 'normal';
     font-display: swap;
@@ -15,7 +15,7 @@
 
 @font-face {
     font-family: 'e-Ukraine', sans-serif;
-    src: url('../fonts/e-Ukraine/e-Ukraine-Light.otf') format('opentype');
+    src: url('/static/fonts//e-Ukraine/e-Ukraine-Light.otf') format('opentype');
     font-weight: 300;
     font-style: 'normal';
     font-display: swap;
@@ -23,7 +23,7 @@
 
 @font-face {
     font-family: 'e-Ukraine', sans-serif;
-    src: url('../fonts/e-Ukraine/e-Ukraine-UltraLight.otf') format('opentype');
+    src: url('/static/fonts/e-Ukraine/e-Ukraine-UltraLight.otf') format('opentype');
     font-weight: 200;
     font-style: 'normal';
     font-display: swap;
@@ -31,7 +31,7 @@
 
 @font-face {
     font-family: 'e-Ukraine', sans-serif;
-    src: url('../fonts/e-Ukraine/e-Ukraine-Thin.otf') format('opentype');
+    src: url('/static/fonts/e-Ukraine/e-Ukraine-Thin.otf') format('opentype');
     font-weight: 100;
     font-style: 'normal';
     font-display: swap;
@@ -39,7 +39,7 @@
 
 @font-face {
     font-family: 'e-Ukraine', sans-serif;
-    src: url('../fonts/e-Ukraine/e-Ukraine-Medium.otf') format('opentype');
+    src: url('/static/fonts/e-Ukraine/e-Ukraine-Medium.otf') format('opentype');
     font-weight: 700;
     font-style: 'normal';
     font-display: swap;
@@ -47,7 +47,7 @@
 
 @font-face {
     font-family: 'e-Ukraine', sans-serif;
-    src: url('../fonts/e-Ukraine/e-Ukraine-Bold.otf') format('opentype');
+    src: url('/static/fonts/e-Ukraine/e-Ukraine-Bold.otf') format('opentype');
     font-weight: 900;
     font-style: 'normal';
     font-display: swap;
@@ -56,7 +56,7 @@
 
 @font-face {
     font-family: 'e-Ukraine Head', sans-serif;
-    src: url('../fonts/e-Ukraine Head/e-UkraineHead-LOGO.otf') format('opentype');
+    src: url('/static/fonts/e-Ukraine Head/e-UkraineHead-LOGO.otf') format('opentype');
     font-weight: 900;
     font-style: 'normal';
     font-display: swap;
@@ -64,7 +64,7 @@
 
 @font-face {
     font-family: 'e-Ukraine Head', sans-serif;
-    src: url('../fonts/e-Ukraine Head/e-UkraineHead-Bold.otf') format('opentype');
+    src: url('/static/fonts/e-Ukraine Head/e-UkraineHead-Bold.otf') format('opentype');
     font-weight: 800;
     font-style: 'normal';
     font-display: swap;
@@ -72,7 +72,7 @@
 
 @font-face {
     font-family: 'e-Ukraine Head', sans-serif;
-    src: url('../fonts/e-Ukraine Head/e-UkraineHead-Medium.otf') format('opentype');
+    src: url('/static/fonts/e-Ukraine Head/e-UkraineHead-Medium.otf') format('opentype');
     font-weight: 600;
     font-style: 'normal';
     font-display: swap;
@@ -80,7 +80,7 @@
 
 @font-face {
     font-family: 'e-Ukraine Head', sans-serif;
-    src: url('../fonts/e-Ukraine Head/e-UkraineHead-Regular.otf') format('opentype');
+    src: url('/static/fonts/e-Ukraine Head/e-UkraineHead-Regular.otf') format('opentype');
     font-weight: 400;
     font-style: 'normal';
     font-display: swap;
@@ -88,7 +88,7 @@
 
 @font-face {
     font-family: 'e-Ukraine Head', sans-serif;
-    src: url('../fonts/e-Ukraine Head/e-UkraineHead-Light.otf') format('opentype');
+    src: url('/static/fonts/e-Ukraine Head/e-UkraineHead-Light.otf') format('opentype');
     font-weight: 300;
     font-style: 'normal';
     font-display: swap;
@@ -96,7 +96,7 @@
 
 @font-face {
     font-family: 'e-Ukraine Head', sans-serif;
-    src: url('../fonts/e-Ukraine Head/e-UkraineHead-UltraLight.otf') format('opentype');
+    src: url('/static/fonts/e-Ukraine Head/e-UkraineHead-UltraLight.otf') format('opentype');
     font-weight: 200;
     font-style: 'normal';
     font-display: swap;
@@ -104,7 +104,7 @@
 
 @font-face {
     font-family: 'e-Ukraine Head', sans-serif;
-    src: url('../fonts/e-Ukraine Head/e-UkraineHead-Thin.otf') format('opentype');
+    src: url('/static/fonts/e-Ukraine Head/e-UkraineHead-Thin.otf') format('opentype');
     font-weight: 100;
     font-style: 'normal';
     font-display: swap;
