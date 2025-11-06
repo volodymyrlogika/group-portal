@@ -4,9 +4,6 @@
 
 <style>
   body {
-  {% comment %}
-    Зроби легкий плавний градієнт темно білого та темнопсірого та куча відтінків кольорів для фону сторінки. який переливаєтсья
-  {% endcomment %}
     background: linear-gradient(270deg, #f0f0f0, #d9d9d9, #bfbfbf, #d9d9d9, #f0f0f0);
     background-size: 400% 400%;
     animation: gradientBG 15s ease infinite;
@@ -271,6 +268,10 @@
         list.appendChild(btn);
       });
     }
+    if (data.type === 'message_deleted') {
+      const msg = document.querySelector(`[data-message-id="${data.message_id}"]`);
+      if (msg) msg.remove();
+    }
   };
 
   document.querySelectorAll('.reaction-btn').forEach(btn => {
@@ -309,24 +310,17 @@
   document.querySelectorAll('.message-delete-btn').forEach(btn => {
     btn.addEventListener('click', function(e) {
       e.preventDefault();
-      const messageId = this.dataset.messageId;
-      const confirmed = confirm("Ви впевнені що хочете видалити це повідомлення?");
-      if (!confirmed) return;
+      if (!confirm("Ви впевнені що хочете видалити це повідомлення?")) return;
   
-      fetch(`/message/${messageId}/delete/`, { 
-        method: "POST",
-        headers: {
-          "X-CSRFToken": "{{ csrf_token }}",
-          "Accept": "application/json",
-        }
-      })
-      .then(res => res.json())
-      .then(data => {
-        if (data.success) this.closest('.message-content').remove();
-      })
-      .catch(err => console.error(err));
+      const messageId = this.dataset.messageId;
+  
+      socket.send(JSON.stringify({
+        type: "delete_message",
+        message_id: messageId
+      }));
     });
   });
+  
 
   let editingMessageId = null;
   const sendBtn = form.querySelector('button[type="submit"]');

@@ -83,8 +83,29 @@ class ChatConsumer(AsyncWebsocketConsumer):
                 'counts': counts
             })
 
+        elif data['type'] == 'delete_message':
+            from .models import Message
+
+            message_id = data['message_id']
+            message = await sync_to_async(Message.objects.filter(id=message_id, user=user).first)()
+
+            if not message:
+                return
+
+            await sync_to_async(message.delete)()
+
+            await self.channel_layer.group_send(self.room_group_name, {
+                'type': 'message_deleted',
+                'message_id': message_id
+            })
+
+
     async def chat_message(self, event):
         await self.send(text_data=json.dumps(event))
 
     async def reaction_update(self, event):
         await self.send(text_data=json.dumps(event))
+
+    async def message_deleted(self, event):
+        await self.send(text_data=json.dumps(event))
+        
