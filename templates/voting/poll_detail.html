@@ -1,24 +1,59 @@
 {% extends 'base.html' %}
-
-{% block title %}{{ poll.title }}{% endblock %}
-
 {% block content %}
-<h1>{{ poll.title }}</h1>
-<p>{{ poll.description }}</p>
+<div class="container mt-4">
+  <h2>{{ poll.title }}</h2>
+  <p class="text-muted">{{ poll.description }}</p>
 
-<form method="post">
+  <form id="vote-form">
     {% csrf_token %}
     {% for question in poll.questions.all %}
+      <div class="mb-3">
         <h5>{{ question.text }}</h5>
-        {% for choice in question.choice_set.all %}
-        <div class="form-check">
-            <input class="form-check-input" type="radio" name="{{ question.id }}" id="choice{{ choice.id }}" value="{{ choice.id }}">
-            <label class="form-check-label" for="choice{{ choice.id }}">{{ choice.text }}</label>
-        </div>
-        {% endfor %}
+        {% if not question.multi_select %}
+          {% for choice in question.choices.all %}
+            <div class="form-check">
+              <input class="form-check-input" type="radio" name="question_{{ question.pk }}" id="c{{ choice.pk }}" value="{{ choice.pk }}"
+                {% if user_votes|get_item:question.pk == choice.pk %}checked{% endif %}>
+              <label class="form-check-label" for="c{{ choice.pk }}">{{ choice.text }}</label>
+            </div>
+          {% endfor %}
+        {% else %}
+          {% for choice in question.choices.all %}
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" name="question_{{ question.pk }}" id="c{{ choice.pk }}" value="{{ choice.pk }}"
+                {% if user_votes|get_item:question.pk == choice.pk %}checked{% endif %}>
+              <label class="form-check-label" for="c{{ choice.pk }}">{{ choice.text }}</label>
+            </div>
+          {% endfor %}
+        {% endif %}
+      </div>
     {% endfor %}
-    <button type="submit" class="btn btn-primary mt-2">Голосувати</button>
-</form>
 
-<a href="{% url 'voting:poll_list' %}" class="btn btn-link mt-3">Назад до списку</a>
+    <button id="vote-btn" type="submit" class="btn btn-success">Проголосувати</button>
+    <a href="{% url 'voting:poll_results' poll.id %}" class="btn btn-outline-secondary">Результати</a>
+  </form>
+
+  <div id="vote-msg" class="mt-3"></div>
+</div>
+
+<script>
+document.getElementById('vote-form').addEventListener('submit', async function(e){
+  e.preventDefault();
+  const form = e.target;
+  const data = new FormData(form);
+  const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+  const resp = await fetch("{% url 'voting:poll_vote' poll.id %}", {
+    method: 'POST',
+    headers: {'X-CSRFToken': csrftoken},
+    body: data
+  });
+  const res = await resp.json();
+  if (res.ok) {
+    // redirect to results
+    window.location.href = res.redirect;
+  } else {
+    document.getElementById('vote-msg').innerHTML = '<div class="alert alert-danger">Помилка: ' + (res.error || 'невідома') + '</div>';
+  }
+});
+</script>
 {% endblock %}

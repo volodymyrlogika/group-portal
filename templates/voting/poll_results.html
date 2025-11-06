@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% load group_tags %}
+{% block content %}
+<div class="container mt-4">
+  <h2>Результати — {{ object.title }}</h2>
+
+  {% for r in results %}
+    <div class="mb-4">
+      <h5>{{ forloop.counter }}. {{ r.question.text }} ({{ r.total }} голосів)</h5>
+      {% for c in r.choices %}
+        <div class="mb-2">
+          <div class="d-flex justify-content-between">
+            <div>{{ c.choice.text }}</div>
+            <div>{{ c.count }} ({{ c.percent|floatformat:1 }}%)</div>
+          </div>
+          <div class="progress">
+            <div class="progress-bar" role="progressbar" style="width: {{ c.percent }}%;" aria-valuenow="{{ c.percent }}" aria-valuemin="0" aria-valuemax="100"></div>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  {% endfor %}
+
+  <a class="btn btn-link" href="{% url 'voting:poll_list' %}">Назад</a>
+  {% if user.is_superuser or user|has_group:"Модератори" %}
+    <a class="btn btn-outline-secondary" href="{% url 'voting:poll_export' object.pk %}">Експорт CSV</a>
+  {% endif %}
+</div>
+{% endblock %}
