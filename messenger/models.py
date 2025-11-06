@@ -1,5 +1,4 @@
 from django.db import models
-
 from group_portal import settings
 from .choices.emoji import EMOJI_CHOICES
 
