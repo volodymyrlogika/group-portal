@@ -4,7 +4,7 @@ from .models import Announcements
 class AnnouncementsForm(forms.ModelForm):
     class Meta:
         model = Announcements
-        fields = ['title', 'content ', 'attachment', 'status']
+        fields = ['title', 'content', 'attachment', 'status']
     
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

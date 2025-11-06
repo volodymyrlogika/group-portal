@@ -13,12 +13,12 @@ def announcements_list(request):
 
 class AnnouncementsCreateView(LoginRequiredMixin, CreateView):
     model = Announcements
-    template_name = 'announcemets_create.html'
+    template_name = 'announcements/announcemets_create.html'
     success_url = reverse_lazy('announcements_list')
     form_class = AnnouncementsForm
 
     def form_valid(self, form):
-        form.instance.user = self.request.user
+        form.instance.author = self.request.user
         return super().form_valid(form)
 
 

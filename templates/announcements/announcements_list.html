@@ -1,6 +1,10 @@
 {% extends 'base.html' %}
 {% block content %}
     <h1>Оголошення</h1>
+    {% if user.is_stuff %}
+      <a href="{% url 'announcements_create' %}" class="btn btn-primary mb-3">Створити оголошення</a>
+      
+    {% endif %}
     {% for announce in announcements %}
     <div class="card mb-3" style="max-width: 540px;">
         <div class="row g-0">
