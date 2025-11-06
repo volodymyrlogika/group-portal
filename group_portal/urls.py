@@ -24,5 +24,5 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('main.urls')),
     path('', include('accounts.urls')),
-    path('', include('surveysystem.urls')),
+    path('surveysystem/', include('surveysystem.urls')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
