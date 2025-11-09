@@ -18,7 +18,7 @@ class LoginForm(AuthenticationForm):
 class RegisterForm(UserCreationForm):
     class Meta:
         model = CustomUser
-        fields = ['first_name', 'last_name', 'username', 'date_of_birth', 'password1', 'password2']
+        fields = ['first_name', 'last_name', 'username', 'date_of_birth', 'phone_number', 'password1', 'password2']
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -27,4 +27,4 @@ class RegisterForm(UserCreationForm):
 
         self.fields['password1'].widget = forms.PasswordInput(attrs={'class': 'form-control mb-2'})
         self.fields['password2'].widget = forms.PasswordInput(attrs={'class': 'form-control mb-2'})
-        self.fields['date_of_birth'].widget = forms.DateInput()
+        self.fields['date_of_birth'].widget = forms.DateInput(attrs={'class': 'form-control mb-2', 'type': 'date'})

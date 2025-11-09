@@ -1,10 +1,11 @@
-from django.shortcuts import render
+from django.shortcuts import redirect, render
 from django.contrib.auth.views import LoginView, LogoutView
+from django.views import View
 from django.views.generic import CreateView
 from .models import CustomUser, Role
 from django.urls import reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
-from django.contrib.auth import login
+from django.contrib.auth import login, logout
 
 from accounts.forms import LoginForm, RegisterForm
 
@@ -15,9 +16,13 @@ class CustomLoginView(LoginView):
     form_class = LoginForm
 
 
-class CustomLogoutView(LogoutView):
+class CustomLogoutView(View):
     next_page = reverse_lazy('login')
 
+    def get(self, request, *args, **kwargs):
+        logout(request)
+        return redirect(self.next_page)
+        
 
 class RegisterView(CreateView):
     model = CustomUser
@@ -26,7 +31,7 @@ class RegisterView(CreateView):
     success_url = reverse_lazy('login')
 
     def form_valid(self, form):
-        form.instance.role = Role.objects.get(name = "Member")
+        form.instance.role = Role.objects.get_or_create(name = "Member")[0]
         return super().form_valid(form)
 
 

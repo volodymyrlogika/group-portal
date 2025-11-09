@@ -18,7 +18,6 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
-from . import settings
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -29,6 +28,7 @@ urlpatterns = [
     path('calendar/', include('calendar_app.urls')),
     path('surveysystem/', include('surveysystem.urls')),
     path('announcements/', include('announcements.urls')),
+    path('', include('announcements.urls')),
 
 ]
 

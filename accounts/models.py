@@ -10,6 +10,6 @@ class Role(models.Model):
         return self.name
 
 class CustomUser(AbstractUser):
-    role = models.ForeignKey(Role, on_delete=models.CASCADE, blank=True, null=True)
-    date_of_birth = models.DateField(blank=True, null=True)
-    phone_number = models.CharField(max_length=20, blank=True, null=True)
+    role = models.ForeignKey(Role, on_delete=models.CASCADE, blank=True, null=True, verbose_name='Роль')
+    date_of_birth = models.DateField(blank=True, null=True, verbose_name='Дата народження')
+    phone_number = models.CharField(max_length=20, blank=True, null=True, verbose_name='Номер телефону')
