@@ -43,12 +43,17 @@ class PollListView(LoginRequiredMixin, ListView):
 @login_required
 def poll_detail(request, pk):
     poll = get_object_or_404(Poll, pk=pk)
-    if not poll.is_open():
-        # allow viewing results if closed
-        return redirect('voting:poll_results', pk=poll.pk)
+    # user_votes - для підставляння вже відданих варіантів (якщо треба)
+    user_votes = {v.question_id: v.choice_id for v in Vote.objects.filter(user=request.user, poll=poll)} if request.user.is_authenticated else {}
 
-    user_votes = {v.question_id: v.choice_id for v in Vote.objects.filter(user=request.user, poll=poll)}
-    return render(request, "voting/poll_detail.html", {"poll": poll, "user_votes": user_votes})
+    # додамо прапорець closed, щоб шаблон міг показати повідомлення / приховати кнопку
+    closed = not poll.is_open()
+
+    return render(request, "voting/poll_detail.html", {
+        "poll": poll,
+        "user_votes": user_votes,
+        "closed": closed,
+    })
 
 class VoteAjaxView(LoginRequiredMixin, View):
     def post(self, request, pk):
@@ -151,3 +156,30 @@ def poll_export_csv(request, pk):
         for c in q.choices.all():
             writer.writerow([q.text, c.text, c.votes.count()])
     return response
+
+class VoteAjaxView(LoginRequiredMixin, View):
+    def post(self, request, pk):
+        poll = get_object_or_404(Poll, pk=pk)
+        if not poll.is_open():
+            return JsonResponse({"error":"Опитування закрите"}, status=400)
+
+        try:
+            with transaction.atomic():
+                for q in poll.questions.all():
+                    key = f"question_{q.pk}"
+                    if q.multi_select:
+                        selected = request.POST.getlist(key)
+                    else:
+                        v = request.POST.get(key)
+                        selected = [v] if v else []
+
+                    # Видаляємо попередні голоси користувача для цього питання
+                    Vote.objects.filter(user=request.user, question=q).delete()
+
+                    for choice_id in filter(None, selected):
+                        choice = get_object_or_404(Choice, pk=int(choice_id), question=q)
+                        Vote.objects.create(poll=poll, question=q, choice=choice, user=request.user)
+        except Exception as e:
+            return JsonResponse({"error": str(e)}, status=500)
+
+        return JsonResponse({"ok": True, "redirect": f"/voting/{poll.pk}/results/"})
