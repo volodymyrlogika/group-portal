@@ -52,7 +52,7 @@ class ChatDeleteView(LoginRequiredMixin, View):
     def post(self, request, chat_pk, *args, **kwargs):
         chat = get_object_or_404(Chat, id=chat_pk, users=request.user)
         chat.delete()
-        return JsonResponse({'success': True, 'redirect_url': '/'})
+        return JsonResponse({'success': True, 'redirect_url': '/messenger/'})
 
 # Вью для редагування повідомлення без шаблона
 class MessageEditView(LoginRequiredMixin, View):
