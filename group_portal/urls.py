@@ -29,7 +29,7 @@ urlpatterns = [
     path('surveysystem/', include('surveysystem.urls')),
     path('announcements/', include('announcements.urls')),
     path('', include('announcements.urls')),
-
+    path('voting/', include('voting.urls')),
 ]
 
 if settings.DEBUG:

@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-4">
+  <h2>{% if object %}Редагувати опитування{% else %}Створити опитування{% endif %}</h2>
+
+  <form method="post" class="mt-3">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="btn btn-primary">
+      {% if object %}Зберегти{% else %}Створити{% endif %}
+    </button>
+    <a href="{% url 'voting:poll_list' %}" class="btn btn-link">Скасувати</a>
+  </form>
+</div>
+{% endblock %}

@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'calendar_app',
     'surveysystem',
     'announcements'
+    'voting',
 
 ]
 
